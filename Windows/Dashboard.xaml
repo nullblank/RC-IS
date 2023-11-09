@@ -134,8 +134,8 @@
                                FontFamily="{StaticResource Poppins}"
                                FontWeight="Bold"
                                HorizontalAlignment="Center"
-                               Margin="0,50,0,0"/>
-                    <TextBlock Text="The Research Center Information System"
+                               Margin="0,20,0,0"/>
+                    <TextBlock Text="Welcome &lt;PLACEHOLDER_NAME&gt;"
                                Foreground="DarkGray"
                                FontSize="12"
                                FontFamily="{StaticResource Poppins}"
@@ -148,7 +148,7 @@
                             <ColumnDefinition Width="425"/>
                             <ColumnDefinition Width="425"/>
                         </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left">
                             <TextBlock Text="Search"
                                Foreground="DarkGray"
                                FontSize="12"
@@ -176,8 +176,8 @@
                                 </TextBox.Background>
                             </TextBox>
                         </StackPanel>
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                        <Button x:Name="btnSearch"
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+                            <Button x:Name="btnSearch"
                                     BorderThickness="0"
                                     Content="Search"
                                     Foreground="White"
@@ -185,28 +185,29 @@
                                     Cursor="Hand"
                                     FontFamily="{StaticResource Poppins}"
                                     Click="btnSearch_Click" Grid.Column="1">
-                            <Button.Style>
-                                <Style TargetType="{x:Type Button}">
-                                    <Setter Property="Background" Value="#473ACB"/>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="#FF39327E"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
+                                <Button.Style>
+                                    <Style TargetType="{x:Type Button}">
+                                        <Setter Property="Background" Value="#473ACB"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#FF39327E"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
 
-                            <Button.Template>
-                                <ControlTemplate TargetType="{x:Type Button}">
-                                    <Border Width="150" Height="30"
+                                <Button.Template>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border Width="150" Height="30"
                                     CornerRadius="10"
                                     Background="{TemplateBinding Background}">
-                                        <ContentPresenter HorizontalAlignment="Center"
+                                            <ContentPresenter HorizontalAlignment="Center"
                                                   VerticalAlignment="Center"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </StackPanel>
                     </Grid>
 
 
@@ -214,6 +215,7 @@
                     <Grid Margin="0,5,0,0"
                           Height="50">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="auto"/>
@@ -259,7 +261,7 @@
                             <ComboBox x:Name="txtSchool"
                                      IsEditable="True"
                                      IsReadOnly="True"
-                                     Text="-- Select School --"
+                                     Text="--"
                                      FontSize="13"
                                      FontWeight="Medium"
                                      FontFamily="{StaticResource Poppins}"
@@ -268,7 +270,7 @@
                                      Background="Transparent"
                                      BorderThickness="0,0,0,2"
                                      Height="28"
-                                     Width="auto"
+                                     Width="75"
                                      VerticalAlignment="Center"
                                      HorizontalAlignment="Left"
                                      Margin="0,5,0,0"
@@ -287,7 +289,7 @@
                             <ComboBox x:Name="txtCourse"
                                      IsEditable="True"
                                      IsReadOnly="True"
-                                     Text="-- Select Course --"
+                                     Text="--"
                                      FontSize="13"
                                      FontWeight="Medium"
                                      FontFamily="{StaticResource Poppins}"
@@ -296,7 +298,7 @@
                                      Background="Transparent"
                                      BorderThickness="0,0,0,2"
                                      Height="28"
-                                     Width="auto"
+                                     Width="90"
                                      VerticalAlignment="Center"
                                      HorizontalAlignment="Left"
                                      Margin="0,5,0,0"
@@ -315,7 +317,7 @@
                             <ComboBox x:Name="txtAgenda"
                                      IsEditable="True"
                                      IsReadOnly="True"
-                                     Text="-- Select Agenda --"
+                                     Text="--"
                                      FontSize="13"
                                      FontWeight="Medium"
                                      FontFamily="{StaticResource Poppins}"
@@ -324,17 +326,18 @@
                                      Background="Transparent"
                                      BorderThickness="0,0,0,2"
                                      Height="28"
-                                     Width="200"
+                                     Width="400"
                                      VerticalAlignment="Center"
                                      HorizontalAlignment="Left"
                                      Margin="0,5,0,0"
                                      Padding="0,0,0,0">
                             </ComboBox>
                         </StackPanel>
+                        
                     </Grid>
 
                     <DataGrid
-                        Height="200"
+                        Height="300"
                         Margin="0,35,0,0">
 
                     </DataGrid>
