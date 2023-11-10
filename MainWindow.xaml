@@ -12,7 +12,7 @@
         WindowStartupLocation="CenterScreen"
         MouseDown="Window_MouseDown"
         Background="Transparent"
-        AllowsTransparency="True"
+        AllowsTransparency="True" Loaded="Window_Loaded"
         >
     <Border CornerRadius="12">
         <Border.Background>

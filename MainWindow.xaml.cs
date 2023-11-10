@@ -1,4 +1,6 @@
-﻿using RC_IS.Windows;
+﻿using MySql.Data.MySqlClient;
+using RC_IS.Classes;
+using RC_IS.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,9 +48,22 @@ namespace RC_IS
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            Dashboard form = new Dashboard();
+            RC_IS.Windows.Panel form = new RC_IS.Windows.Panel();
             form.Show();
             this.Hide();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                DatabaseHandler databaseHandler = new DatabaseHandler();
+                databaseHandler.ExecuteQuery("Test");
+            }
+            catch (MySqlException a)
+            {
+                MessageBox.Show("MySQL Error: " + a.Message);
+            }
         }
     }
 }

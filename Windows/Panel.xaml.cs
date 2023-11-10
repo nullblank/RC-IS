@@ -15,23 +15,13 @@ using System.Windows.Shapes;
 namespace RC_IS.Windows
 {
     /// <summary>
-    /// Interaction logic for Dashboard.xaml
+    /// Interaction logic for Panel.xaml
     /// </summary>
-    public partial class Dashboard : Window
+    public partial class Panel : Window
     {
-        public Dashboard()
+        public Panel()
         {
             InitializeComponent();
-        }
-
-        private void btnClose_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-
-        private void btnMinimize_Click(object sender, RoutedEventArgs e)
-        {
-            WindowState = WindowState.Minimized;
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -42,7 +32,17 @@ namespace RC_IS.Windows
             }
         }
 
-        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        private void btnMinimize_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void btnResearchRecords_Click(object sender, RoutedEventArgs e)
         {
 
         }
