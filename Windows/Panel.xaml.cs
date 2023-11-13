@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RC_IS.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,8 +20,10 @@ namespace RC_IS.Windows
     /// </summary>
     public partial class Panel : Window
     {
-        public Panel()
+        private User _user;
+        public Panel(User user)
         {
+            _user = user;
             InitializeComponent();
         }
 
@@ -48,6 +51,16 @@ namespace RC_IS.Windows
         {
             Dashboard form = new Dashboard();
             form.Show();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            lblPanel.Text = "Panel - " + _user.Description;
+        }
+
+        private void btnResearchers_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

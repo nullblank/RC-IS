@@ -48,21 +48,15 @@ namespace RC_IS
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            string enteredUsername = txtUsername.Text;
-            string enteredPassword = txtPassword.Password;
-            DatabaseHandler dbHandler = new DatabaseHandler();
-            if (dbHandler.AuthenticateUser(enteredUsername, enteredPassword))
+            User user  = new User(txtUsername.Text);
+            if (user.Authenticate(txtPassword.Password))
             {
-                MessageBox.Show("Access Granted!");
-                RC_IS.Windows.Panel form = new RC_IS.Windows.Panel();
-                form.Show();
+                Audit audit = new Audit(user);
+                audit.Log(user.Description + " has logged in!", null, null, null);
+                RC_IS.Windows.Panel panel = new RC_IS.Windows.Panel(user);
+                panel.Show();
                 this.Close();
             }
-            else
-            {
-                MessageBox.Show("Access Denied.");
-            }
-
 
         }
 
@@ -70,12 +64,15 @@ namespace RC_IS
         {
             try
             {
+
+                //DEBUGGING PURPOSES ONLY
+
                 //DatabaseHandler databaseHandler = new DatabaseHandler();
                 //if (databaseHandler.InsertUser("dev", "dev", "Diego Gerard A. Diego"))
                 //{
                 //    MessageBox.Show("SuperUser successfully Inserted.");
                 //}
-                
+
             }
             catch (MySqlException a)
             {

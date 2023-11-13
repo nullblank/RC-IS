@@ -4,14 +4,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Dashboard" Height="691" Width="985"
+        Title="Dashboard" Height="689" Width="1111"
         WindowStyle="None"
         ResizeMode="NoResize"
         BorderThickness="0"
         WindowStartupLocation="CenterScreen"
         MouseDown="Window_MouseDown"
         Background="Transparent"
-        AllowsTransparency="True">
+        AllowsTransparency="True" Loaded="Window_Loaded">
     <Border CornerRadius="12" Margin="0,0,0,0">
         <Border.Background>
             <ImageBrush ImageSource="/Resources/Images/smu.jpg"
@@ -40,18 +40,28 @@
 
             <Grid x:Name="Grid_Root">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="*" />
+                    <!--Main display grid-->
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-                <Grid x:Name="Grid_Panel" HorizontalAlignment="left" Width="auto">
-                    <StackPanel Margin="0,0,0,0">
-                        <TextBlock Text="PANEL"
+                <Grid x:Name="Grid_Main" Grid.Column="1" Grid.Row="1"/>
+
+                <Grid Grid.Row="0" Grid.Column="0">
+                    <TextBlock x:Name="lblPanel" Text="PANEL"
                         Foreground="White"
                         FontSize="24"
                         FontFamily="{StaticResource Poppins}"
                         FontWeight="Bold" Margin="20,35,0,0"
                         HorizontalAlignment="left"/>
+                </Grid>
 
+                <Grid x:Name="Grid_Panel" Margin="0,0,0,0" HorizontalAlignment="left" Width="auto" Grid.Row="1">
+                    <StackPanel Margin="0,0,0,0">
                         <Button x:Name="btnResearchRecords"
                             BorderThickness="0"
                             Content="Research Records"
@@ -61,6 +71,37 @@
                                 Margin="20,20,20,0"
                             FontFamily="{StaticResource Poppins}"
                             Click="btnResearchRecords_Click" Height="30" Width="150">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Background" Value="#473ACB" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#FF39327E" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <Button.Template>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Width="150" Height="30"
+                                        CornerRadius="10"
+                                        Background="{TemplateBinding Background}">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
+                        <Button x:Name="btnResearchers"
+                            BorderThickness="0"
+                            Content="Researchers"
+                            Foreground="White"
+                            FontSize="12"
+                            Cursor="Hand"
+                                Margin="20,20,20,0"
+                            FontFamily="{StaticResource Poppins}"
+                            Click="btnResearchers_Click" Height="30" Width="150">
                             <Button.Style>
                                 <Style TargetType="{x:Type Button}">
                                     <Setter Property="Background" Value="#473ACB" />

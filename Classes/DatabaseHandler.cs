@@ -20,7 +20,7 @@ namespace RC_IS.Classes
             this.connectionString = ConfigurationManager.ConnectionStrings["MyDatabase"].ConnectionString;
             Trace.WriteLine("DATAINFO: " + this.connectionString);
         }
-
+        // ------------- CONTROLS -------------
         private void OpenConnection()
         {
             if (connection == null)
@@ -76,101 +76,24 @@ namespace RC_IS.Classes
             }
         }
 
-        // Other methods for specific database operations can be added here
         public void Dispose()
         {
             CloseConnection();
             connection?.Dispose();
         }
 
-        // AUTHENTICATE
-        public bool AuthenticateUser(string enteredUsername, string enteredPassword)
-        {
-            try
-            {
-                OpenConnection();
-                string query = "SELECT acc_name, acc_pass, acc_salt FROM tblacc WHERE acc_name = @Username";
-                using (MySqlCommand command = new MySqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@Username", enteredUsername);
-                    MySqlDataReader reader = command.ExecuteReader();
-
-                    if (reader.Read())
-                    {
-                        string accountName = reader["acc_name"].ToString();
-                        // Get the password and salt from the database
-                        byte[] accountPassBytes = (byte[])reader["acc_pass"];
-                        byte[] accountSaltBytes = (byte[])reader["acc_salt"];
-                        // Convert the bytes to strings
-                        string accountPass = Encoding.UTF8.GetString(accountPassBytes);
-                        string salt = Encoding.UTF8.GetString(accountSaltBytes);
-                        // Hash the entered password with the salt
-                        string enteredPasswordHash = HashPassword(enteredPassword, salt);
-                        // Compare the entered password hash with the one in the database
-                        return accountPass == enteredPasswordHash;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                CloseConnection();
-            }
-            return false; // If the user doesn't exist
-        }
-
-        // ------------------ HASHING ------------------
-        private string HashPassword(string password, string salt)
-        {
-            using (SHA256 sha256 = SHA256.Create())
-            { 
-                // Get encoding
-                byte[] saltBytes = Encoding.UTF8.GetBytes(salt);
-                byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
-                // Combine salt and password bytes
-                byte[] combinedBytes = saltBytes.Concat(passwordBytes).ToArray();
-                // Compute the hash
-                byte[] hashBytes = sha256.ComputeHash(combinedBytes);
-                // Convert the hash to a hexadecimal string
-                string hashString = BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
-                return hashString;
-            }
-        }
-        // ------------------ SALTING ------------------
-        private string GenerateSalt()
-        {
-            byte[] saltBytes = new byte[32];
-            using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
-            {
-                rngCsp.GetBytes(saltBytes);
-            }
-
-            // Convert the salt to a base64-encoded string
-            string salt = Convert.ToBase64String(saltBytes);
-
-            return salt;
-        }
+        // ------------- CRUD -------------
+        // CREATE
         public bool InsertUser(string username, string password, string description)
         {
             try
             {
-                // Generate a random salt
                 string salt = GenerateSalt();
-
-                // Hash the password with the generated salt
                 string hashedPassword = HashPassword(password, salt);
-
-                // Insert the user data into the database
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
                     connection.Open();
-
-                    // Database logic
                     string query = "INSERT INTO tblacc (acc_name, acc_pass, acc_salt, acc_desc) VALUES (@Username, @Password, @Salt, @Desc)";
-
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@Username", username);
@@ -185,9 +108,168 @@ namespace RC_IS.Classes
             }
             catch (MySqlException e)
             {
-                // Catch error when inserting user
                 MessageBox.Show("ERROR INSERTING USER: " + e.Message);
                 return false;
+            }
+        }
+
+        // AUTHENTICATION
+        public bool AuthenticateUser(string enteredUsername, string enteredPassword, User user)
+        {
+            try
+            {
+                OpenConnection();
+                var (hashedPasswordFromDatabase, salt) = GetHashedPasswordAndSalt(enteredUsername);
+                if (hashedPasswordFromDatabase != null && salt != null)
+                {
+                    string hashedEnteredPassword = HashPassword(enteredPassword, salt);
+                    //MessageBox.Show(hashedEnteredPassword + ":" + hashedPasswordFromDatabase);
+                    bool passwordMatches = hashedEnteredPassword == hashedPasswordFromDatabase;
+                    if (passwordMatches)
+                    {
+                        MessageBox.Show("Login successful!");
+                        var (userId, userDesc, userRole) = GetUserInfo(enteredUsername);
+                        user.Username = enteredUsername;
+                        user.Description = userDesc;
+                        user.UserId = userId;
+                        user.Role = userRole;
+                        return true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Incorrect password.");
+                        return false;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("User was not found.");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error authenticating user: " + ex.Message);
+                return false;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
+
+        public (int userId, string userDesc, int userRole) GetUserInfo(string enteredUsername)
+        {
+            try
+            {
+                OpenConnection();
+                string query = "SELECT acc_id, acc_desc, acc_role FROM tblacc WHERE acc_name = @Username";
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@Username", enteredUsername);
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            int userId = reader.GetInt32("acc_id");
+                            string userDesc = reader.GetString("acc_desc");
+                            int userRole = reader.GetInt32("acc_role");
+                            return (userId, userDesc, userRole);
+                        }
+                    }
+                }
+                return (0, null, 0);
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine("Error retrieving user info: " + ex.Message);
+                return (0, null, 0);
+            }
+        }
+
+        public (string hashedPassword, string salt) GetHashedPasswordAndSalt(string enteredUsername)
+        {
+            try
+            {
+                OpenConnection();
+
+                string query = "SELECT acc_pass, acc_salt FROM tblacc WHERE acc_name = @Username";
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@Username", enteredUsername);
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            byte[] accountHashedPassBytes = (byte[])reader["acc_pass"];
+                            string accountHashedPass = Encoding.UTF8.GetString(accountHashedPassBytes);
+
+                            byte[] accountSaltBytes = (byte[])reader["acc_salt"];
+                            string salt = Encoding.UTF8.GetString(accountSaltBytes);
+
+                            return (accountHashedPass, salt);
+                        }
+                    }
+                }
+                return (null, null);
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine("Error retrieving hashed password and salt: " + ex.Message);
+                return (null, null);
+            }
+        }
+
+        // ------------------ HELPER METHODS ------------------
+        private string HashPassword(string password, string salt)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] saltBytes = Encoding.UTF8.GetBytes(salt);
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+                byte[] combinedBytes = saltBytes.Concat(passwordBytes).ToArray();
+                byte[] hashBytes = sha256.ComputeHash(combinedBytes);
+
+                string hashString = BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+                return hashString;
+            }
+        }
+
+        private string GenerateSalt()
+        {
+            byte[] saltBytes = new byte[32];
+
+            using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(saltBytes);
+            }
+
+            string salt = Convert.ToBase64String(saltBytes);
+            return salt;
+        }
+
+        internal void LogUserAction(User user, string action, string table, string row_id, string column)
+        {
+            try
+            {
+                OpenConnection();
+                string query = "INSERT INTO tblaudit (acc_id, action, `table`, row_id, `column`) " +
+                               "VALUES (@accountId, @action, @table, @rowId, @column)";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@accountId", user.UserId);
+                    cmd.Parameters.AddWithValue("@action", action);
+                    cmd.Parameters.AddWithValue("@table", table);
+                    cmd.Parameters.AddWithValue("@rowId", row_id);
+                    cmd.Parameters.AddWithValue("@column", column);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Trace.WriteLine("Error logging user action!: " + ex.Message);
             }
         }
     }
