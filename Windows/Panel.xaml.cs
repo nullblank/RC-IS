@@ -39,12 +39,15 @@ namespace RC_IS.Windows
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            this.Hide();
+            MainWindow form  = new MainWindow();
+            form.Show();
         }
 
         private void btnResearchRecords_Click(object sender, RoutedEventArgs e)
         {
-
+            Dashboard form = new Dashboard();
+            form.Show();
         }
     }
 }

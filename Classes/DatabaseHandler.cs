@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Windows;
 
 namespace RC_IS.Classes
 {
@@ -85,32 +86,48 @@ namespace RC_IS.Classes
         // AUTHENTICATE
         public bool AuthenticateUser(string enteredUsername, string enteredPassword)
         {
-            OpenConnection();
-            string query = "SELECT acc_name, acc_pass, acc_salt FROM tblacc WHERE acc_name = @Username";
-            using (MySqlCommand command = new MySqlCommand(query, connection))
+            try
             {
-                command.Parameters.AddWithValue("@Username", enteredUsername);
-                MySqlDataReader reader = command.ExecuteReader();
-
-                if (reader.Read())
+                OpenConnection();
+                string query = "SELECT acc_name, acc_pass, acc_salt FROM tblacc WHERE acc_name = @Username";
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
-                    string accountName = reader["acc_name"].ToString();
-                    string accountPass = reader["acc_pass"].ToString();
-                    string salt = reader["acc_salt"].ToString();
-                    // Hasbrown the potato's password and add salt
-                    string enteredPasswordHash = HashPassword(enteredPassword, salt);
-                    // Is it the same hashbrown??
-                    return accountPass == enteredPasswordHash; // OPEN SAYS ME!
+                    command.Parameters.AddWithValue("@Username", enteredUsername);
+                    MySqlDataReader reader = command.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        string accountName = reader["acc_name"].ToString();
+                        // Get the password and salt from the database
+                        byte[] accountPassBytes = (byte[])reader["acc_pass"];
+                        byte[] accountSaltBytes = (byte[])reader["acc_salt"];
+                        // Convert the bytes to strings
+                        string accountPass = Encoding.UTF8.GetString(accountPassBytes);
+                        string salt = Encoding.UTF8.GetString(accountSaltBytes);
+                        // Hash the entered password with the salt
+                        string enteredPasswordHash = HashPassword(enteredPassword, salt);
+                        // Compare the entered password hash with the one in the database
+                        return accountPass == enteredPasswordHash;
+                    }
                 }
             }
-
-            return false; // NONE SHALL PASS!
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            return false; // If the user doesn't exist
         }
 
+        // ------------------ HASHING ------------------
         private string HashPassword(string password, string salt)
         {
             using (SHA256 sha256 = SHA256.Create())
-            {
+            { 
+                // Get encoding
                 byte[] saltBytes = Encoding.UTF8.GetBytes(salt);
                 byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
                 // Combine salt and password bytes
@@ -122,33 +139,7 @@ namespace RC_IS.Classes
                 return hashString;
             }
         }
-        public void InsertUser(string username, string password)
-        {
-            // Generate a random salt
-            string salt = GenerateSalt();
-
-            // Hash the password with the generated salt
-            string hashedPassword = HashPassword(password, salt);
-
-            // Insert the user data into the database
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                connection.Open();
-
-                // Implement your database insertion logic here
-                string query = "INSERT INTO tblacc (acc_name, acc_pass, acc_salt) VALUES (@Username, @Password, @Salt)";
-
-                using (MySqlCommand command = new MySqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@Username", username);
-                    command.Parameters.AddWithValue("@Password", hashedPassword);
-                    command.Parameters.AddWithValue("@Salt", salt);
-
-                    command.ExecuteNonQuery();
-                }
-            }
-        }
-
+        // ------------------ SALTING ------------------
         private string GenerateSalt()
         {
             byte[] saltBytes = new byte[32];
@@ -161,6 +152,43 @@ namespace RC_IS.Classes
             string salt = Convert.ToBase64String(saltBytes);
 
             return salt;
+        }
+        public bool InsertUser(string username, string password, string description)
+        {
+            try
+            {
+                // Generate a random salt
+                string salt = GenerateSalt();
+
+                // Hash the password with the generated salt
+                string hashedPassword = HashPassword(password, salt);
+
+                // Insert the user data into the database
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    // Database logic
+                    string query = "INSERT INTO tblacc (acc_name, acc_pass, acc_salt, acc_desc) VALUES (@Username, @Password, @Salt, @Desc)";
+
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Username", username);
+                        command.Parameters.AddWithValue("@Password", hashedPassword);
+                        command.Parameters.AddWithValue("@Salt", salt);
+                        command.Parameters.AddWithValue("@Desc", description);
+
+                        command.ExecuteNonQuery();
+                    }
+                }
+                return true;
+            }
+            catch (MySqlException e)
+            {
+                // Catch error when inserting user
+                MessageBox.Show("ERROR INSERTING USER: " + e.Message);
+                return false;
+            }
         }
     }
 }

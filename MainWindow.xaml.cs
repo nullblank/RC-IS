@@ -48,17 +48,34 @@ namespace RC_IS
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            RC_IS.Windows.Panel form = new RC_IS.Windows.Panel();
-            form.Show();
-            this.Hide();
+            string enteredUsername = txtUsername.Text;
+            string enteredPassword = txtPassword.Password;
+            DatabaseHandler dbHandler = new DatabaseHandler();
+            if (dbHandler.AuthenticateUser(enteredUsername, enteredPassword))
+            {
+                MessageBox.Show("Access Granted!");
+                RC_IS.Windows.Panel form = new RC_IS.Windows.Panel();
+                form.Show();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Access Denied.");
+            }
+
+
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             try
             {
-                DatabaseHandler databaseHandler = new DatabaseHandler();
-                databaseHandler.ExecuteQuery("Test");
+                //DatabaseHandler databaseHandler = new DatabaseHandler();
+                //if (databaseHandler.InsertUser("dev", "dev", "Diego Gerard A. Diego"))
+                //{
+                //    MessageBox.Show("SuperUser successfully Inserted.");
+                //}
+                
             }
             catch (MySqlException a)
             {

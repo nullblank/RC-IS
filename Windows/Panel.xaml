@@ -44,12 +44,12 @@
                 </Grid.ColumnDefinitions>
 
                 <Grid x:Name="Grid_Panel" HorizontalAlignment="left" Width="auto">
-                    <StackPanel Margin="10,0,10,0">
+                    <StackPanel Margin="0,0,0,0">
                         <TextBlock Text="PANEL"
                         Foreground="White"
                         FontSize="24"
                         FontFamily="{StaticResource Poppins}"
-                        FontWeight="Bold" Margin="0,35,0,0"
+                        FontWeight="Bold" Margin="20,35,0,0"
                         HorizontalAlignment="left"/>
 
                         <Button x:Name="btnResearchRecords"
@@ -58,7 +58,7 @@
                             Foreground="White"
                             FontSize="12"
                             Cursor="Hand"
-                                Margin="0,20,10,0"
+                                Margin="20,20,20,0"
                             FontFamily="{StaticResource Poppins}"
                             Click="btnResearchRecords_Click" Height="30" Width="150">
                             <Button.Style>
