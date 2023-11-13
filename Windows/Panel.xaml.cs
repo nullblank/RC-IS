@@ -49,7 +49,7 @@ namespace RC_IS.Windows
 
         private void btnResearchRecords_Click(object sender, RoutedEventArgs e)
         {
-            Dashboard form = new Dashboard();
+            Dashboard form = new Dashboard(_user);
             form.Show();
         }
 
@@ -60,7 +60,7 @@ namespace RC_IS.Windows
 
         private void btnResearchers_Click(object sender, RoutedEventArgs e)
         {
-
+            MessageBox.Show("NOT YET IMPLEMENTED", "WARNING!", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
 }

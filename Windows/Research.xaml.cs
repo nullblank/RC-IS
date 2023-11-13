@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RC_IS.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,14 @@ namespace RC_IS.Windows
     /// </summary>
     public partial class Dashboard : Window
     {
-        public Dashboard()
+        private WindowState originalWindowState;
+        private User _user;
+        public Dashboard(User user)
         {
             InitializeComponent();
+            originalWindowState = this.WindowState;
+            _user = user;
+            lblWelcome.Text = "Welcome " + _user.Description;
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
@@ -60,6 +66,26 @@ namespace RC_IS.Windows
         private void btnFilter_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void btnMaximize_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleMaximize();
+        }
+
+        private void ToggleMaximize()
+        {
+            if (this.WindowState != WindowState.Maximized)
+            {
+                // Save the current window state before maximizing
+                originalWindowState = this.WindowState;
+                this.WindowState = WindowState.Maximized;
+            }
+            else
+            {
+                // Restore the window to the original size
+                this.WindowState = originalWindowState;
+            }
         }
     }
 }
