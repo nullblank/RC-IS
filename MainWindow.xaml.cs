@@ -68,7 +68,7 @@ namespace RC_IS
                 //DEBUGGING PURPOSES ONLY
 
                 //DatabaseHandler databaseHandler = new DatabaseHandler();
-                //if (databaseHandler.InsertUser("dev", "dev", "Diego Gerard A. Diego"))
+                //if (databaseHandler.InsertUser("admin", "admin", "Anna Aelanna Cessara"))
                 //{
                 //    MessageBox.Show("SuperUser successfully Inserted.");
                 //}
