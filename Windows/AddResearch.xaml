@@ -3,8 +3,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RC_IS.Windows"
         mc:Ignorable="d"
-        Title="AddResearch" Height="702" Width="832"
+        Title="AddResearch" Height="671" Width="834"
         WindowStyle="None"
         ResizeMode="NoResize"
         BorderThickness="0"
@@ -218,14 +219,16 @@
                                         FontFamily="{StaticResource Poppins}"
                                         TextWrapping="Wrap" />
                                         <ComboBox x:Name="txtSchool"
+                                        DisplayMemberPath="Desc"
+                                        SelectedValuePath="Id"
                                         FontSize="13"
                                         FontWeight="Medium"
                                         FontFamily="{StaticResource Poppins}"
-                                        Foreground="White"
+                                        Foreground="Black"
                                         BorderBrush="DarkGray"
                                         Background="Transparent"
                                         Height="35"
-                                        BorderThickness="0,0,0,2" Margin="0,0,0,0" />
+                                        BorderThickness="0,0,0,2" Margin="0,0,0,0" SelectionChanged="txtSchool_SelectionChanged" />
                                     </StackPanel>
                                 </Grid>
                             </Grid>
@@ -244,12 +247,14 @@
                                         <ComboBox x:Name="txtCourse"
                                         FontSize="13"
                                         FontWeight="Medium"
+                                        DisplayMemberPath="Desc"
+                                        SelectedValuePath="Id"
                                         FontFamily="{StaticResource Poppins}"
-                                        Foreground="White"
+                                        Foreground="Black"
                                         BorderBrush="DarkGray"
                                         Background="Transparent"
                                         Height="35"
-                                        BorderThickness="0,0,0,2" Margin="0,0,0,0" />
+                                        BorderThickness="0,0,0,2" Margin="0,0,0,0" SelectionChanged="txtCourse_SelectionChanged" />
                                     </StackPanel>
                                 </Grid>
                             </Grid>
@@ -270,7 +275,7 @@
                                                         FontSize="13"
                                                         FontWeight="Medium"
                                                         FontFamily="{StaticResource Poppins}"
-                                                        Foreground="White"
+                                                        Foreground="Black"
                                                         BorderBrush="DarkGray"
                                                         Background="Transparent"
                                                         Height="35"

@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
@@ -18,18 +19,20 @@ namespace RC_IS.Classes
         public DatabaseHandler()
         {
             this.connectionString = ConfigurationManager.ConnectionStrings["MyDatabase"].ConnectionString;
-            Trace.WriteLine("DATAINFO: " + this.connectionString);
+            Trace.WriteLine("DatabaseHandler Initiated");
         }
         // ------------- CONTROLS -------------
         private void OpenConnection()
         {
             if (connection == null)
             {
+                Trace.WriteLine("DatabaseHandler Opened");
                 connection = new MySqlConnection(connectionString);
             }
 
             if (connection.State != ConnectionState.Open)
             {
+                Trace.WriteLine("DatabaseHandler Opened");
                 connection.Open();
             }
         }
@@ -39,6 +42,7 @@ namespace RC_IS.Classes
             if (connection != null && connection.State == ConnectionState.Open)
             {
                 connection.Close();
+                Trace.WriteLine("DatabaseHandler Closed");
             }
         }
 
@@ -54,6 +58,30 @@ namespace RC_IS.Classes
                     return dataTable;
                 }
             }
+        }
+
+        public DataTable ExecuteQueryWithParameters(string query, params MySqlParameter[] parameters)
+        {
+            DataTable dataTable = new DataTable();
+
+            try
+            {
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddRange(parameters);
+
+                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+                    {
+                        adapter.Fill(dataTable);
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Error executing query: " + ex.Message);
+            }
+
+            return dataTable;
         }
 
         public int ExecuteNonQuery(string query)
@@ -80,6 +108,7 @@ namespace RC_IS.Classes
         {
             CloseConnection();
             connection?.Dispose();
+            Trace.WriteLine("DatabaseHandler Closed and Disposed");
         }
 
         // ------------- CRUD -------------
@@ -221,6 +250,67 @@ namespace RC_IS.Classes
         }
 
         // ------------------ HELPER METHODS ------------------
+        internal List<Schools> GetSchoolData()
+        {
+            try
+            {
+                OpenConnection();
+                List<Schools> list = new List<Schools> ();
+                string query = "SELECT * FROM tblschool";
+                DataTable dt = ExecuteQuery(query);
+                foreach (DataRow row in dt.Rows)
+                {
+                    Schools schools = new Schools
+                    {
+                        Id = Convert.ToInt32(row["school_id"]),
+                        Desc = row["description"].ToString(),
+                    };
+                    list.Add(schools);
+                }
+                return list;
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine("ERROR GETTING SCHOOLDATA");
+                return null;
+            }
+            finally
+            {
+                this.Dispose();
+            }
+            
+        }
+
+        internal List<Programs> GetProgramData(int schoolId)
+        {
+            try
+            {
+                OpenConnection();
+                List<Programs> list = new List<Programs>();
+                string query = "SELECT * FROM tblprograms WHERE school_id = @SchoolID";
+                MySqlParameter parameter = new MySqlParameter("@SchoolID", schoolId);
+                DataTable dt = ExecuteQueryWithParameters(query, parameter);
+                foreach (DataRow row in dt.Rows)
+                {
+                    Programs programs = new Programs
+                    {
+                        Id = Convert.ToInt32(row["program_id"]),
+                        Desc = row["description"].ToString(),
+                    };
+                    list.Add(programs);
+                }
+                return list;
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine("ERROR GETTING SCHOOLDATA");
+                return null;
+            }
+            finally
+            {
+                this.Dispose();
+            }
+        }
         private string HashPassword(string password, string salt)
         {
             using (SHA256 sha256 = SHA256.Create())
@@ -272,5 +362,7 @@ namespace RC_IS.Classes
                 Trace.WriteLine("Error logging user action!: " + ex.Message);
             }
         }
+
+        
     }
 }
