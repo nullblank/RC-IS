@@ -16,60 +16,22 @@ using System.Windows.Shapes;
 namespace RC_IS.Windows
 {
     /// <summary>
-    /// Interaction logic for Dashboard.xaml
+    /// Interaction logic for AddResearch.xaml
     /// </summary>
-    public partial class Dashboard : Window
+    public partial class AddResearch : Window
     {
         private WindowState originalWindowState;
         private User _user;
-        private Window _window;
-        public Dashboard(User user, Window window)
+        public AddResearch(User user)
         {
             InitializeComponent();
             originalWindowState = this.WindowState;
             _user = user;
-            _window = window;
-            lblWelcome.Text = "Welcome " + _user.Description;
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            _window.Show();
             this.Close();
-        }
-
-        private void btnMinimize_Click(object sender, RoutedEventArgs e)
-        {
-            WindowState = WindowState.Minimized;
-        }
-
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                this.DragMove();
-            }
-        }
-
-        private void btnSearch_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btnAddResearches_Click(object sender, RoutedEventArgs e)
-        {
-            AddResearch form = new AddResearch(_user);
-            form.Show();
-        }
-
-        private void btnReport_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btnFilter_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void btnMaximize_Click(object sender, RoutedEventArgs e)
@@ -89,6 +51,19 @@ namespace RC_IS.Windows
             {
                 // Restore the window to the original size
                 this.WindowState = originalWindowState;
+            }
+        }
+
+        private void btnMinimize_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                this.DragMove();
             }
         }
     }

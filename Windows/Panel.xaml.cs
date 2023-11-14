@@ -49,8 +49,9 @@ namespace RC_IS.Windows
 
         private void btnResearchRecords_Click(object sender, RoutedEventArgs e)
         {
-            Dashboard form = new Dashboard(_user);
+            Dashboard form = new Dashboard(_user, this);
             form.Show();
+            this.Hide();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
