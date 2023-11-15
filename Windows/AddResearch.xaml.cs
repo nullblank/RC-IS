@@ -1,6 +1,7 @@
 ﻿using RC_IS.Classes;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -137,7 +138,7 @@ namespace RC_IS.Windows
 
         private void dgResearchersList_Loaded(object sender, RoutedEventArgs e)
         {
-
+            
         }
 
 
@@ -145,6 +146,46 @@ namespace RC_IS.Windows
         private void btnAddUnRegResearcher_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            Researcher researcher = (Researcher)button.DataContext;
+
+            if (!ResearcherExistsInGrid(dgResearchersSelected, researcher))
+            {
+                dgResearchersSelected.Items.Add(researcher);
+                //DEBUG
+                //if (dgResearchersList.ItemsSource is ObservableCollection<Researcher> researchers)
+                //{
+                //    researchers.Remove(researcher);
+                //}
+            }
+            else
+            {
+                MessageBox.Show($"Researcher {researcher.Name} already exists in the second DataGrid.");
+            }         
+        }
+
+        private bool ResearcherExistsInGrid(DataGrid dataGrid, Researcher researcher)
+        {
+            // Check if the researcher exists in the specified DataGrid
+            foreach (var item in dataGrid.Items)
+            {
+                if (item is Researcher existingResearcher && existingResearcher.Id == researcher.Id)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            Researcher researcher = (Researcher)button.DataContext;
+            dgResearchersSelected.Items.Remove(researcher);
         }
     }
 }
