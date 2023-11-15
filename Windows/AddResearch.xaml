@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RC_IS.Windows"
         mc:Ignorable="d"
-        Title="AddResearch" Height="671" Width="834"
+        Title="AddResearch" Height="1351" Width="854"
         WindowStyle="None"
         ResizeMode="NoResize"
         BorderThickness="0"
@@ -172,7 +172,6 @@
                                         FontFamily="{StaticResource Poppins}"
                                         TextWrapping="Wrap" Margin="0,0,0,0" />
                                     <TextBox x:Name="txtTitle"
-                                        Text=""
                                         FontSize="13"
                                         FontWeight="Medium"
                                         FontFamily="{StaticResource Poppins}"
@@ -292,22 +291,62 @@
                                     <RowDefinition Height="auto" />
                                 </Grid.RowDefinitions>
 
-                                <TextBlock Text="Search Adviser"
-                                                   Grid.Row="0"
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Search Adviser"
+                                                   Grid.Column="0"
                                                    Foreground="DarkGray"
                                                    FontSize="12"
                                                    FontFamily="{StaticResource Poppins}"
                                                    TextWrapping="Wrap" />
-                                <TextBox x:Name="txtSearchAdviser"
-                                                 Grid.Row="1"
-                                                 FontSize="13"
-                                                 FontWeight="Medium"
-                                                 FontFamily="{StaticResource Poppins}"
-                                                 Foreground="White"
-                                                 BorderBrush="DarkGray"
-                                                 Background="Transparent"
-                                                 Height="35"
-                                                 BorderThickness="0,0,0,2" Margin="0,0,0,0" />
+                                    <TextBox x:Name="txtSearchAdviser"
+                                             Grid.Column="0"
+                                             FontSize="13"
+                                             FontWeight="Medium"
+                                             FontFamily="{StaticResource Poppins}"
+                                             Foreground="White"
+                                             BorderBrush="DarkGray"
+                                             Background="Transparent"
+                                             Height="45"
+                                             Padding="0,20,0,0"
+                                             BorderThickness="0,0,0,2" Margin="0,0,0,0" />
+                                    <Button x:Name="btnAddUnRegStaff"
+                                        Grid.Column="1"
+                                        Content="Set as an Unregistered Member"
+                                        Foreground="White"
+                                        FontSize="12"
+                                        Cursor="Hand"
+                                        FontFamily="{StaticResource Poppins}"
+                                        Width="300"
+                                        Click="btnAddUnRegStaff_Click" Margin="0,0,0,0">
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}">
+                                                <Setter Property="Background" Value="#473ACB"/>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#FF39327E"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <Border Height="40"
+                                                CornerRadius="20"
+                                                
+                                                Background="{TemplateBinding Background}">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>
+                                    
+                                </Grid>
+
                                 <Grid Grid.Row="2" Margin="0,10,0,0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="auto" />
@@ -319,7 +358,7 @@
                                                        FontSize="12"
                                                        FontFamily="{StaticResource Poppins}"
                                                        TextWrapping="Wrap" />
-                                    <TextBlock Text="NO ADVISER SELECTED"
+                                    <TextBlock x:Name="lblSelectedAdviser" Text="NO ADVISER SELECTED"
                                                        Grid.Column="1"
                                                        Foreground="DarkGray"
                                                        FontSize="12"
@@ -334,7 +373,126 @@
                                                   Height="200"/>
 
                             </Grid>
-                            <Grid/>
+                            <Grid x:Name="Researcher_Data_Grid" Height="auto" Margin="0,10,0,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                </Grid.RowDefinitions>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Search Adviser"
+                                        Grid.Column="0"
+                                        Foreground="DarkGray"
+                                        FontSize="12"
+                                        FontFamily="{StaticResource Poppins}"
+                                        TextWrapping="Wrap" />
+                                    <TextBox x:Name="txtSearchResearcher"
+                                        Grid.Column="0"
+                                        FontSize="13"
+                                        FontWeight="Medium"
+                                        FontFamily="{StaticResource Poppins}"
+                                        Foreground="White"
+                                        BorderBrush="DarkGray"
+                                        Background="Transparent"
+                                        Height="45"
+                                        Padding="0,20,0,0"
+                                        BorderThickness="0,0,0,2" Margin="0,0,0,0" TextChanged="txtSearchResearcher_TextChanged" />
+                                    <Button x:Name="btnAddUnRegResearcher"
+                                        Grid.Column="1"
+                                        Content="Set as an Unregistered Researcher"
+                                        Foreground="White"
+                                        FontSize="12"
+                                        Cursor="Hand"
+                                        FontFamily="{StaticResource Poppins}"
+                                        Width="300"
+                                        Click="btnAddUnRegResearcher_Click" Margin="0,0,0,0">
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}">
+                                                <Setter Property="Background" Value="#473ACB"/>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#FF39327E"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <Border Height="40"
+                                                    CornerRadius="20"
+                                                
+                                                    Background="{TemplateBinding Background}">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>
+                                </Grid>
+
+                                <Grid Grid.Row="1" Margin="0,10,0,0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="Selected Researchers"
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Foreground="DarkGray"
+                                        FontSize="12"
+                                        HorizontalAlignment="Center"
+                                        FontFamily="{StaticResource Poppins}"
+                                        TextWrapping="Wrap" />
+                                    <TextBlock Text="Registered Researchers"
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Foreground="DarkGray"
+                                        FontSize="12"
+                                        HorizontalAlignment="Center"
+                                        FontFamily="{StaticResource Poppins}"
+                                        TextWrapping="Wrap" />
+
+                                    <DataGrid x:Name="dgResearchersList"
+                                              Grid.Row="1"
+                                              Grid.Column="0"
+                                                Margin="0,10,10,0"
+                                                Height="300"
+                                              CanUserAddRows="False"
+                                              AutoGenerateColumns="False" Loaded="dgResearchersList_Loaded">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="auto" />
+                                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
+                                            <!--DataGrid Button Properties-->
+                                            <DataGridTemplateColumn Header="Action" x:Name="actionColumn" Width="Auto">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <Button Content="Select" />
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                    <DataGrid x:Name="dgResearchersSelected"
+                                              Grid.Row="1"
+                                              Grid.Column="2"
+                                                Margin="10,10,0,0"
+                                                Height="300"/>
+                                </Grid>
+
+
+
+                            </Grid>
                         </StackPanel>
                     </ScrollViewer>
                 </Grid>

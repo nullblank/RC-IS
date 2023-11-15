@@ -110,5 +110,41 @@ namespace RC_IS.Windows
         {
 
         }
+
+        private void btnAddUnRegStaff_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult adviserBoxResult =  MessageBox.Show("The current name is going to be set as an UNREGISTERED ENTITY in the system. Do you wish to procede?", "WARNING!", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+            if (adviserBoxResult.Equals(MessageBoxResult.OK))
+            {
+                //add constructor here
+                lblSelectedAdviser.Text = txtSearchAdviser.Text;
+            }
+            else
+            {
+                txtSearchAdviser.Text = "NO ADVISER SELECTED";
+            }
+        }
+
+        private void txtSearchResearcher_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            dgResearchersList.ItemsSource = null;
+            string searchKeyword = txtSearchResearcher.Text;
+            DatabaseHandler dbHandler = new DatabaseHandler();
+            List<Researcher> researchers = dbHandler.GetResearchers(searchKeyword);
+            dgResearchersList.ItemsSource = researchers;
+
+        }
+
+        private void dgResearchersList_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+
+
+        private void btnAddUnRegResearcher_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

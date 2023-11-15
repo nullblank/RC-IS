@@ -6,8 +6,10 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Security.Policy;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 
 namespace RC_IS.Classes
 {
@@ -140,6 +142,76 @@ namespace RC_IS.Classes
                 MessageBox.Show("ERROR INSERTING USER: " + e.Message);
                 return false;
             }
+            finally
+            {
+                this.Dispose();
+            }
+        }
+        // READ
+
+        internal List<Researcher> GetResearchers(string researcherName)
+        {
+            try
+            {
+                OpenConnection();
+                List<Researcher> list = new List<Researcher>();
+                string query = "SELECT * FROM tblres WHERE res_fname LIKE @FirstName OR res_lname LIKE @FirstName OR res_mi LIKE @FirstName LIMIT 10";
+                MySqlParameter parameter = new MySqlParameter("@FirstName", "%" + researcherName + "%");
+                DataTable dt = ExecuteQueryWithParameters(query, parameter);
+                foreach (DataRow row in dt.Rows)
+                {
+                    if (!string.IsNullOrEmpty(row["res_fname"].ToString()))
+                    {
+                        Researcher researcher = new Researcher
+                        {
+                            Id = Convert.ToInt32(row["res_id"]),
+                            Name = row["res_fname"].ToString() + " " + row["res_mi"].ToString() + " " + row["res_lname"].ToString(),
+                        };
+                        list.Add(researcher);
+                    }
+                }
+                return list;
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine("ERROR GETTING RESEARCHERDATA");
+                return null;
+            }
+            finally
+            {
+                this.Dispose();
+            }
+        }
+
+        internal List<Programs> GetProgramData(int schoolId)
+        {
+            try
+            {
+                OpenConnection();
+                List<Programs> list = new List<Programs>();
+                string query = "SELECT * FROM tblprograms WHERE school_id = @SchoolID";
+                MySqlParameter parameter = new MySqlParameter("@SchoolID", schoolId);
+                DataTable dt = ExecuteQueryWithParameters(query, parameter);
+                foreach (DataRow row in dt.Rows)
+                {
+                    Programs programs = new Programs
+                    {
+                        Id = Convert.ToInt32(row["program_id"]),
+                        Desc = row["description"].ToString(),
+                    };
+                    list.Add(programs);
+                }
+                return list;
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine("ERROR GETTING PROGRAMDATA");
+                return null;
+            }
+            finally
+            {
+                this.Dispose();
+            }
         }
 
         // AUTHENTICATION
@@ -152,7 +224,6 @@ namespace RC_IS.Classes
                 if (hashedPasswordFromDatabase != null && salt != null)
                 {
                     string hashedEnteredPassword = HashPassword(enteredPassword, salt);
-                    //MessageBox.Show(hashedEnteredPassword + ":" + hashedPasswordFromDatabase);
                     bool passwordMatches = hashedEnteredPassword == hashedPasswordFromDatabase;
                     if (passwordMatches)
                     {
@@ -281,36 +352,7 @@ namespace RC_IS.Classes
             
         }
 
-        internal List<Programs> GetProgramData(int schoolId)
-        {
-            try
-            {
-                OpenConnection();
-                List<Programs> list = new List<Programs>();
-                string query = "SELECT * FROM tblprograms WHERE school_id = @SchoolID";
-                MySqlParameter parameter = new MySqlParameter("@SchoolID", schoolId);
-                DataTable dt = ExecuteQueryWithParameters(query, parameter);
-                foreach (DataRow row in dt.Rows)
-                {
-                    Programs programs = new Programs
-                    {
-                        Id = Convert.ToInt32(row["program_id"]),
-                        Desc = row["description"].ToString(),
-                    };
-                    list.Add(programs);
-                }
-                return list;
-            }
-            catch (MySqlException e)
-            {
-                Trace.WriteLine("ERROR GETTING SCHOOLDATA");
-                return null;
-            }
-            finally
-            {
-                this.Dispose();
-            }
-        }
+        
         private string HashPassword(string password, string salt)
         {
             using (SHA256 sha256 = SHA256.Create())
@@ -360,6 +402,10 @@ namespace RC_IS.Classes
             catch (MySqlException ex)
             {
                 Trace.WriteLine("Error logging user action!: " + ex.Message);
+            }
+            finally
+            {
+                this.Dispose();
             }
         }
 
