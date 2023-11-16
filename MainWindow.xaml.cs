@@ -67,11 +67,8 @@ namespace RC_IS
 
                 //DEBUGGING PURPOSES ONLY
 
-                //DatabaseHandler databaseHandler = new DatabaseHandler();
-                //if (databaseHandler.InsertUser("admin", "admin", "Anna Aelanna Cessara"))
-                //{
-                //    MessageBox.Show("SuperUser successfully Inserted.");
-                //}
+                MSDatabaseHandler dbHandler = new MSDatabaseHandler();
+
 
             }
             catch (MySqlException a)

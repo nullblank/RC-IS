@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RC_IS.Windows"
         mc:Ignorable="d"
-        Title="AddResearch" Height="1351" Width="854"
+        Title="AddResearch" Height="629" Width="854"
         WindowStyle="None"
         ResizeMode="NoResize"
         BorderThickness="0"
@@ -315,7 +315,7 @@
                                              BorderThickness="0,0,0,2" Margin="0,0,0,0" />
                                     <Button x:Name="btnAddUnRegStaff"
                                         Grid.Column="1"
-                                        Content="Set as an Unregistered Member"
+                                        Content="Set as an Unregistered Adviser"
                                         Foreground="White"
                                         FontSize="12"
                                         Cursor="Hand"
@@ -368,9 +368,25 @@
 
                                 </Grid>
                                 <DataGrid x:Name="dgAdvisers"
-                                                  Grid.Row="3"
-                                                  Margin="0,10,0,0"
-                                                  Height="200"/>
+                                            Grid.Row="3"
+                                            Margin="0,10,0,0"
+                                            Height="200"
+                                            CanUserAddRows="False"
+                                            AutoGenerateColumns="False"
+                                            BeginningEdit="dgAdvisers_BeginningEdit">
+                                    <DataGrid.Columns>
+                                        <!--<DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="auto" />-->
+                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
+                                        <!--DataGrid Button Properties-->
+                                        <DataGridTemplateColumn Header="Action" x:Name="adviserdActionColumn" Width="100">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Button Content="Set" Click="Button_Click_2" HorizontalAlignment="Stretch"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
 
                             </Grid>
                             <Grid x:Name="Researcher_Data_Grid" Height="auto" Margin="0,10,0,0">
@@ -386,7 +402,7 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="Search Adviser"
+                                    <TextBlock Text="Search Researcher"
                                         Grid.Column="0"
                                         Foreground="DarkGray"
                                         FontSize="12"
@@ -405,7 +421,7 @@
                                         BorderThickness="0,0,0,2" Margin="0,0,0,0" TextChanged="txtSearchResearcher_TextChanged" />
                                     <Button x:Name="btnAddUnRegResearcher"
                                         Grid.Column="1"
-                                        Content="Set as an Unregistered Researcher"
+                                        Content="Add as an Unregistered Researcher"
                                         Foreground="White"
                                         FontSize="12"
                                         Cursor="Hand"
@@ -446,7 +462,7 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBlock Text="Selected Researchers"
+                                    <TextBlock Text="Registered Researchers"
                                         Grid.Row="0"
                                         Grid.Column="0"
                                         Foreground="DarkGray"
@@ -454,7 +470,7 @@
                                         HorizontalAlignment="Center"
                                         FontFamily="{StaticResource Poppins}"
                                         TextWrapping="Wrap" />
-                                    <TextBlock Text="Registered Researchers"
+                                    <TextBlock Text="Selected Researchers"
                                         Grid.Row="0"
                                         Grid.Column="1"
                                         Foreground="DarkGray"
@@ -469,7 +485,9 @@
                                                 Margin="0,10,10,0"
                                                 Height="300"
                                               CanUserAddRows="False"
-                                              AutoGenerateColumns="False" Loaded="dgResearchersList_Loaded"
+                                              AutoGenerateColumns="False"
+                                              BeginningEdit="dgResearchersList_BeginningEdit"
+                                              
                                               GridLinesVisibility="None">
                                         <DataGrid.Columns>
                                             <!--<DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="auto" />-->
@@ -491,6 +509,7 @@
                                                 Height="300"
                                               CanUserAddRows="False"
                                               AutoGenerateColumns="False"
+                                              BeginningEdit="dgResearchersSelected_BeginningEdit"
                                               GridLinesVisibility="None">
                                         <DataGrid.Columns>
                                             <!--<DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="auto" />-->

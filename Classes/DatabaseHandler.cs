@@ -20,10 +20,10 @@ namespace RC_IS.Classes
 
         public DatabaseHandler()
         {
-            this.connectionString = ConfigurationManager.ConnectionStrings["MyDatabase"].ConnectionString;
+            this.connectionString = ConfigurationManager.ConnectionStrings["DbURC"].ConnectionString;
             Trace.WriteLine("DatabaseHandler Initiated");
         }
-        // ------------- CONTROLS -------------
+        // 
         private void OpenConnection()
         {
             if (connection == null)
@@ -148,7 +148,39 @@ namespace RC_IS.Classes
             }
         }
         // READ
-
+        internal List<Staff> GetStaff(string searchKeyword) // REPLACE WITH GET STAFF <-- Current function is for testing purposes only
+        {
+            try
+            {
+                OpenConnection();
+                List<Staff> list = new List<Staff>();
+                string query = "SELECT * FROM tblres WHERE res_fname LIKE @keyWord OR res_lname LIKE @keyWord OR res_mi LIKE @keyWord LIMIT 10";
+                MySqlParameter parameter = new MySqlParameter("@keyWord", "%" + searchKeyword + "%");
+                DataTable dt = ExecuteQueryWithParameters(query, parameter);
+                foreach (DataRow row in dt.Rows)
+                {
+                    if (!string.IsNullOrEmpty(row["res_fname"].ToString()))
+                    {
+                        Staff staff = new Staff
+                        {
+                            Id = Convert.ToInt32(row["res_id"]),
+                            Name = row["res_fname"].ToString() + " " + row["res_mi"].ToString() + " " + row["res_lname"].ToString(),
+                        };
+                        list.Add(staff);
+                    }
+                }
+                return list;
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine("ERROR GETTING STAFF DATA");
+                return null;
+            }
+            finally
+            {
+                this.Dispose();
+            }
+        }
         internal List<Researcher> GetResearchers(string researcherName)
         {
             try
