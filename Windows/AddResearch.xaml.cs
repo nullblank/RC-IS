@@ -113,20 +113,6 @@ namespace RC_IS.Windows
             }
         }
 
-        private void btnAddUnRegStaff_Click(object sender, RoutedEventArgs e) // Set unregistered staff as research paper adviser. 
-        {
-            MessageBoxResult adviserBoxResult =  MessageBox.Show("The current name is going to be set as an UNREGISTERED ENTITY in the system. Do you wish to procede?", "WARNING!", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
-            if (adviserBoxResult.Equals(MessageBoxResult.OK))
-            {
-                //add constructor here
-                lblSelectedAdviser.Text = txtSearchAdviser.Text;
-            }
-            else
-            {
-                txtSearchAdviser.Text = "NO ADVISER SELECTED";
-            }
-        }
-
         private async void txtSearchResearcher_TextChanged(object sender, TextChangedEventArgs e) // Search researcher event handler (txtSearchResearcher) (async) (await)
         { 
             dgResearchersList.ItemsSource = null;
@@ -150,35 +136,6 @@ namespace RC_IS.Windows
 
         }
         */
-
-        private void btnAddUnRegResearcher_Click(object sender, RoutedEventArgs e) // Add unregistered researcher as research paper author.
-        {
-            if (!string.IsNullOrEmpty(txtSearchResearcher.Text))
-            {
-                MessageBoxResult adviserBoxResult = MessageBox.Show("The current name is going to be set as an UNREGISTERED ENTITY in the system. Do you wish to procede?", "WARNING!", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
-                if (adviserBoxResult.Equals(MessageBoxResult.OK))
-                {
-                    // Add the researcher to the selected list
-                    Researcher researcher = new Researcher
-                    {
-                        // Default Id for unregistered researchers is 0
-                        Id = 0,
-                        Name = txtSearchResearcher.Text,
-                    };
-                    dgResearchersSelected.Items.Add(researcher);
-                }
-                else
-                {
-                    txtSearchResearcher.Text = "";
-                }
-            }
-            else
-            {
-                MessageBox.Show("Please enter a researcher's name", "Error: No input", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e) // Add researcher to selected list
         {
             Button button = (Button)sender;
@@ -186,12 +143,8 @@ namespace RC_IS.Windows
 
             if (!ResearcherExistsInGrid(dgResearchersSelected, researcher))
             {
+                Trace.WriteLine($"Added Student: ID[{researcher.Id}], NAME[{researcher.Name}]");
                 dgResearchersSelected.Items.Add(researcher);
-                //DEBUG
-                //if (dgResearchersList.ItemsSource is ObservableCollection<Researcher> researchers)
-                //{
-                //    researchers.Remove(researcher);
-                //}
             }
             else
             {
@@ -215,8 +168,16 @@ namespace RC_IS.Windows
         {
             Button button = (Button)sender;
             Researcher researcher = (Researcher)button.DataContext;
-            // MessageBox.Show($"You have removed ID: {researcher.Id}"); // DEBUG
+            Trace.WriteLine($"Removed Student: ID[{researcher.Id}], NAME[{researcher.Name}]");
             dgResearchersSelected.Items.Remove(researcher);
+        }
+
+        private async void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            Staff staff = (Staff)button.DataContext;
+            Trace.WriteLine($"Selected Adviser: ID[{staff.Id}], NAME[{staff.Name}]");
+            lblSelectedAdviser.Text = staff.Name;
         }
 
         private void dgResearchersSelected_BeginningEdit(object sender, DataGridBeginningEditEventArgs e) // Prevent editing of the selected researchers
@@ -234,21 +195,15 @@ namespace RC_IS.Windows
             e.Cancel = true;
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private async void txtSearchAdviser_TextChanged(object sender, TextChangedEventArgs e)
         {
+            dgAdvisers.ItemsSource = null;
             string searchKeyword = txtSearchAdviser.Text;
-            DatabaseHandler dbHandler = new DatabaseHandler();
-            List<Staff> staff = dbHandler.GetStaff(searchKeyword);
-            if (staff.Count > 0)
-            {
-                int staffId = staff[0].Id;
-                string staffName = staff[0].Name;
-                lblSelectedAdviser.Text = staffName;
-            }
-            else
-            {
-                MessageBox.Show("Error getting staff member's ID", "DEADLY ERROR", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
+
+            MSDatabaseHandler dbHandler = new MSDatabaseHandler();
+            List<Staff> staff = await dbHandler.GetStaffAsync(searchKeyword);
+
+            dgAdvisers.ItemsSource = staff;
         }
     }
 }

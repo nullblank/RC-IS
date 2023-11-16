@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RC_IS.Windows"
         mc:Ignorable="d"
-        Title="AddResearch" Height="629" Width="854"
+        Title="AddResearch" Height="630" Width="854"
         WindowStyle="None"
         ResizeMode="NoResize"
         BorderThickness="0"
@@ -312,39 +312,8 @@
                                              Background="Transparent"
                                              Height="45"
                                              Padding="0,20,0,0"
-                                             BorderThickness="0,0,0,2" Margin="0,0,0,0" />
-                                    <Button x:Name="btnAddUnRegStaff"
-                                        Grid.Column="1"
-                                        Content="Set as an Unregistered Adviser"
-                                        Foreground="White"
-                                        FontSize="12"
-                                        Cursor="Hand"
-                                        FontFamily="{StaticResource Poppins}"
-                                        Width="300"
-                                        Click="btnAddUnRegStaff_Click" Margin="0,0,0,0">
-                                        <Button.Style>
-                                            <Style TargetType="{x:Type Button}">
-                                                <Setter Property="Background" Value="#473ACB"/>
-                                                <Style.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter Property="Background" Value="#FF39327E"/>
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Button.Style>
-                                        <Button.Template>
-                                            <ControlTemplate TargetType="{x:Type Button}">
-                                                <Border Height="40"
-                                                CornerRadius="20"
-                                                
-                                                Background="{TemplateBinding Background}">
-                                                    <ContentPresenter HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                    </Button>
-                                    
+                                             BorderThickness="0,0,0,2" Margin="0,0,0,0" TextChanged="txtSearchAdviser_TextChanged" />
+
                                 </Grid>
 
                                 <Grid Grid.Row="2" Margin="0,10,0,0">
@@ -373,7 +342,8 @@
                                             Height="200"
                                             CanUserAddRows="False"
                                             AutoGenerateColumns="False"
-                                            BeginningEdit="dgAdvisers_BeginningEdit">
+                                            BeginningEdit="dgAdvisers_BeginningEdit"
+                                            GridLinesVisibility="None">
                                     <DataGrid.Columns>
                                         <!--<DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="auto" />-->
                                         <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
@@ -419,37 +389,6 @@
                                         Height="45"
                                         Padding="0,20,0,0"
                                         BorderThickness="0,0,0,2" Margin="0,0,0,0" TextChanged="txtSearchResearcher_TextChanged" />
-                                    <Button x:Name="btnAddUnRegResearcher"
-                                        Grid.Column="1"
-                                        Content="Add as an Unregistered Researcher"
-                                        Foreground="White"
-                                        FontSize="12"
-                                        Cursor="Hand"
-                                        FontFamily="{StaticResource Poppins}"
-                                        Width="300"
-                                        Click="btnAddUnRegResearcher_Click" Margin="0,0,0,0">
-                                        <Button.Style>
-                                            <Style TargetType="{x:Type Button}">
-                                                <Setter Property="Background" Value="#473ACB"/>
-                                                <Style.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter Property="Background" Value="#FF39327E"/>
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Button.Style>
-                                        <Button.Template>
-                                            <ControlTemplate TargetType="{x:Type Button}">
-                                                <Border Height="40"
-                                                    CornerRadius="20"
-                                                
-                                                    Background="{TemplateBinding Background}">
-                                                    <ContentPresenter HorizontalAlignment="Center"
-                                                        VerticalAlignment="Center"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                    </Button>
                                 </Grid>
 
                                 <Grid Grid.Row="1" Margin="0,10,0,0">
