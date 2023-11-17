@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Security.Policy;
@@ -441,6 +443,37 @@ namespace RC_IS.Classes
             }
         }
 
-        
+        public void StoreDocument(List<ResearchFiles> files)
+        {
+            try
+            {
+                OpenConnection();
+                string query = "INSERT INTO tblfiles (paper_id, files_content, files_name) VALUES (1, @DocumentData, @DocumentName)";
+
+                foreach (ResearchFiles file in files)
+                {
+                    byte[] documentBytes = File.ReadAllBytes(file.FilePath);
+
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@DocumentName", file.FileName);
+                        command.Parameters.AddWithValue("@DocumentData", documentBytes);
+
+                        command.ExecuteNonQuery();
+                    }
+                }
+                Trace.WriteLine("Document stored successfully!");
+            }
+            catch (MySqlException ex)
+            {
+                Trace.WriteLine($"Error storing document: {ex.Message}");
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+
     }
 }

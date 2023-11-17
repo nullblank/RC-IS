@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RC_IS.Windows"
         mc:Ignorable="d"
-        Title="AddResearch" Height="2035" Width="838"
+        Title="AddResearch" Height="561" Width="838"
         WindowStyle="None"
         ResizeMode="NoResize"
         BorderThickness="0"
@@ -641,18 +641,100 @@
                                     GridLinesVisibility="None">
                                     <DataGrid.Columns>
                                         <!--<DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="auto" />-->
-                                        <DataGridTextColumn Header="Filename" Binding="{Binding Name}" Width="*" />
-                                        <DataGridTextColumn Header="Filepath" Binding="{Binding Name}" Width="*" />
+                                        <DataGridTextColumn Header="Filename" Binding="{Binding FileName}" Width="150" />
+                                        <DataGridTextColumn Header="Filepath" Binding="{Binding FilePath}" Width="*" />
                                         <!--DataGrid Button Properties-->
                                         <DataGridTemplateColumn Header="Action" x:Name="adviserdActionColumn1" Width="100">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <Button Content="Remove" Click="Button_Click_2" HorizontalAlignment="Stretch"/>
+                                                    <Button Content="Remove" Click="Button_Click_5" HorizontalAlignment="Stretch"/>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
                                     </DataGrid.Columns>
                                 </DataGrid>
+
+                            </Grid>
+                            <Grid x:Name="DEBUG_SECTION" Height="40" Width="706">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Files"
+                                    Grid.Column="0"
+                                    Foreground="DarkGray"
+                                    FontSize="12"
+                                    FontFamily="{StaticResource Poppins}"
+                                    TextWrapping="Wrap" />
+                                <Button x:Name="btnDebugUpload"
+                                    Grid.Column="1"
+                                    BorderThickness="0"
+                                    Content="DEBUG UPLOAD FILES"
+                                    Foreground="White"
+                                    FontSize="12"
+                                    Cursor="Hand"
+                                    FontFamily="{StaticResource Poppins}"
+                                    Click="btnDebugUpload_Click" Margin="0,0,0,0">
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Setter Property="Background" Value="#473ACB"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#FF39327E"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border Width="300" Height="40"
+                                                CornerRadius="20"
+                                                Background="{TemplateBinding Background}">
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+
+
+                            </Grid>
+                            <Grid x:Name="Submit_Section" Height="40" Width="706" Margin="0,20,0,40">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Button x:Name="btnSubmit"
+                                    BorderThickness="0"
+                                    Content="Submit"
+                                    Foreground="White"
+                                    FontSize="12"
+                                    Cursor="Hand"
+                                    FontFamily="{StaticResource Poppins}"
+                                    Click="btnSubmit_Click" Margin="0,0,0,0">
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Setter Property="Background" Value="#473ACB"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#FF39327E"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border Width="300" Height="40"
+                                                CornerRadius="20"
+                                                Background="{TemplateBinding Background}">
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+
 
                             </Grid>
                         </StackPanel>

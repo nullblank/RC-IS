@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.IO; // Added for file handling
 
 namespace RC_IS.Windows
 {
@@ -272,12 +273,56 @@ namespace RC_IS.Windows
             };
             if (openFileDialog.ShowDialog() == true)
             {
-                ResearchFiles files = new ResearchFiles
+                foreach (string filepath in openFileDialog.FileNames)
                 {
-                    FilePath = openFileDialog.FileName;
-                };
+                    ResearchFiles files = new ResearchFiles
+                    {
+                        FileName = System.IO.Path.GetFileName(filepath),
+                        FilePath = filepath,
+                    };
+                    list.Add(files);
+                }
+                dgFilesSelected.ItemsSource = list;
             }
-            dgFilesSelected.ItemsSource = files;
+            
+        }
+
+        private void dgFilesSelected_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            e.Cancel = true;
+        }
+
+        private void Button_Click_5(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            ResearchFiles files = (ResearchFiles)button.DataContext;
+
+            // Remove the item from the underlying data source
+            List<ResearchFiles> list = (List<ResearchFiles>)dgFilesSelected.ItemsSource;
+            list.Remove(files);
+
+            // Update the DataGrid by resetting the ItemsSource
+            dgFilesSelected.ItemsSource = null;
+            dgFilesSelected.ItemsSource = list;
+        }
+
+        private void btnDebugUpload_Click(object sender, RoutedEventArgs e)
+        {
+            if (dgFilesSelected.Items.Count > 0)
+            {
+                List<ResearchFiles> list = (List<ResearchFiles>)dgFilesSelected.ItemsSource;
+                DatabaseHandler dbHandler = new DatabaseHandler();
+                dbHandler.StoreDocument(list);
+            }
+            else
+            {
+                Trace.WriteLine("NO FILES SELECTED");
+            }   
+        }
+
+        private void btnSubmit_Click(object sender, RoutedEventArgs e) // Submits the entire list as a new research paper document
+        {
+
         }
     }
 }
