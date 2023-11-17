@@ -1,4 +1,5 @@
-﻿using RC_IS.Classes;
+﻿using Microsoft.Win32;
+using RC_IS.Classes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -48,7 +49,31 @@ namespace RC_IS.Windows
                 this.WindowState = originalWindowState;
             }
         }
-        
+
+        private bool ResearcherExistsInGrid(DataGrid dataGrid, Researcher researcher) // Check if researcher exists in the selected list already (dgResearchersSelected)
+        {
+            foreach (var item in dataGrid.Items)
+            {
+                if (item is Researcher existingResearcher && existingResearcher.Id == researcher.Id)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool StaffExistsInGrid(DataGrid dataGrid, Staff staff) // Check if researcher exists in the selected list already (dgResearchersSelected)
+        {
+            foreach (var item in dataGrid.Items)
+            {
+                if (item is Staff existingResearcher && existingResearcher.Id == staff.Id)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private void LoadSchoolData() // Load school data from database to combobox (txtSchool)
         {
             txtSchool.ItemsSource = null;
@@ -67,27 +92,6 @@ namespace RC_IS.Windows
 
 
         // --------------- Event Handlers ---------------
-        private void txtSchool_SelectionChanged(object sender, SelectionChangedEventArgs e) // When a school is selected, load the programs of that school
-        {
-            Schools selectedData = (Schools)txtSchool.SelectedItem;
-            int selectedId = selectedData.Id;
-            Trace.WriteLine("SELECTED SCHOOL ID: " + selectedId.ToString());
-            LoadProgramData(selectedId);
-        }
-
-        
-
-        
-        private void txtCourse_SelectionChanged(object sender, SelectionChangedEventArgs e) // When a program is selected, assign ID
-        {
-            Programs selectedData = (Programs)txtCourse.SelectedItem;
-            if (selectedData != null)
-            {
-                int selectedId = selectedData.Id;
-                Trace.WriteLine("SELECTED COURSE ID: " + selectedId.ToString());
-            }
-        }
-
         private void btnClose_Click(object sender, RoutedEventArgs e) // Close window button event handler (btnClose)
         {
             this.Close();
@@ -113,6 +117,7 @@ namespace RC_IS.Windows
             }
         }
 
+        // txtSearchResearcher_TextChanged
         private async void txtSearchResearcher_TextChanged(object sender, TextChangedEventArgs e) // Search researcher event handler (txtSearchResearcher) (async) (await)
         { 
             dgResearchersList.ItemsSource = null;
@@ -141,7 +146,7 @@ namespace RC_IS.Windows
             Button button = (Button)sender;
             Researcher researcher = (Researcher)button.DataContext;
 
-            if (!ResearcherExistsInGrid(dgResearchersSelected, researcher))
+            if (!ResearcherExistsInGrid(dgResearchersSelected, researcher)) // Check if researcher exists in the selected list already (dgResearchersSelected)
             {
                 Trace.WriteLine($"Added Student: ID[{researcher.Id}], NAME[{researcher.Name}]");
                 dgResearchersSelected.Items.Add(researcher);
@@ -150,18 +155,6 @@ namespace RC_IS.Windows
             {
                 MessageBox.Show($"Researcher {researcher.Name} is already selected!");
             }         
-        }
-
-        private bool ResearcherExistsInGrid(DataGrid dataGrid, Researcher researcher) // Check if researcher exists in the selected list already (dgResearchersSelected)
-        {
-            foreach (var item in dataGrid.Items)
-            {
-                if (item is Researcher existingResearcher && existingResearcher.Id == researcher.Id)
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e) // Remove researcher from selected list
@@ -180,6 +173,35 @@ namespace RC_IS.Windows
             lblSelectedAdviser.Text = staff.Name;
         }
 
+        private async void txtSearchAdviser_TextChanged(object sender, TextChangedEventArgs e) // Search adviser event handler (txtSearchAdviser) (async) (await)
+        {
+            dgAdvisers.ItemsSource = null;
+            string searchKeyword = txtSearchAdviser.Text;
+
+            MSDatabaseHandler dbHandler = new MSDatabaseHandler();
+            List<Staff> staff = await dbHandler.GetStaffAsync(searchKeyword);
+
+            dgAdvisers.ItemsSource = staff;
+        }
+
+        private void txtSchool_SelectionChanged(object sender, SelectionChangedEventArgs e) // When a school is selected, load the programs of that school
+        {
+            Schools selectedData = (Schools)txtSchool.SelectedItem;
+            int selectedId = selectedData.Id;
+            Trace.WriteLine("SELECTED SCHOOL ID: " + selectedId.ToString());
+            LoadProgramData(selectedId);
+        }
+
+        private void txtCourse_SelectionChanged(object sender, SelectionChangedEventArgs e) // When a program is selected, assign ID
+        {
+            Programs selectedData = (Programs)txtCourse.SelectedItem;
+            if (selectedData != null)
+            {
+                int selectedId = selectedData.Id;
+                Trace.WriteLine("SELECTED COURSE ID: " + selectedId.ToString());
+            }
+        }
+
         private void dgResearchersSelected_BeginningEdit(object sender, DataGridBeginningEditEventArgs e) // Prevent editing of the selected researchers
         {
             e.Cancel = true;
@@ -195,15 +217,67 @@ namespace RC_IS.Windows
             e.Cancel = true;
         }
 
-        private async void txtSearchAdviser_TextChanged(object sender, TextChangedEventArgs e)
+        private void Button_Click_3(object sender, RoutedEventArgs e) // Add panelist to selected list
         {
-            dgAdvisers.ItemsSource = null;
-            string searchKeyword = txtSearchAdviser.Text;
+            Button button = (Button)sender;
+            Staff staff = (Staff)button.DataContext;
+
+            if (!StaffExistsInGrid(dgPanelistSelected, staff)) // Check if staff exists in the selected list already (dgPanelistSelected)
+            {
+                Trace.WriteLine($"Added Panelist: ID[{staff.Id}], NAME[{staff.Name}]");
+                dgPanelistSelected.Items.Add(staff);
+            }
+            else
+            {
+                MessageBox.Show($"Panelist {staff.Name} is already selected!");
+            }
+        }
+
+        private async void txtSearchPanelist_TextChanged(object sender, TextChangedEventArgs e) // Search panelist event handler
+        {
+            dgPanelist.ItemsSource = null;
+            string searchKeyword = txtSearchPanelist.Text;
 
             MSDatabaseHandler dbHandler = new MSDatabaseHandler();
             List<Staff> staff = await dbHandler.GetStaffAsync(searchKeyword);
 
-            dgAdvisers.ItemsSource = staff;
+            dgPanelist.ItemsSource = staff;
+        }
+
+        private void dgPanelist_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            e.Cancel = true;
+        }
+
+        private void dgPanelistSelected_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            e.Cancel = true;
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e) // Remove panelist from selected list
+        {
+            Button button = (Button)sender;
+            Staff staff = (Staff)button.DataContext;
+            Trace.WriteLine($"Removed Student: ID[{staff.Id}], NAME[{staff.Name}]");
+            dgPanelistSelected.Items.Remove(staff);
+        }
+
+        private void btnBrowseFiles_Click(object sender, RoutedEventArgs e)
+        {
+            List<ResearchFiles> list  = new List<ResearchFiles>();
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Multiselect = true,
+                Filter = "PDF Files (*.pdf)|*.pdf|Word Files (*.docx)|*.docx|All files (*.*)|*.*"
+            };
+            if (openFileDialog.ShowDialog() == true)
+            {
+                ResearchFiles files = new ResearchFiles
+                {
+                    FilePath = openFileDialog.FileName;
+                };
+            }
+            dgFilesSelected.ItemsSource = files;
         }
     }
 }
