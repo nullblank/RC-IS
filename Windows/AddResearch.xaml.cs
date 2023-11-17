@@ -263,7 +263,7 @@ namespace RC_IS.Windows
             dgPanelistSelected.Items.Remove(staff);
         }
 
-        private void btnBrowseFiles_Click(object sender, RoutedEventArgs e)
+        private void btnBrowseFiles_Click(object sender, RoutedEventArgs e) // Browse files event handler (btnBrowseFiles)
         {
             List<ResearchFiles> list  = new List<ResearchFiles>();
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -287,12 +287,12 @@ namespace RC_IS.Windows
             
         }
 
-        private void dgFilesSelected_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        private void dgFilesSelected_BeginningEdit(object sender, DataGridBeginningEditEventArgs e) // Prevent editing of the selected files
         {
             e.Cancel = true;
         }
 
-        private void Button_Click_5(object sender, RoutedEventArgs e)
+        private void Button_Click_5(object sender, RoutedEventArgs e) // Remove file from selected list (dgFilesSelected)
         {
             Button button = (Button)sender;
             ResearchFiles files = (ResearchFiles)button.DataContext;
@@ -306,7 +306,7 @@ namespace RC_IS.Windows
             dgFilesSelected.ItemsSource = list;
         }
 
-        private void btnDebugUpload_Click(object sender, RoutedEventArgs e)
+        private void btnDebugUpload_Click(object sender, RoutedEventArgs e) // Debug button for uploading files to database
         {
             if (dgFilesSelected.Items.Count > 0)
             {
