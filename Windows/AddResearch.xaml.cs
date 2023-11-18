@@ -30,14 +30,13 @@ namespace RC_IS.Windows
         public AddResearch(User user) // Constructor for AddResearch window (called from MainWindow) 
         {
             InitializeComponent();
-            DatabaseHandler dbHander = new DatabaseHandler();
             originalWindowState = this.WindowState;
             _user = user;
             LoadSchoolData();
+            LoadAgendaData();
         }
 
         // ------------- Methods -------------
-
         private void ToggleMaximize() // Maximize window to fullscreen and vice versa
         {
             if (this.WindowState != WindowState.Maximized)
@@ -81,6 +80,21 @@ namespace RC_IS.Windows
             DatabaseHandler dbHandler = new DatabaseHandler();
             List<Schools> schools = dbHandler.GetSchoolData();
             txtSchool.ItemsSource = schools;
+        }
+
+        private void LoadAgendaData() // Load agenda data from database to combobox (txtAgenda)
+        {
+            txtAgenda.ItemsSource = null;
+            DatabaseHandler dbHandler = new DatabaseHandler();
+            List<Agenda> agendas = dbHandler.GetAgendaData();
+            if (agendas != null && agendas.Any())
+            {
+                txtAgenda.ItemsSource = agendas;
+            }
+            else
+            {
+                Trace.WriteLine("No agenda data retrieved from the database.");
+            }
         }
 
         private void LoadProgramData(int schoolId) // Load program data from database to combobox (txtCourse)
@@ -191,6 +205,19 @@ namespace RC_IS.Windows
             int selectedId = selectedData.Id;
             Trace.WriteLine("SELECTED SCHOOL ID: " + selectedId.ToString());
             LoadProgramData(selectedId);
+        }
+
+        private void txtAgenda_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (txtAgenda.SelectedItem != null && txtAgenda.SelectedItem is Agenda selectedData)
+            {
+                int selectedId = selectedData.Id;
+                Trace.WriteLine("SELECTED Agenda ID: " + selectedId.ToString());
+            }
+            else
+            {
+                Trace.WriteLine("No item selected or selected item is not of type Agenda.");
+            }
         }
 
         private void txtCourse_SelectionChanged(object sender, SelectionChangedEventArgs e) // When a program is selected, assign ID
@@ -322,7 +349,9 @@ namespace RC_IS.Windows
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e) // Submits the entire list as a new research paper document
         {
-
+            
         }
+
+        
     }
 }

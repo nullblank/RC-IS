@@ -379,14 +379,43 @@ namespace RC_IS.Classes
                 Trace.WriteLine("ERROR GETTING SCHOOLDATA");
                 return null;
             }
-            finally
-            {
-                this.Dispose();
-            }
-            
         }
 
-        
+        internal List<Agenda> GetAgendaData() // Get all agenda data from database
+        {
+            try
+            {
+                OpenConnection();
+                List<Agenda> list = new List<Agenda>();
+                string query = "SELECT * FROM tblagenda";
+                DataTable dt = ExecuteQuery(query);
+                if (dt != null)
+                {
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        Agenda agenda = new Agenda
+                        {
+                            Id = Convert.ToInt32(row["agenda_id"]),
+                            Desc = row["description"].ToString(),
+                        };
+                        Trace.WriteLine($"Agenda ID: {agenda.Id} | Agenda Description: {agenda.Desc}"); 
+                        list.Add(agenda);
+                    }
+                }
+                else
+                {
+                    Trace.WriteLine("DataTable is null or empty. No data retrieved from the database.");
+                }
+                return list;
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine($"ERROR GETTING AGENDADATA: {e.Message}");
+                return null;
+            }
+        }
+
+
         private string HashPassword(string password, string salt)
         {
             using (SHA256 sha256 = SHA256.Create())
@@ -474,6 +503,6 @@ namespace RC_IS.Classes
             }
         }
 
-
+        
     }
 }
