@@ -9,23 +9,23 @@ namespace RC_IS.Classes
 {
     internal class ValidationHelper
     {
-        public List<string> GetEmptyControls(List<TextBox> textboxes, List<DataGrid> datagrids)
+        public List<ControlInfo> GetEmptyControls(List<ControlInfo> controls)
         {
-            List<string> emptyControls = new List<string>();
+            List<ControlInfo> emptyControls = new List<ControlInfo>();
 
-            foreach (var textBox in textboxes)
+            foreach (var controlInfo in controls)
             {
-                if (string.IsNullOrWhiteSpace(textBox.Text))
+                if (controlInfo.Control is TextBox textBox && string.IsNullOrWhiteSpace(textBox.Text))
                 {
-                    emptyControls.Add(textBox.Name); // or any other identifier
+                    emptyControls.Add(controlInfo);
                 }
-            }
-
-            foreach (var dataGrid in datagrids)
-            {
-                if (dataGrid.Items.Count == 0)
+                else if (controlInfo.Control is DataGrid dataGrid && dataGrid.Items.Count == 0)
                 {
-                    emptyControls.Add(dataGrid.Name); // or any other identifier
+                    emptyControls.Add(controlInfo);
+                }
+                else if (controlInfo.Control is ComboBox comboBox && comboBox.SelectedIndex == -1)
+                {
+                    emptyControls.Add(controlInfo);
                 }
             }
 

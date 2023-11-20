@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.IO; // Added for file handling
+using System.Text.RegularExpressions;
 
 namespace RC_IS.Windows
 {
@@ -414,33 +415,45 @@ namespace RC_IS.Windows
             }   
         }
 
+        private string GetNumericValueWithoutHyphen(string formattedText)
+        {
+            return new string(formattedText.Where(char.IsDigit).ToArray());
+        }
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e) // Submits the entire list as a new research paper document
         {
-            List<TextBox> textBoxes = new List<TextBox>
+            List<ControlInfo> allControls = new List<ControlInfo> // List of all controls that need to be validated
             {
-                txtTitle, txtYear, txtSchool, txtCourse, txtAgenda
+                new ControlInfo { Name = "Title is empty", Control = txtTitle },
+                new ControlInfo { Name = "Year is empty", Control = txtYear },
+                new ControlInfo { Name = "No school selected", Control = txtSchool },
+                new ControlInfo { Name = "No course/program selected", Control = txtCourse },
+                new ControlInfo { Name = "No agenda selected", Control = txtAgenda },
+                new ControlInfo { Name = "No panelists selected", Control = dgPanelistSelected },
+                new ControlInfo { Name = "No authors selected", Control = dgResearchersSelected },
+                new ControlInfo { Name = "No files seleected", Control = dgFilesSelected },
             };
-
-            List<DataGrid> dataGrids = new List<DataGrid>
-            {
-                dgPanelistSelected, dgResearchersSelected, dgFilesSelected
-            };
-
+            // Validate the controls
+            ValidationHelper validator = new ValidationHelper();
+            List<ControlInfo> emptyControls = validator.GetEmptyControls(allControls);
+            // If there are empty controls, show an error message
             if (emptyControls.Count > 0)
             {
                 // Handle the empty controls (e.g., show a message)
-                string errorMessage = "The following controls are empty:\n" + string.Join("\n", emptyControls);
+                string errorMessage = "The following need attention:\n" +
+                string.Join("\n", emptyControls.Select(info => info.Name));
                 MessageBox.Show(errorMessage, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            // If there are no empty controls, proceed to submit the paper
             else
             {
-                ValidationHelper validator = new ValidationHelper();
-                List<string> emptyControls = validator.GetEmptyControls(textBoxes, dataGrids);
+                Trace.WriteLine("Validation returns clear!");
+                int year = Int32.Parse(GetNumericValueWithoutHyphen(txtYear.Text));
 
                 Schools selectedSchool = (Schools)txtSchool.SelectedItem;
                 Programs selectedProgram = (Programs)txtCourse.SelectedItem;
                 Agenda selectedAgenda = (Agenda)txtAgenda.SelectedItem;
+
                 Papers paper = new Papers
                 {
                     Title = txtTitle.Text,
@@ -458,11 +471,70 @@ namespace RC_IS.Windows
                 dbHandler.InsertAdviser(paper);
                 dbHandler.InsertAuthors(paper);
                 dbHandler.InsertPanelist(paper);
+
+                //Trace.WriteLine("--------- PAPER DEBUG ---------");
+                //Trace.WriteLine($"Title: {txtTitle.Text}");
+                //Trace.WriteLine($"YEAR: {year}");
+                //Trace.WriteLine($"School:  {selectedSchool.Id}");
+                //Trace.WriteLine($"Program: {selectedProgram.Id}");
+                //Trace.WriteLine($"Agenda: {selectedAgenda.Id}");
+                //Trace.WriteLine($"Adviser: {_staff.Id}");
+                //foreach (object author in dgResearchersSelected.Items)
+                //{
+                //    if (author is Researcher)
+                //    {
+                //        Researcher researcher = (Researcher)author;
+                //        Trace.WriteLine($"Author Student: [ID]{researcher.Id}[NAME]{researcher.Name}");
+                //    }
+                //    else if (author is Staff)
+                //    {
+                //        Staff staff = (Staff)author;
+                //        Trace.WriteLine($"Author Staff: [ID]{staff.Id}[NAME]{staff.Name}");
+                //    }
+                //}
+                //foreach (Staff staff in dgPanelistSelected.Items)
+                //{
+                //    Trace.WriteLine($"Panelist: [ID]{staff.Id}[NAME]{staff.Name}");
+                //}
+                //foreach (ResearchFiles files in dgFilesSelected.Items)
+                //{
+                //    Trace.WriteLine($"File: [NAME]{files.FileName}[PATH]{files.FilePath}");
+                //}
+                //Trace.WriteLine("-------------------------------");
             }
 
-            
+
         }
 
-        
+        private void txtYear_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (!Regex.IsMatch(e.Text, "[0-9]"))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtYear_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+
+            // Remove non-numeric characters
+            string numericText = new string(textBox.Text.Where(char.IsDigit).ToArray());
+
+            // Format the text as ####-####
+            if (numericText.Length > 4)
+            {
+                numericText = numericText.Insert(4, "-");
+            }
+
+            // Limit the total length to 9 characters
+            if (numericText.Length > 9)
+            {
+                numericText = numericText.Substring(0, 9);
+            }
+
+            textBox.Text = numericText;
+            textBox.CaretIndex = numericText.Length; // Set the caret position at the end
+        }
     }
 }

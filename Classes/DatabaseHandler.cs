@@ -473,12 +473,12 @@ namespace RC_IS.Classes
             }
         }
 
-        public void StoreDocument(List<ResearchFiles> files)
+        public void InsertDocuments(List<ResearchFiles> files, Papers paper)
         {
             try
             {
                 OpenConnection();
-                string query = "INSERT INTO tblfiles (paper_id, files_content, files_name) VALUES (1, @DocumentData, @DocumentName)";
+                string query = "INSERT INTO tblfiles (paper_id, files_content, files_name) VALUES (@PaperID, @DocumentData, @DocumentName)";
 
                 foreach (ResearchFiles file in files)
                 {
@@ -486,6 +486,7 @@ namespace RC_IS.Classes
 
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
+                        command.Parameters.AddWithValue("@PaperID", paper.Id);
                         command.Parameters.AddWithValue("@DocumentName", file.FileName);
                         command.Parameters.AddWithValue("@DocumentData", documentBytes);
 
