@@ -108,7 +108,7 @@ namespace RC_IS.Classes
             try
             {
                 List<Staff> list = new List<Staff>();
-                string query = "SELECT TOP 5 szEmpFirstName, szEmpLastName, szEmpMiddle, szEmpID " +
+                string query = "SELECT TOP 10 szEmpFirstName, szEmpLastName, szEmpMiddle, szEmpID " +
                                 "FROM dbo.UVW_EMPLOYEES " +
                                 "WHERE szEmpFirstName LIKE @KeyWord OR szEmpLastName LIKE @KeyWord OR szEmpMiddle LIKE @KeyWord OR szEmpID LIKE @KeyWord";
                 SqlParameter parameter = new SqlParameter("@keyWord", "%" + searchKeyword + "%");
@@ -143,13 +143,9 @@ namespace RC_IS.Classes
             try
             {
                 List<Researcher> list = new List<Researcher>();
-                string query = "SELECT TOP 5 STDN_FNM, STDN_LNM, STDN_MID, STDN_IDN " +
+                string query = "SELECT TOP 10 STDN_FNM, STDN_LNM, STDN_MID, STDN_IDN " +
                                    "FROM DBO.UVW_CURRENT_ENROLLED_STUDENTS " +
-                                   "WHERE STDN_FNM LIKE @KeyWord OR STDN_LNM LIKE @KeyWord OR STDN_MID LIKE @KeyWord OR STDN_IDN LIKE @KeyWord " +
-                                   "UNION " +
-                                   "SELECT TOP 5 szEmpFirstName, szEmpLastName, szEmpMiddle, szEmpID " +
-                                   "FROM dbo.UVW_EMPLOYEES " +
-                                   "WHERE szEmpFirstName LIKE @KeyWord OR szEmpLastName LIKE @KeyWord OR szEmpMiddle LIKE @KeyWord OR szEmpID LIKE @KeyWord";
+                                   "WHERE STDN_FNM LIKE @KeyWord OR STDN_LNM LIKE @KeyWord OR STDN_MID LIKE @KeyWord OR STDN_IDN LIKE @KeyWord ";
                 SqlParameter parameter = new SqlParameter("@KeyWord", "%" + keyWord + "%");
                 DataTable dt = await Task.Run(() => ExecuteQueryWithParameters(query, parameter));// Student Fill
                 if (dt != null)
@@ -180,41 +176,41 @@ namespace RC_IS.Classes
             }
         }
 
-        /*
-        internal List<Researcher> GetResearchers(string researcherName)
-        {
-            try
-            {
-                OpenConnection();
-                List<Researcher> list = new List<Researcher>();
-                string query = "SELECT TOP 10 * FROM dbo.UVW_CURRENT_ENROLLED_STUDENTS WHERE STDN_FNM LIKE @FirstName OR STDN_LNM LIKE @FirstName OR STDN_MID LIKE @FirstName OR STDN_IDN LIKE @FirstName";
-                SqlParameter parameter = new SqlParameter("@FirstName", "%" + researcherName + "%");
-                DataTable dt = ExecuteQueryWithParameters(query, parameter);
-                foreach (DataRow row in dt.Rows)
-                {
-                    if (!string.IsNullOrEmpty(row["STDN_IDN"].ToString()))
-                    {
-                        Researcher researcher = new Researcher
-                        {
-                            Id = Convert.ToInt32(row["STDN_IDN"]),
-                            Name = row["STDN_FNM"].ToString() + " " + row["STDN_MID"].ToString() + " " + row["STDN_LNM"].ToString(),
-                        };
-                        list.Add(researcher);
-                    }
-                }
-                return list;
-            }
-            catch (SqlException e)
-            {
-                Trace.WriteLine("ERROR GETTING RESEARCHERDATA");
-                return null;
-            }
-            finally
-            {
-                this.Dispose();
-            }
-        }
-        */
+
+        //internal List<Researcher> GetResearchersAsync(string researcherName)
+        //{
+        //    try
+        //    {
+        //        OpenConnection();
+        //        List<Researcher> list = new List<Researcher>();
+        //        string query = "SELECT TOP 10 * FROM dbo.UVW_CURRENT_ENROLLED_STUDENTS WHERE STDN_FNM LIKE @FirstName OR STDN_LNM LIKE @FirstName OR STDN_MID LIKE @FirstName OR STDN_IDN LIKE @FirstName";
+        //        SqlParameter parameter = new SqlParameter("@FirstName", "%" + researcherName + "%");
+        //        DataTable dt = ExecuteQueryWithParameters(query, parameter);
+        //        foreach (DataRow row in dt.Rows)
+        //        {
+        //            if (!string.IsNullOrEmpty(row["STDN_IDN"].ToString()))
+        //            {
+        //                Researcher researcher = new Researcher
+        //                {
+        //                    Id = Convert.ToInt32(row["STDN_IDN"]),
+        //                    Name = row["STDN_FNM"].ToString() + " " + row["STDN_MID"].ToString() + " " + row["STDN_LNM"].ToString(),
+        //                };
+        //                list.Add(researcher);
+        //            }
+        //        }
+        //        return list;
+        //    }
+        //    catch (SqlException e)
+        //    {
+        //        Trace.WriteLine("ERROR GETTING RESEARCHERDATA");
+        //        return null;
+        //    }
+        //    finally
+        //    {
+        //        this.Dispose();
+        //    }
+        //}
+
 
     }
 }

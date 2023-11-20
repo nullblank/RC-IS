@@ -50,6 +50,8 @@ namespace RC_IS.Windows
             }
         }
 
+
+
         private bool ResearcherExistsInGrid(DataGrid dataGrid, Researcher researcher) // Check if researcher exists in the selected list already (dgResearchersSelected)
         {
             foreach (var item in dataGrid.Items)
@@ -137,11 +139,29 @@ namespace RC_IS.Windows
         { 
             dgResearchersList.ItemsSource = null;
             string searchKeyword = txtSearchResearcher.Text;
-
             MSDatabaseHandler dbHandler = new MSDatabaseHandler();
-            List<Researcher> researchers = await dbHandler.GetResearchersAsync(searchKeyword);
+            switch (txtResearcherType.SelectedIndex)
+            {
+                case 0:
+                    List<Researcher> researchers = await dbHandler.GetResearchersAsync(searchKeyword);
+                    Trace.WriteLine($"Researcher count: {researchers.Count}");
+                    dgResearchersList.ItemsSource = researchers;
+                    break;
+                case 1:
+                    List<Staff> staff = await dbHandler.GetStaffAsync(searchKeyword);
+                    Trace.WriteLine($"Staff count: {staff.Count}");
+                    dgResearchersList.ItemsSource = staff;
+                    break;
+                default:
+                    break;
+            }
 
-            dgResearchersList.ItemsSource = researchers;
+
+
+            
+            
+
+            
         }
 
 
@@ -156,36 +176,83 @@ namespace RC_IS.Windows
 
         }
         */
-        private void Button_Click(object sender, RoutedEventArgs e) // Add researcher to selected list
+        private void Button_Click(object sender, RoutedEventArgs e) // Add authors to selected list
         {
             Button button = (Button)sender;
-            Researcher researcher = (Researcher)button.DataContext;
-
-            if (!ResearcherExistsInGrid(dgResearchersSelected, researcher)) // Check if researcher exists in the selected list already (dgResearchersSelected)
+            if (button.DataContext is Researcher researcher)
             {
-                Trace.WriteLine($"Added Student: ID[{researcher.Id}], NAME[{researcher.Name}]");
-                dgResearchersSelected.Items.Add(researcher);
+                if (!ResearcherExistsInGrid(dgResearchersSelected, researcher)) // Check if researcher exists in the selected list already (dgResearchersSelected)
+                {
+                    Trace.WriteLine($"Added Student: ID[{researcher.Id}], NAME[{researcher.Name}]");
+                    dgResearchersSelected.Items.Add(researcher);
+                    Trace.WriteLine($"DataContext is a Student: ID[{researcher.Id}], NAME[{researcher.Name}]");
+                }
+                else
+                {
+                    MessageBox.Show($"Researcher {researcher.Name} is already selected!");
+                }
+            }
+            else if (button.DataContext is Staff staff)
+            {
+                if (!StaffExistsInGrid(dgResearchersSelected, staff)) // Check if researcher exists in the selected list already (dgResearchersSelected)
+                {
+                    Trace.WriteLine($"Added Staff: ID[{staff.Id}], NAME[{staff.Name}]");
+                    dgResearchersSelected.Items.Add(staff);
+                    Trace.WriteLine($"DataContext is a Staff: ID[{staff.Id}], NAME[{staff.Name}]");
+                }
+                else
+                {
+                    MessageBox.Show($"Staff {staff.Name} is already selected!");
+                }
             }
             else
             {
-                MessageBox.Show($"Researcher {researcher.Name} is already selected!");
-            }         
+                Trace.WriteLine($"DataContext is an unknown constructor");
+            }    
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e) // Remove researcher from selected list
+        private void Button_Click_1(object sender, RoutedEventArgs e) // Remove authors from selected list
         {
             Button button = (Button)sender;
-            Researcher researcher = (Researcher)button.DataContext;
-            Trace.WriteLine($"Removed Student: ID[{researcher.Id}], NAME[{researcher.Name}]");
-            dgResearchersSelected.Items.Remove(researcher);
+            if (button.DataContext is Researcher researcher)
+            {
+                if (ResearcherExistsInGrid(dgResearchersSelected, researcher)) // Check if researcher exists in the selected list already (dgResearchersSelected)
+                {
+                    Trace.WriteLine($"Removed Student: ID[{researcher.Id}], NAME[{researcher.Name}]");
+                    dgResearchersSelected.Items.Remove(researcher);
+                    Trace.WriteLine($"DataContext is a Student: ID[{researcher.Id}], NAME[{researcher.Name}]");
+                }
+                else
+                {
+                    MessageBox.Show($"Researcher {researcher.Name} is not selected!");
+                }
+            }
+            else if (button.DataContext is Staff staff)
+            {
+                if (StaffExistsInGrid(dgResearchersSelected, staff)) // Check if researcher exists in the selected list already (dgResearchersSelected)
+                {
+                    Trace.WriteLine($"Removed Staff: ID[{staff.Id}], NAME[{staff.Name}]");
+                    dgResearchersSelected.Items.Remove(staff);
+                    Trace.WriteLine($"DataContext is a Staff: ID[{staff.Id}], NAME[{staff.Name}]");
+                }
+                else
+                {
+                    MessageBox.Show($"Staff {staff.Name} is not selected!");
+                }
+            }
+            else
+            {
+                Trace.WriteLine($"DataContext is an unknown constructor");
+            }
         }
 
-        private async void Button_Click_2(object sender, RoutedEventArgs e)
+        private Staff _staff;
+        private async void Button_Click_2(object sender, RoutedEventArgs e) // Set adviser
         {
             Button button = (Button)sender;
-            Staff staff = (Staff)button.DataContext;
-            Trace.WriteLine($"Selected Adviser: ID[{staff.Id}], NAME[{staff.Name}]");
-            lblSelectedAdviser.Text = staff.Name;
+            _staff = (Staff)button.DataContext;
+            Trace.WriteLine($"Selected Adviser: ID[{_staff.Id}], NAME[{_staff.Name}]");
+            lblSelectedAdviser.Text = _staff.Name;
         }
 
         private async void txtSearchAdviser_TextChanged(object sender, TextChangedEventArgs e) // Search adviser event handler (txtSearchAdviser) (async) (await)
@@ -347,8 +414,52 @@ namespace RC_IS.Windows
             }   
         }
 
+
         private void btnSubmit_Click(object sender, RoutedEventArgs e) // Submits the entire list as a new research paper document
         {
+            List<TextBox> textBoxes = new List<TextBox>
+            {
+                txtTitle, txtYear, txtSchool, txtCourse, txtAgenda
+            };
+
+            List<DataGrid> dataGrids = new List<DataGrid>
+            {
+                dgPanelistSelected, dgResearchersSelected, dgFilesSelected
+            };
+
+            if (emptyControls.Count > 0)
+            {
+                // Handle the empty controls (e.g., show a message)
+                string errorMessage = "The following controls are empty:\n" + string.Join("\n", emptyControls);
+                MessageBox.Show(errorMessage, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                ValidationHelper validator = new ValidationHelper();
+                List<string> emptyControls = validator.GetEmptyControls(textBoxes, dataGrids);
+
+                Schools selectedSchool = (Schools)txtSchool.SelectedItem;
+                Programs selectedProgram = (Programs)txtCourse.SelectedItem;
+                Agenda selectedAgenda = (Agenda)txtAgenda.SelectedItem;
+                Papers paper = new Papers
+                {
+                    Title = txtTitle.Text,
+                    Year = Int32.Parse(txtYear.Text),
+                    SchoolID = selectedSchool.Id,
+                    ProgramID = selectedProgram.Id,
+                    AgendaID = selectedAgenda.Id,
+                    AdviserID = _staff.Id,
+                    Authors = (List<Researcher>)dgResearchersSelected.ItemsSource,
+                    Panelist = (List<Staff>)dgPanelistSelected.ItemsSource,
+                    Files = (List<ResearchFiles>)dgFilesSelected.ItemsSource,
+                };
+                DatabaseHandler dbHandler = new DatabaseHandler();
+                dbHandler.InsertPaper(paper);
+                dbHandler.InsertAdviser(paper);
+                dbHandler.InsertAuthors(paper);
+                dbHandler.InsertPanelist(paper);
+            }
+
             
         }
 

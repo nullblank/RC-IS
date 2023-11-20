@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -502,7 +503,115 @@ namespace RC_IS.Classes
                 connection.Close();
             }
         }
+        internal void InsertPaper(Papers paper)
+        {
+            try
+            {
+                OpenConnection();
+                string insertPaperQuery = "INSERT INTO tblpapers (paper_title, paper_year, school_id, program_id, agenda_id) VALUES (@PaperID, @PaperYear, @SchoolID, @ProgramID, @AgendaID)";
+                using (MySqlCommand command = new MySqlCommand(insertPaperQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@PaperTitle", paper.Title);
+                    command.Parameters.AddWithValue("@PaperYear", paper.Year);
+                    command.Parameters.AddWithValue("@SchoolID", paper.SchoolID);
+                    command.Parameters.AddWithValue("@ProgramID", paper.ProgramID);
+                    command.Parameters.AddWithValue("@AgendaID", paper.AgendaID);
+                    command.ExecuteNonQuery();
+                }
+                CloseConnection();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error inserting data: {ex.Message}");
+                // Handle exceptions as needed
+            }
+        }
 
-        
+        internal void InsertAuthors(Papers paper) // Insert authors into database
+        {
+            try
+            {
+                OpenConnection();
+                foreach (object author in paper.Authors) // Loop through authors
+                {
+                    if (author is Researcher researcher) // If author is a researcher
+                    {
+                        Trace.WriteLine($"Inserting Student: [ID]{researcher.Id}, [NAME]{researcher.Name}");
+                        string query = "INSERT INTO tblauthors (paper_id, student_id) VALUES (@PaperId, @Id)";
+                        using (MySqlCommand command = new MySqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@PaperId", paper.Id);
+                            command.Parameters.AddWithValue("@Id", researcher.Id);
+                            command.ExecuteNonQuery();
+                        }
+                    }
+
+                    else if (author is Staff staff) // If author is a staff
+                    {
+                        Trace.WriteLine($"Inserting Staff: [ID]{staff.Id}, [NAME]{staff.Name}");
+                        string query = "INSERT INTO tblauthors (paper_id, employee_id) VALUES (@PaperId, @Id)";
+                        using (MySqlCommand command = new MySqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@PaperId", paper.Id);
+                            command.Parameters.AddWithValue("@Id", staff.Id);
+                            command.ExecuteNonQuery();
+                        }
+                    }
+
+                    else
+                    {
+                        Trace.WriteLine("Attempted insert of an unknown author object!");
+                    }
+                }
+                CloseConnection();
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine($"Error inserting authors! {e.Message}");
+            }
+        }
+
+        internal void InsertPanelist(Papers paper) // Insert panelists into database
+        {
+            try
+            {
+                OpenConnection();
+                foreach (Staff staff in paper.Panelist) // Loop through panelists
+                {
+                    string query = "INSERT INTO tblpanelists (paper_id, employee_id) VALUES (@PaperId, @Id)";
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@PaperId", paper.Id);
+                        command.Parameters.AddWithValue("@Id", staff.Id);
+                        command.ExecuteNonQuery();
+                    }
+                }
+                CloseConnection();
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine($"Error inserting panelist: {e.Message}");
+            }
+        }
+
+        internal void InsertAdviser(Papers paper)
+        {
+            try
+            {
+                OpenConnection();
+                string query = "INSERT INTO tbladvisers (paper_id, employee_id) VALUES (@PaperId, @Id)";
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@PaperId", paper.Id);
+                    command.Parameters.AddWithValue("@Id", paper.AdviserID);
+                    command.ExecuteNonQuery();
+                }
+                CloseConnection();
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine($"Error inserting adviser: {e.Message}");
+            }
+        }
     }
 }
