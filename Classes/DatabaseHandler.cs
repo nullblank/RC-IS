@@ -473,14 +473,14 @@ namespace RC_IS.Classes
             }
         }
 
-        public void InsertDocuments(List<ResearchFiles> files, Papers paper)
+        public void InsertDocuments(Papers paper)
         {
             try
             {
                 OpenConnection();
                 string query = "INSERT INTO tblfiles (paper_id, files_content, files_name) VALUES (@PaperID, @DocumentData, @DocumentName)";
 
-                foreach (ResearchFiles file in files)
+                foreach (ResearchFiles file in paper.Files)
                 {
                     byte[] documentBytes = File.ReadAllBytes(file.FilePath);
 
@@ -489,7 +489,6 @@ namespace RC_IS.Classes
                         command.Parameters.AddWithValue("@PaperID", paper.Id);
                         command.Parameters.AddWithValue("@DocumentName", file.FileName);
                         command.Parameters.AddWithValue("@DocumentData", documentBytes);
-
                         command.ExecuteNonQuery();
                     }
                 }
@@ -501,15 +500,15 @@ namespace RC_IS.Classes
             }
             finally
             {
-                connection.Close();
+                CloseConnection();
             }
         }
-        internal void InsertPaper(Papers paper)
+        internal int InsertPaper(Papers paper)
         {
             try
             {
                 OpenConnection();
-                string insertPaperQuery = "INSERT INTO tblpapers (paper_title, paper_year, school_id, program_id, agenda_id) VALUES (@PaperID, @PaperYear, @SchoolID, @ProgramID, @AgendaID)";
+                string insertPaperQuery = "INSERT INTO tblpapers (paper_title, paper_year, school_id, program_id, agenda_id, isarchive) VALUES (@PaperID, @PaperYear, @SchoolID, @ProgramID, @AgendaID, 0)";
                 using (MySqlCommand command = new MySqlCommand(insertPaperQuery, connection))
                 {
                     command.Parameters.AddWithValue("@PaperTitle", paper.Title);
@@ -519,12 +518,37 @@ namespace RC_IS.Classes
                     command.Parameters.AddWithValue("@AgendaID", paper.AgendaID);
                     command.ExecuteNonQuery();
                 }
-                CloseConnection();
+
+                string getPaperIdQuery = "SELECT paper_id FROM tblpapers WHERE paper_title = @PaperTitle AND paper_year = @PaperYear AND school_id = @SchoolID AND program_id = @ProgramID AND agenda_id = @AgendaID";
+                using (MySqlCommand command = new MySqlCommand(getPaperIdQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@PaperTitle", paper.Title);
+                    command.Parameters.AddWithValue("@PaperYear", paper.Year);
+                    command.Parameters.AddWithValue("@SchoolID", paper.SchoolID);
+                    command.Parameters.AddWithValue("@ProgramID", paper.ProgramID);
+                    command.Parameters.AddWithValue("@AgendaID", paper.AgendaID);
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return Convert.ToInt32(reader["paper_id"]);
+                        }
+                        else
+                        {
+                            return -1;
+                        }
+                    }
+                }   
+                
             }
-            catch (Exception ex)
+            catch (MySqlException ex)
             {
-                Console.WriteLine($"Error inserting data: {ex.Message}");
-                // Handle exceptions as needed
+                Trace.WriteLine($"Error inserting data: {ex.Message}");
+                return -1;
+            }
+            finally
+            {
+                CloseConnection();
             }
         }
 

@@ -206,8 +206,8 @@
                                         BorderBrush="DarkGray"
                                         Background="Transparent"
                                         Height="35"
-                                        PreviewTextInput="txtYear_PreviewTextInput"
-                                        TextChanged="txtYear_TextChanged"
+                                        PreviewTextInput="Year_PreviewTextInput"
+                                        TextChanged="Year_TextChanged"
                                         BorderThickness="0,0,0,2" Margin="0,0,0,0" />
                                     </StackPanel>
                                 </Grid>

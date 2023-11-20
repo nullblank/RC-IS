@@ -403,16 +403,16 @@ namespace RC_IS.Windows
 
         private void btnDebugUpload_Click(object sender, RoutedEventArgs e) // Debug button for uploading files to database
         {
-            if (dgFilesSelected.Items.Count > 0)
-            {
-                List<ResearchFiles> list = (List<ResearchFiles>)dgFilesSelected.ItemsSource;
-                DatabaseHandler dbHandler = new DatabaseHandler();
-                dbHandler.StoreDocument(list);
-            }
-            else
-            {
-                Trace.WriteLine("NO FILES SELECTED");
-            }   
+            //if (dgFilesSelected.Items.Count > 0)
+            //{
+            //    List<ResearchFiles> list = (List<ResearchFiles>)dgFilesSelected.ItemsSource;
+            //    DatabaseHandler dbHandler = new DatabaseHandler();
+            //    dbHandler.InsertDocuments(list);
+            //}
+            //else
+            //{
+            //    Trace.WriteLine("NO FILES SELECTED");
+            //}   
         }
 
         private string GetNumericValueWithoutHyphen(string formattedText)
@@ -420,7 +420,7 @@ namespace RC_IS.Windows
             return new string(formattedText.Where(char.IsDigit).ToArray());
         }
 
-        private void btnSubmit_Click(object sender, RoutedEventArgs e) // Submits the entire list as a new research paper document
+        private bool ValidateControls()
         {
             List<ControlInfo> allControls = new List<ControlInfo> // List of all controls that need to be validated
             {
@@ -433,80 +433,108 @@ namespace RC_IS.Windows
                 new ControlInfo { Name = "No authors selected", Control = dgResearchersSelected },
                 new ControlInfo { Name = "No files seleected", Control = dgFilesSelected },
             };
-            // Validate the controls
+
             ValidationHelper validator = new ValidationHelper();
             List<ControlInfo> emptyControls = validator.GetEmptyControls(allControls);
-            // If there are empty controls, show an error message
+
             if (emptyControls.Count > 0)
             {
-                // Handle the empty controls (e.g., show a message)
                 string errorMessage = "The following need attention:\n" +
-                string.Join("\n", emptyControls.Select(info => info.Name));
+                    string.Join("\n", emptyControls.Select(info => info.Name));
+
                 MessageBox.Show(errorMessage, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
             }
-            // If there are no empty controls, proceed to submit the paper
-            else
+
+            return true;
+        }
+
+        private Papers CreatePaperObject()
+        {
+            int year = ParseYear(txtYear.Text);
+            Schools selectedSchool = (Schools)txtSchool.SelectedItem;
+            Programs selectedProgram = (Programs)txtCourse.SelectedItem;
+            Agenda selectedAgenda = (Agenda)txtAgenda.SelectedItem;
+
+            List<object> authors = dgResearchersSelected.Items.Cast<object>().ToList();
+            List<Staff> panelists = dgPanelistSelected.Items.Cast<Staff>().ToList();
+            List<ResearchFiles> files = dgFilesSelected.Items.Cast<ResearchFiles>().ToList();
+
+            return new Papers
             {
-                Trace.WriteLine("Validation returns clear!");
-                int year = Int32.Parse(GetNumericValueWithoutHyphen(txtYear.Text));
+                Title = txtTitle.Text,
+                Year = year,
+                SchoolID = selectedSchool?.Id ?? 0, // Use null-conditional operator to handle possible null
+                ProgramID = selectedProgram?.Id ?? 0,
+                AgendaID = selectedAgenda?.Id ?? 0,
+                AdviserID = _staff?.Id ?? 0,
+                Authors = authors,
+                Panelist = panelists,
+                Files = files,
+            };
+        }
 
-                Schools selectedSchool = (Schools)txtSchool.SelectedItem;
-                Programs selectedProgram = (Programs)txtCourse.SelectedItem;
-                Agenda selectedAgenda = (Agenda)txtAgenda.SelectedItem;
+        private int ParseYear(string yearText)
+        {
+            string numericValue = GetNumericValueWithoutHyphen(yearText);
+            return int.Parse(numericValue);
+        }
 
-                Papers paper = new Papers
-                {
-                    Title = txtTitle.Text,
-                    Year = Int32.Parse(txtYear.Text),
-                    SchoolID = selectedSchool.Id,
-                    ProgramID = selectedProgram.Id,
-                    AgendaID = selectedAgenda.Id,
-                    AdviserID = _staff.Id,
-                    Authors = (List<Researcher>)dgResearchersSelected.ItemsSource,
-                    Panelist = (List<Staff>)dgPanelistSelected.ItemsSource,
-                    Files = (List<ResearchFiles>)dgFilesSelected.ItemsSource,
-                };
-                DatabaseHandler dbHandler = new DatabaseHandler();
-                dbHandler.InsertPaper(paper);
+        private void InsertPaperToDatabase(Papers paper)
+        {
+            DatabaseHandler dbHandler = new DatabaseHandler();
+            paper.Id = dbHandler.InsertPaper(paper);
+            if (paper.Id > 0)
+            {
                 dbHandler.InsertAdviser(paper);
                 dbHandler.InsertAuthors(paper);
                 dbHandler.InsertPanelist(paper);
-
-                //Trace.WriteLine("--------- PAPER DEBUG ---------");
-                //Trace.WriteLine($"Title: {txtTitle.Text}");
-                //Trace.WriteLine($"YEAR: {year}");
-                //Trace.WriteLine($"School:  {selectedSchool.Id}");
-                //Trace.WriteLine($"Program: {selectedProgram.Id}");
-                //Trace.WriteLine($"Agenda: {selectedAgenda.Id}");
-                //Trace.WriteLine($"Adviser: {_staff.Id}");
-                //foreach (object author in dgResearchersSelected.Items)
-                //{
-                //    if (author is Researcher)
-                //    {
-                //        Researcher researcher = (Researcher)author;
-                //        Trace.WriteLine($"Author Student: [ID]{researcher.Id}[NAME]{researcher.Name}");
-                //    }
-                //    else if (author is Staff)
-                //    {
-                //        Staff staff = (Staff)author;
-                //        Trace.WriteLine($"Author Staff: [ID]{staff.Id}[NAME]{staff.Name}");
-                //    }
-                //}
-                //foreach (Staff staff in dgPanelistSelected.Items)
-                //{
-                //    Trace.WriteLine($"Panelist: [ID]{staff.Id}[NAME]{staff.Name}");
-                //}
-                //foreach (ResearchFiles files in dgFilesSelected.Items)
-                //{
-                //    Trace.WriteLine($"File: [NAME]{files.FileName}[PATH]{files.FilePath}");
-                //}
-                //Trace.WriteLine("-------------------------------");
+                MessageBox.Show($"Successfully inserted paper with id of [ID]{paper.Id} to database!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.Close();
             }
-
-
+            else
+            {
+                MessageBox.Show("Failed to insert paper to database!", "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
-        private void txtYear_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        private void btnSubmit_Click(object sender, RoutedEventArgs e) // Submits the entire list as a new research paper document
+        {
+
+            try
+            {
+                if (ValidateControls())
+                {
+                    Papers paper = CreatePaperObject();
+                    InsertPaperToDatabase(paper);
+
+                    // DEBUG TRACE
+                    //foreach (object author in paper.Authors)
+                    //{
+                    //    if (author is Researcher researcher)
+                    //    {
+                    //        Trace.WriteLine($"Researcher: [ID]{researcher.Id} [NAME]{researcher.Name}");
+                    //    }
+                    //    else if (author is Staff staff)
+                    //    {
+                    //        Trace.WriteLine($"Staff: [ID]{staff.Id} [NAME]{staff.Name}");
+                    //    }
+                    //    else
+                    //    {
+                    //        Trace.WriteLine("Unknown author type!");
+                    //    }
+                    //}
+
+                    Trace.WriteLine("Validation returns clear!");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void Year_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             if (!Regex.IsMatch(e.Text, "[0-9]"))
             {
@@ -514,27 +542,21 @@ namespace RC_IS.Windows
             }
         }
 
-        private void txtYear_TextChanged(object sender, TextChangedEventArgs e)
+        private void Year_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textBox = (TextBox)sender;
-
-            // Remove non-numeric characters
             string numericText = new string(textBox.Text.Where(char.IsDigit).ToArray());
-
-            // Format the text as ####-####
             if (numericText.Length > 4)
             {
                 numericText = numericText.Insert(4, "-");
             }
-
-            // Limit the total length to 9 characters
             if (numericText.Length > 9)
             {
                 numericText = numericText.Substring(0, 9);
             }
-
             textBox.Text = numericText;
-            textBox.CaretIndex = numericText.Length; // Set the caret position at the end
+            textBox.CaretIndex = numericText.Length;
         }
     }
 }
+

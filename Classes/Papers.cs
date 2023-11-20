@@ -19,7 +19,7 @@ namespace RC_IS.Classes
         public int AdviserID { get; set; }
         public string Comments { get; set; }
         
-        public List<Researcher> Authors { get; set; }
+        public List<object> Authors { get; set; }
         public List<Staff> Panelist { get; set; }
         public List<ResearchFiles> Files { get; set; }
 
