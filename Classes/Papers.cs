@@ -18,7 +18,6 @@ namespace RC_IS.Classes
         public int AgendaID { get; set; }
         public int AdviserID { get; set; }
         public string Comments { get; set; }
-        
         public List<object> Authors { get; set; }
         public List<Staff> Panelist { get; set; }
         public List<ResearchFiles> Files { get; set; }

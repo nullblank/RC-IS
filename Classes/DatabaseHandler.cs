@@ -508,7 +508,7 @@ namespace RC_IS.Classes
             try
             {
                 OpenConnection();
-                string insertPaperQuery = "INSERT INTO tblpapers (paper_title, paper_year, school_id, program_id, agenda_id, isarchive) VALUES (@PaperID, @PaperYear, @SchoolID, @ProgramID, @AgendaID, 0)";
+                string insertPaperQuery = "INSERT INTO tblpapers (paper_title, paper_year, school_id, program_id, agenda_id, isarchive) VALUES (@PaperTitle, @PaperYear, @SchoolID, @ProgramID, @AgendaID, 0)";
                 using (MySqlCommand command = new MySqlCommand(insertPaperQuery, connection))
                 {
                     command.Parameters.AddWithValue("@PaperTitle", paper.Title);

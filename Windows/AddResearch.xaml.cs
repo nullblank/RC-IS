@@ -489,6 +489,7 @@ namespace RC_IS.Windows
                 dbHandler.InsertAdviser(paper);
                 dbHandler.InsertAuthors(paper);
                 dbHandler.InsertPanelist(paper);
+                dbHandler.InsertDocuments(paper);
                 MessageBox.Show($"Successfully inserted paper with id of [ID]{paper.Id} to database!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.Close();
             }
