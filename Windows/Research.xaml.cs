@@ -68,8 +68,9 @@ namespace RC_IS.Windows
 
         private void btnAddResearches_Click(object sender, RoutedEventArgs e)
         {
-            AddResearch form = new AddResearch(_user);
+            AddResearch form = new AddResearch(_user, this);
             form.Show();
+            this.Close();
         }
 
         private void btnReport_Click(object sender, RoutedEventArgs e)

@@ -143,21 +143,21 @@ namespace RC_IS.Classes
             try
             {
                 List<Researcher> list = new List<Researcher>();
-                string query = "SELECT TOP 10 STDN_FNM, STDN_LNM, STDN_MID, STDN_IDN " +
-                                   "FROM DBO.UVW_CURRENT_ENROLLED_STUDENTS " +
-                                   "WHERE STDN_FNM LIKE @KeyWord OR STDN_LNM LIKE @KeyWord OR STDN_MID LIKE @KeyWord OR STDN_IDN LIKE @KeyWord ";
+                string query = "SELECT TOP 10 szFirstName, szLastName, szMiddleName, szIDNo " +
+                                   "FROM DBO.UVW_STUDENTS " +
+                                   "WHERE szLastName LIKE @KeyWord OR szFirstName LIKE @KeyWord OR szMiddleName LIKE @KeyWord OR szIDNo LIKE @KeyWord ";
                 SqlParameter parameter = new SqlParameter("@KeyWord", "%" + keyWord + "%");
                 DataTable dt = await Task.Run(() => ExecuteQueryWithParameters(query, parameter));// Student Fill
                 if (dt != null)
                 {
                     foreach (DataRow row in dt.Rows)
                     {
-                        if (!string.IsNullOrEmpty(row["STDN_IDN"].ToString()))
+                        if (!string.IsNullOrEmpty(row["szIDNo"].ToString()))
                         {
                             Researcher researcher = new Researcher
                             {
-                                Id = Convert.ToInt32(row["STDN_IDN"]),
-                                Name = row["STDN_FNM"].ToString() + " " + row["STDN_MID"].ToString() + " " + row["STDN_LNM"].ToString(),
+                                Id = Convert.ToInt32(row["szIDNo"]),
+                                Name = row["szFirstName"].ToString() + " " + row["szMiddleName"].ToString() + " " + row["szLastName"].ToString(),
                             };
                             list.Add(researcher);
                         }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RC_IS.Windows"
         mc:Ignorable="d"
-        Title="AddResearch" Height="712" Width="867"
+        Title="AddResearch" Height="733" Width="867"
         WindowStyle="None"
         ResizeMode="NoResize"
         BorderThickness="0"
@@ -168,7 +168,7 @@
                                 <StackPanel>
                                     <TextBlock Text="Title"
                                         Foreground="DarkGray"
-                                        FontSize="12"
+                                        FontSize="15"
                                         FontFamily="{StaticResource Poppins}"
                                         TextWrapping="Wrap" Margin="0,0,0,0" />
                                     <TextBox x:Name="txtTitle"
@@ -193,7 +193,7 @@
                                     <StackPanel>
                                         <TextBlock Text="School Year"
                                         Foreground="DarkGray"
-                                        FontSize="12"
+                                        FontSize="15"
                                         FontFamily="{StaticResource Poppins}"
                                         TextWrapping="Wrap" />
                                         <TextBox x:Name="txtYear"
@@ -216,7 +216,7 @@
                                     <StackPanel>
                                         <TextBlock Text="School"
                                         Foreground="DarkGray"
-                                        FontSize="12"
+                                        FontSize="15"
                                         FontFamily="{StaticResource Poppins}"
                                         TextWrapping="Wrap" />
                                         <ComboBox x:Name="txtSchool"
@@ -242,7 +242,7 @@
                                     <StackPanel>
                                         <TextBlock Text="Course"
                                         Foreground="DarkGray"
-                                        FontSize="12"
+                                        FontSize="15"
                                         FontFamily="{StaticResource Poppins}"
                                         TextWrapping="Wrap" />
                                         <ComboBox x:Name="txtCourse"
@@ -269,7 +269,7 @@
                                     <StackPanel>
                                         <TextBlock Text="Agenda"
                                                         Foreground="DarkGray"
-                                                        FontSize="12"
+                                                        FontSize="15"
                                                         FontFamily="{StaticResource Poppins}"
                                                         TextWrapping="Wrap" />
                                         <ComboBox x:Name="txtAgenda"
@@ -303,7 +303,7 @@
                                     <TextBlock Text="Search Adviser"
                                                    Grid.Column="0"
                                                    Foreground="DarkGray"
-                                                   FontSize="12"
+                                                   FontSize="15"
                                                    FontFamily="{StaticResource Poppins}"
                                                    TextWrapping="Wrap" />
                                     <TextBox x:Name="txtSearchAdviser"
@@ -328,7 +328,7 @@
                                     <TextBlock Text="Selected Adviser:"
                                                        Grid.Column="0"
                                                        Foreground="DarkGray"
-                                                       FontSize="12"
+                                                       FontSize="15"
                                                        FontFamily="{StaticResource Poppins}"
                                                        TextWrapping="Wrap" />
                                     <TextBlock x:Name="lblSelectedAdviser" Text=""
@@ -379,7 +379,7 @@
                                     <TextBlock Text="Search Researcher"
                                         Grid.Column="0"
                                         Foreground="DarkGray"
-                                        FontSize="12"
+                                        FontSize="15"
                                         FontFamily="{StaticResource Poppins}"
                                         TextWrapping="Wrap" />
                                     <TextBox x:Name="txtSearchResearcher"
@@ -396,7 +396,7 @@
                                     <TextBlock Text="Select type of researcher"
                                         Grid.Column="1"
                                         Foreground="DarkGray"
-                                        FontSize="12"
+                                        FontSize="15"
                                         FontFamily="{StaticResource Poppins}"
                                         TextWrapping="Wrap" 
                                         Margin="10,0,0,0"/>
@@ -431,7 +431,7 @@
                                         Grid.Row="0"
                                         Grid.Column="0"
                                         Foreground="DarkGray"
-                                        FontSize="12"
+                                        FontSize="15"
                                         HorizontalAlignment="Center"
                                         FontFamily="{StaticResource Poppins}"
                                         TextWrapping="Wrap" />
@@ -439,7 +439,7 @@
                                         Grid.Row="0"
                                         Grid.Column="1"
                                         Foreground="DarkGray"
-                                        FontSize="12"
+                                        FontSize="15"
                                         HorizontalAlignment="Center"
                                         FontFamily="{StaticResource Poppins}"
                                         TextWrapping="Wrap" />
@@ -510,7 +510,7 @@
                                     <TextBlock Text="Search for Panelist"
                                         Grid.Column="0"
                                         Foreground="DarkGray"
-                                        FontSize="12"
+                                        FontSize="15"
                                         FontFamily="{StaticResource Poppins}"
                                         TextWrapping="Wrap" />
                                     <TextBox x:Name="txtSearchPanelist"
@@ -540,7 +540,7 @@
                                         Grid.Row="0"
                                         Grid.Column="0"
                                         Foreground="DarkGray"
-                                        FontSize="12"
+                                        FontSize="15"
                                         HorizontalAlignment="Center"
                                         FontFamily="{StaticResource Poppins}"
                                         TextWrapping="Wrap" />
@@ -548,7 +548,7 @@
                                         Grid.Row="0"
                                         Grid.Column="1"
                                         Foreground="DarkGray"
-                                        FontSize="12"
+                                        FontSize="15"
                                         HorizontalAlignment="Center"
                                         FontFamily="{StaticResource Poppins}"
                                         TextWrapping="Wrap" />
@@ -619,7 +619,7 @@
                                     <TextBlock Text="Files"
                                         Grid.Column="0"
                                         Foreground="DarkGray"
-                                        FontSize="12"
+                                        FontSize="15"
                                         FontFamily="{StaticResource Poppins}"
                                         TextWrapping="Wrap" />
                                     <Button x:Name="btnBrowseFiles"
@@ -627,7 +627,7 @@
                                         BorderThickness="0"
                                         Content="Browse Files"
                                         Foreground="White"
-                                        FontSize="12"
+                                        FontSize="15"
                                         Cursor="Hand"
                                         FontFamily="{StaticResource Poppins}"
                                         Click="btnBrowseFiles_Click" Margin="0,0,0,0">
@@ -732,7 +732,7 @@
                                     BorderThickness="0"
                                     Content="Submit"
                                     Foreground="White"
-                                    FontSize="12"
+                                    FontSize="15"
                                     Cursor="Hand"
                                     FontFamily="{StaticResource Poppins}"
                                     Click="btnSubmit_Click" Margin="0,0,0,0">

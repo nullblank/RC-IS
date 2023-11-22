@@ -28,14 +28,16 @@ namespace RC_IS.Windows
         private WindowState originalWindowState;
         private User _user;
         private Staff _staff;
+        private Dashboard _form;
 
-        public AddResearch(User user) // Constructor for AddResearch window (called from MainWindow) 
+        public AddResearch(User user, Dashboard dashboard) // Constructor for AddResearch window (called from MainWindow) 
         {
             InitializeComponent();
             originalWindowState = this.WindowState;
             _user = user;
             LoadSchoolData();
             LoadAgendaData();
+            _form = dashboard;
         }
 
         // ------------- Methods -------------
@@ -490,6 +492,7 @@ namespace RC_IS.Windows
                 dbHandler.InsertPanelist(paper);
                 dbHandler.InsertDocuments(paper);
                 MessageBox.Show($"Successfully inserted paper with id of [ID]{paper.Id} to database!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                _form.Show();
                 this.Close();
             }
             else
@@ -507,24 +510,6 @@ namespace RC_IS.Windows
                 {
                     Papers paper = CreatePaperObject();
                     InsertPaperToDatabase(paper);
-
-                    // DEBUG TRACE
-                    //foreach (object author in paper.Authors)
-                    //{
-                    //    if (author is Researcher researcher)
-                    //    {
-                    //        Trace.WriteLine($"Researcher: [ID]{researcher.Id} [NAME]{researcher.Name}");
-                    //    }
-                    //    else if (author is Staff staff)
-                    //    {
-                    //        Trace.WriteLine($"Staff: [ID]{staff.Id} [NAME]{staff.Name}");
-                    //    }
-                    //    else
-                    //    {
-                    //        Trace.WriteLine("Unknown author type!");
-                    //    }
-                    //}
-
                     Trace.WriteLine("Validation returns clear!");
                 }
             }
