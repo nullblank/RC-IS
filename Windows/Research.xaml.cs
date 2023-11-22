@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,6 +31,15 @@ namespace RC_IS.Windows
             _user = user;
             _window = window;
             lblWelcome.Text = "Welcome " + _user.Description;
+            LoadPapers();
+        }
+
+        private void LoadPapers()
+        {
+            dgPapers.ItemsSource = null;
+            DatabaseHandler dbHandler = new DatabaseHandler();
+            List<Papers> papers = dbHandler.GetPapers();
+            dgPapers.ItemsSource = papers;
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
@@ -90,6 +100,40 @@ namespace RC_IS.Windows
                 // Restore the window to the original size
                 this.WindowState = originalWindowState;
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void dgPapers_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            e.Cancel = true;
+        }
+
+        private void txtYear_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (!Regex.IsMatch(e.Text, "[0-9]"))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtYear_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            string numericText = new string(textBox.Text.Where(char.IsDigit).ToArray());
+            if (numericText.Length > 4)
+            {
+                numericText = numericText.Insert(4, "-");
+            }
+            if (numericText.Length > 9)
+            {
+                numericText = numericText.Substring(0, 9);
+            }
+            textBox.Text = numericText;
+            textBox.CaretIndex = numericText.Length;
         }
     }
 }

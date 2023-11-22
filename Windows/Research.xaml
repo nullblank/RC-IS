@@ -4,7 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Dashboard" Height="732" Width="974"
+        Title="Dashboard" Height="732" Width="997"
         WindowStyle="None"
         ResizeMode="NoResize"
         BorderThickness="0"
@@ -381,7 +381,7 @@
                                             Width="100"
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Left"
-                                            Margin="0,5,0,0" />
+                                            Margin="0,5,0,0" PreviewTextInput="txtYear_PreviewTextInput" TextChanged="txtYear_TextChanged" />
                                     </StackPanel>
                                     <StackPanel Grid.Column="1"
                                         Margin="0,0,10,0">
@@ -503,7 +503,26 @@
                             </StackPanel>
                         </Grid>
                         <Grid Grid.Row="1" Margin="0,20,0,35">
-                            <DataGrid Margin="0,0,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+                            <DataGrid x:Name="dgPapers" Margin="0,0,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                      CanUserAddRows="False"
+                                      AutoGenerateColumns="False"
+                                      BeginningEdit="dgPapers_BeginningEdit"
+                                      GridLinesVisibility="None">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*" />
+                                    <DataGridTextColumn Header="S.Y" Binding="{Binding ParsedYear}" Width="100" />
+                                    <DataGridTextColumn Header="School" Binding="{Binding SchoolName}" Width="90" />
+                                    <DataGridTextColumn Header="Program" Binding="{Binding ProgramName}" Width="*" />
+                                    <DataGridTextColumn Header="Agenda" Binding="{Binding AgendaName}" Width="*" />
+                                    <DataGridTemplateColumn Header="Action" x:Name="dgPapersActionColumn" Width="100">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Content="View" Click="Button_Click" HorizontalAlignment="Stretch"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
                         </Grid>
                     </Grid>
 

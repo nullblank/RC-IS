@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RC_IS.Windows"
         mc:Ignorable="d"
-        Title="AddResearch" Height="1229" Width="883"
+        Title="AddResearch" Height="712" Width="867"
         WindowStyle="None"
         ResizeMode="NoResize"
         BorderThickness="0"
@@ -681,7 +681,7 @@
                                 </DataGrid>
 
                             </Grid>
-                            <Grid x:Name="DEBUG_SECTION" Height="40" Width="706">
+                            <!--<Grid x:Name="DEBUG_SECTION" Height="40" Width="706">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
@@ -723,9 +723,7 @@
                                         </ControlTemplate>
                                     </Button.Template>
                                 </Button>
-
-
-                            </Grid>
+                            </Grid>-->
                             <Grid x:Name="Submit_Section" Height="40" Width="706" Margin="0,20,0,40">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>

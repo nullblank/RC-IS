@@ -151,6 +151,89 @@ namespace RC_IS.Classes
             }
         }
         // READ
+        internal List<Papers> GetPapers()
+        {
+            try
+            {
+                OpenConnection();
+                List<Papers> list = new List<Papers>();
+                string query = "SELECT * FROM tblpapers";
+                DataTable dt = ExecuteQuery(query);
+                foreach (DataRow row in dt.Rows)
+                {
+                    if (!string.IsNullOrEmpty(row["paper_title"].ToString()) && Convert.ToInt32(row["isarchive"]) != 1)
+                    {
+                        Papers paper = new Papers
+                        {
+                            Id = Convert.ToInt32(row["paper_id"]),
+                            Title = row["paper_title"].ToString(),
+                            Year = Convert.ToInt32(row["paper_year"]),
+                            SchoolID = Convert.ToInt32(row["school_id"]),
+                            ProgramID = Convert.ToInt32(row["program_id"]),
+                            AgendaID = Convert.ToInt32(row["agenda_id"]),
+                        };
+                        paper.SchoolName = GetSchoolData(paper);
+                        paper.ProgramName = GetProgramData(paper);
+                        paper.AgendaName = GetAgendaData(paper);
+                        paper.ParseYearInt();
+                        list.Add(paper);
+                    }
+                }
+                return list;
+            }
+            catch (MySqlException e) 
+            {
+                Trace.WriteLine($"ERROR GETTING PAPERS DATA: {e.Message}");
+                return null;
+            }
+        }
+        internal string GetProgramData(Papers paper)
+        {
+            try
+            {
+                OpenConnection();
+                string query = "SELECT * FROM tblprograms WHERE program_id = @ProgramID";
+                MySqlParameter parameter = new MySqlParameter("@ProgramID", paper.ProgramID);
+                DataTable dt = ExecuteQueryWithParameters(query, parameter);
+                foreach (DataRow row in dt.Rows)
+                {
+                    if (!string.IsNullOrEmpty(row["description"].ToString()))
+                    {
+                        return row["description"].ToString();
+                    }
+                }
+                return null;
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine($"ERROR GETTING PROGRAM DATA: {e.Message}");
+                return null;
+            }
+        }
+        internal string GetAgendaData(Papers paper)
+        {
+            try
+            {
+                OpenConnection();
+                string query = "SELECT * FROM tblagenda WHERE agenda_id = @AgendaID";
+                MySqlParameter parameter = new MySqlParameter("@AgendaID", paper.AgendaID);
+                DataTable dt = ExecuteQueryWithParameters(query, parameter);
+                foreach (DataRow row in dt.Rows)
+                {
+                    if (!string.IsNullOrEmpty(row["description"].ToString()))
+                    {
+                        return row["description"].ToString();
+                    }
+                }
+                return null;
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine($"ERROR GETTING AGENDA DATA: {e.Message}");
+                return null;
+            }
+
+        }
         internal List<Staff> GetStaff(string searchKeyword) // REPLACE WITH GET STAFF <-- Current function is for testing purposes only
         {
             try
@@ -356,6 +439,27 @@ namespace RC_IS.Classes
         }
 
         // ------------------ HELPER METHODS ------------------
+        internal string GetSchoolData(Papers paper)
+        {
+            try
+            {
+                OpenConnection ();
+                string query = "SELECT * FROM tblschool WHERE school_id = @SchoolID";
+                MySqlParameter parameter = new MySqlParameter("@SchoolID", paper.SchoolID);
+                DataTable dt = ExecuteQueryWithParameters(query, parameter);
+                foreach (DataRow row in dt.Rows)
+                {
+                    return row["tinydesc"].ToString();
+                }
+                Trace.WriteLine($"ERROR GETTING SCHOOLDATA!");
+                return null;
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine($"ERROR GETTING SCHOOLDATA: {e.Message}");
+                return null;
+            }
+        }
         internal List<Schools> GetSchoolData()
         {
             try
@@ -638,5 +742,7 @@ namespace RC_IS.Classes
                 Trace.WriteLine($"Error inserting adviser: {e.Message}");
             }
         }
+
+
     }
 }

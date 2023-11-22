@@ -27,6 +27,7 @@ namespace RC_IS.Windows
     {
         private WindowState originalWindowState;
         private User _user;
+        private Staff _staff;
 
         public AddResearch(User user) // Constructor for AddResearch window (called from MainWindow) 
         {
@@ -246,8 +247,6 @@ namespace RC_IS.Windows
                 Trace.WriteLine($"DataContext is an unknown constructor");
             }
         }
-
-        private Staff _staff;
         private async void Button_Click_2(object sender, RoutedEventArgs e) // Set adviser
         {
             Button button = (Button)sender;
