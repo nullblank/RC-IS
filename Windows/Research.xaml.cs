@@ -1,6 +1,7 @@
 ﻿using RC_IS.Classes;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -32,6 +33,8 @@ namespace RC_IS.Windows
             _window = window;
             lblWelcome.Text = "Welcome " + _user.Description;
             LoadPapers();
+            LoadSchool();
+            LoadAgenda();
         }
 
         private void LoadPapers()
@@ -40,6 +43,40 @@ namespace RC_IS.Windows
             DatabaseHandler dbHandler = new DatabaseHandler();
             List<Papers> papers = dbHandler.GetPapers();
             dgPapers.ItemsSource = papers;
+        }
+
+        private void LoadSchool() // Load school data from database to combobox (txtSchool)
+        {
+            txtSchool.ItemsSource = null;
+            DatabaseHandler dbHandler = new DatabaseHandler();
+            List<Schools> schools = dbHandler.GetSchoolData();
+            txtSchool.ItemsSource = schools;
+            txtSchool.SelectedIndex = 0;
+        }
+
+        private void LoadAgenda() // Load agenda data from database to combobox (txtAgenda)
+        {
+            txtAgenda.ItemsSource = null;
+            DatabaseHandler dbHandler = new DatabaseHandler();
+            List<Agenda> agendas = dbHandler.GetAgendaData();
+            if (agendas != null && agendas.Any())
+            {
+                txtAgenda.ItemsSource = agendas;
+                txtAgenda.SelectedIndex = 0;
+            }
+            else
+            {
+                Trace.WriteLine("No agenda data retrieved from the database.");
+            }
+        }
+
+        private void LoadProgram(int schoolId) // Load program data from database to combobox (txtCourse)
+        {
+            txtProgram.ItemsSource = null;
+            DatabaseHandler dbHandler = new DatabaseHandler();
+            List<Programs> programs = dbHandler.GetProgramData(schoolId);
+            txtProgram.ItemsSource = programs;
+            txtProgram.SelectedIndex = 0;
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
@@ -63,14 +100,53 @@ namespace RC_IS.Windows
 
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
+            //Add check user controls here for checking later.
+            dgPapers.ItemsSource = null;
+            string title = txtSearch.Text;
+            DatabaseHandler dbHandler = new DatabaseHandler();
+            string query = ConstructQuery();
 
+            int year = GetNumericValueWithoutHyphen(txtYear.Text) == "" ? 0 : int.Parse(GetNumericValueWithoutHyphen(txtYear.Text));
+            int schoolId = txtSchool.SelectedItem == null ? 0 : ((Schools)txtSchool.SelectedItem).Id;
+            int programId = txtProgram.SelectedItem == null ? 0 : ((Programs)txtProgram.SelectedItem).Id;
+            int agendaId = txtAgenda.SelectedItem == null ? 0 : ((Agenda)txtAgenda.SelectedItem).Id;
+
+            List<Papers> papers = dbHandler.GetPapers(query, title, year, schoolId, programId, agendaId);
+            dgPapers.ItemsSource = papers;
+        }
+
+        private string GetNumericValueWithoutHyphen(string formattedText)
+        {
+            return new string(formattedText.Where(char.IsDigit).ToArray());
+        }
+
+        private string ConstructQuery()
+        {
+            string query = "SELECT * FROM tblpapers WHERE LOWER(paper_title) LIKE LOWER(@PaperTitle)";
+            if (!string.IsNullOrEmpty(txtYear.Text))
+            {
+                query += " AND paper_year = @PaperYear";
+            }
+            if (txtSchool.SelectedIndex != 0)
+            {
+                query += " AND school_id = @PaperSchool";
+            }
+            if (txtProgram.SelectedIndex != 0)
+            {
+                query += " AND program_id = @PaperProgram";
+            }
+            if (txtAgenda.SelectedIndex != 0)
+            {
+                query += " AND agenda_id = @PaperAgenda";
+            }
+            return query;
         }
 
         private void btnAddResearches_Click(object sender, RoutedEventArgs e)
         {
             AddResearch form = new AddResearch(_user, this);
             form.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void btnReport_Click(object sender, RoutedEventArgs e)
@@ -135,6 +211,37 @@ namespace RC_IS.Windows
             }
             textBox.Text = numericText;
             textBox.CaretIndex = numericText.Length;
+        }
+
+        private void txtSchool_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Schools selectedData = (Schools)txtSchool.SelectedItem;
+            int selectedId = selectedData.Id;
+            Trace.WriteLine("SELECTED SCHOOL ID: " + selectedId.ToString());
+            LoadProgram(selectedId);
+        }
+
+        private void txtProgram_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Programs selectedData = (Programs)txtProgram.SelectedItem;
+            if (selectedData != null)
+            {
+                int selectedId = selectedData.Id;
+                Trace.WriteLine("SELECTED COURSE ID: " + selectedId.ToString());
+            }
+        }
+
+        private void txtAgenda_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (txtAgenda.SelectedItem != null && txtAgenda.SelectedItem is Agenda selectedData)
+            {
+                int selectedId = selectedData.Id;
+                Trace.WriteLine("SELECTED Agenda ID: " + selectedId.ToString());
+            }
+            else
+            {
+                Trace.WriteLine("No item selected or selected item is not of type Agenda.");
+            }
         }
     }
 }

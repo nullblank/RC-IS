@@ -116,6 +116,7 @@ namespace RC_IS.Windows
         private void btnClose_Click(object sender, RoutedEventArgs e) // Close window button event handler (btnClose)
         {
             this.Close();
+            _form.Show();
         }
 
         private void btnMaximize_Click(object sender, RoutedEventArgs e) // Maximize window button event handler (btnMaximize)

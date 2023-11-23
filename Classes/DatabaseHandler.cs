@@ -307,6 +307,12 @@ namespace RC_IS.Classes
             {
                 OpenConnection();
                 List<Programs> list = new List<Programs>();
+                Programs def = new Programs
+                {
+                    Id = 0,
+                    Desc = "Select a program",
+                };
+                list.Add(def);
                 string query = "SELECT * FROM tblprograms WHERE school_id = @SchoolID";
                 MySqlParameter parameter = new MySqlParameter("@SchoolID", schoolId);
                 DataTable dt = ExecuteQueryWithParameters(query, parameter);
@@ -468,6 +474,12 @@ namespace RC_IS.Classes
                 List<Schools> list = new List<Schools> ();
                 string query = "SELECT * FROM tblschool";
                 DataTable dt = ExecuteQuery(query);
+                Schools def = new Schools
+                {
+                    Id = 0,
+                    Desc = "Select a school",
+                };
+                list.Add(def);
                 foreach (DataRow row in dt.Rows)
                 {
                     Schools schools = new Schools
@@ -492,6 +504,12 @@ namespace RC_IS.Classes
             {
                 OpenConnection();
                 List<Agenda> list = new List<Agenda>();
+                Agenda def = new Agenda
+                {
+                    Id = 0,
+                    Desc = "Select an agenda",
+                };
+                list.Add(def);
                 string query = "SELECT * FROM tblagenda";
                 DataTable dt = ExecuteQuery(query);
                 if (dt != null)
@@ -744,5 +762,45 @@ namespace RC_IS.Classes
         }
 
 
+        internal List<Papers> GetPapers(string query, string title, int year, int school, int program, int agenda)
+        {
+            try
+            {
+                OpenConnection();
+                List<Papers> list = new List<Papers>();
+                List<MySqlParameter> parameters = new List<MySqlParameter> {new MySqlParameter("@PaperTitle", $"%{title}%")};
+                if (year != 0) {parameters.Add(new MySqlParameter("@PaperYear", year));}
+                if (school != 0) {parameters.Add(new MySqlParameter("@PaperSchool", school));}
+                if (program != 0) {parameters.Add(new MySqlParameter("@PaperProgram", program));}
+                if (agenda != 0) {parameters.Add(new MySqlParameter("@PaperAgenda", agenda));}
+                DataTable dt = ExecuteQueryWithParameters(query, parameters.ToArray());
+                foreach (DataRow row in dt.Rows)
+                {
+                    if (!string.IsNullOrEmpty(row["paper_title"].ToString()) && Convert.ToInt32(row["isarchive"]) != 1)
+                    {
+                        Papers paper = new Papers
+                        {
+                            Id = Convert.ToInt32(row["paper_id"]),
+                            Title = row["paper_title"].ToString(),
+                            Year = Convert.ToInt32(row["paper_year"]),
+                            SchoolID = Convert.ToInt32(row["school_id"]),
+                            ProgramID = Convert.ToInt32(row["program_id"]),
+                            AgendaID = Convert.ToInt32(row["agenda_id"]),
+                        };
+                        paper.SchoolName = GetSchoolData(paper);
+                        paper.ProgramName = GetProgramData(paper);
+                        paper.AgendaName = GetAgendaData(paper);
+                        paper.ParseYearInt();
+                        list.Add(paper);
+                    }
+                }
+                return list;
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine($"Error getting papers! {e.Message}");
+                return null;
+            }
+        }
     }
 }
