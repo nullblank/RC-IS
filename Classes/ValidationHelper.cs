@@ -23,7 +23,7 @@ namespace RC_IS.Classes
                 {
                     emptyControls.Add(controlInfo);
                 }
-                else if (controlInfo.Control is ComboBox comboBox && comboBox.SelectedIndex == -1)
+                else if (controlInfo.Control is ComboBox comboBox && (comboBox.SelectedIndex == 0 || comboBox.SelectedIndex == -1))
                 {
                     emptyControls.Add(controlInfo);
                 }

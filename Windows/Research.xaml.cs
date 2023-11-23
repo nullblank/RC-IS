@@ -125,7 +125,7 @@ namespace RC_IS.Windows
             string query = "SELECT * FROM tblpapers WHERE LOWER(paper_title) LIKE LOWER(@PaperTitle)";
             if (!string.IsNullOrEmpty(txtYear.Text))
             {
-                query += " AND paper_year = @PaperYear";
+                query += " AND paper_year LIKE @PaperYear";
             }
             if (txtSchool.SelectedIndex != 0)
             {

@@ -168,19 +168,6 @@ namespace RC_IS.Windows
 
             
         }
-
-
-        /*
-        private void txtSearchResearcher_TextChanged(object sender, TextChangedEventArgs e) // Search researcher event handler (txtSearchResearcher)
-        {
-            dgResearchersList.ItemsSource = null;
-            string searchKeyword = txtSearchResearcher.Text;
-            MSDatabaseHandler dbHandler = new MSDatabaseHandler();
-            List<Researcher> researchers = dbHandler.GetResearchers(searchKeyword);
-            dgResearchersList.ItemsSource = researchers;
-
-        }
-        */
         private void Button_Click(object sender, RoutedEventArgs e) // Add authors to selected list
         {
             Button button = (Button)sender;

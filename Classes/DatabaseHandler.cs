@@ -310,7 +310,7 @@ namespace RC_IS.Classes
                 Programs def = new Programs
                 {
                     Id = 0,
-                    Desc = "Select a program",
+                    Desc = "--",
                 };
                 list.Add(def);
                 string query = "SELECT * FROM tblprograms WHERE school_id = @SchoolID";
@@ -477,7 +477,7 @@ namespace RC_IS.Classes
                 Schools def = new Schools
                 {
                     Id = 0,
-                    Desc = "Select a school",
+                    Desc = "--",
                 };
                 list.Add(def);
                 foreach (DataRow row in dt.Rows)
@@ -507,7 +507,7 @@ namespace RC_IS.Classes
                 Agenda def = new Agenda
                 {
                     Id = 0,
-                    Desc = "Select an agenda",
+                    Desc = "--",
                 };
                 list.Add(def);
                 string query = "SELECT * FROM tblagenda";
@@ -769,7 +769,7 @@ namespace RC_IS.Classes
                 OpenConnection();
                 List<Papers> list = new List<Papers>();
                 List<MySqlParameter> parameters = new List<MySqlParameter> {new MySqlParameter("@PaperTitle", $"%{title}%")};
-                if (year != 0) {parameters.Add(new MySqlParameter("@PaperYear", year));}
+                if (year != 0) {parameters.Add(new MySqlParameter("@PaperYear", $"%{year}%"));}
                 if (school != 0) {parameters.Add(new MySqlParameter("@PaperSchool", school));}
                 if (program != 0) {parameters.Add(new MySqlParameter("@PaperProgram", program));}
                 if (agenda != 0) {parameters.Add(new MySqlParameter("@PaperAgenda", agenda));}
