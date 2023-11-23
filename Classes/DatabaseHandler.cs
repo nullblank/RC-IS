@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using RC_IS.Windows;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -684,10 +685,11 @@ namespace RC_IS.Classes
                     if (author is Researcher researcher) // If author is a researcher
                     {
                         Trace.WriteLine($"Inserting Student: [ID]{researcher.Id}, [NAME]{researcher.Name}");
-                        string query = "INSERT INTO tblauthors (paper_id, student_id) VALUES (@PaperId, @Id)";
+                        string query = "INSERT INTO tblauthors (paper_id, author_name, student_id) VALUES (@PaperId, @AuthorName, @Id)";
                         using (MySqlCommand command = new MySqlCommand(query, connection))
                         {
                             command.Parameters.AddWithValue("@PaperId", paper.Id);
+                            command.Parameters.AddWithValue("@AuthorName", researcher.Name);
                             command.Parameters.AddWithValue("@Id", researcher.Id);
                             command.ExecuteNonQuery();
                         }
@@ -696,10 +698,11 @@ namespace RC_IS.Classes
                     else if (author is Staff staff) // If author is a staff
                     {
                         Trace.WriteLine($"Inserting Staff: [ID]{staff.Id}, [NAME]{staff.Name}");
-                        string query = "INSERT INTO tblauthors (paper_id, employee_id) VALUES (@PaperId, @Id)";
+                        string query = "INSERT INTO tblauthors (paper_id, author_name, employee_id) VALUES (@PaperId, @AuthorName, @Id)";
                         using (MySqlCommand command = new MySqlCommand(query, connection))
                         {
                             command.Parameters.AddWithValue("@PaperId", paper.Id);
+                            command.Parameters.AddWithValue("@AuthorName", staff.Name);
                             command.Parameters.AddWithValue("@Id", staff.Id);
                             command.ExecuteNonQuery();
                         }
@@ -725,11 +728,12 @@ namespace RC_IS.Classes
                 OpenConnection();
                 foreach (Staff staff in paper.Panelist) // Loop through panelists
                 {
-                    string query = "INSERT INTO tblpanelists (paper_id, employee_id) VALUES (@PaperId, @Id)";
+                    string query = "INSERT INTO tblpanelists (paper_id, employee_id, employee_name) VALUES (@PaperId, @Id, @EmpName)";
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@PaperId", paper.Id);
                         command.Parameters.AddWithValue("@Id", staff.Id);
+                        command.Parameters.AddWithValue("@EmpName", staff.Name);
                         command.ExecuteNonQuery();
                     }
                 }
@@ -746,11 +750,12 @@ namespace RC_IS.Classes
             try
             {
                 OpenConnection();
-                string query = "INSERT INTO tbladvisers (paper_id, employee_id) VALUES (@PaperId, @Id)";
+                string query = "INSERT INTO tbladvisers (paper_id, employee_id, employee_name) VALUES (@PaperId, @Id, @EmpName)";
                 using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@PaperId", paper.Id);
                     command.Parameters.AddWithValue("@Id", paper.AdviserID);
+                    command.Parameters.AddWithValue("@EmpName", paper.AdviserName);
                     command.ExecuteNonQuery();
                 }
                 CloseConnection();
@@ -761,6 +766,46 @@ namespace RC_IS.Classes
             }
         }
 
+        internal List<object> GetAuthors(int id)
+        {
+            try
+            {
+                OpenConnection ();
+                List<object> authors = new List<object>();
+                string query = "SELECT * FROM tblauthors WHERE paper_id = @PaperId";
+                MySqlParameter parameter = new MySqlParameter("@PaperId", id);
+                DataTable dt = ExecuteQueryWithParameters(query, parameter);
+                foreach (DataRow row in dt.Rows)
+                {
+                    if (row["student_id"] != DBNull.Value)
+                    {
+                        Researcher researcher = new Researcher
+                        {
+                            Id = Convert.ToInt32(row["student_id"]),
+                            Name = row["author_name"].ToString(),
+                        };
+                        Trace.WriteLine($"GET: [TYPE]STUDENT [ID]{researcher.Id} [NAME]{researcher.Name}");
+                        authors.Add(researcher);
+                    }
+                    else if (row["employee_id"] != DBNull.Value)
+                    {
+                        Staff staff = new Staff
+                        {
+                            Id = Convert.ToInt32(row["employee_id"]),
+                            Name = row["author_name"].ToString(),
+                        };
+                        Trace.WriteLine($"GET: [TYPE]STAFF [ID]{staff.Id} [NAME]{staff.Name}");
+                        authors.Add(staff);
+                    }
+                }
+                return authors;
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine($"Error getting authors: {e.Message}");
+                return null;
+            }
+        }
 
         internal List<Papers> GetPapers(string query, string title, int year, int school, int program, int agenda)
         {
@@ -799,6 +844,64 @@ namespace RC_IS.Classes
             catch (MySqlException e)
             {
                 Trace.WriteLine($"Error getting papers! {e.Message}");
+                return null;
+            }
+        }
+
+        internal List<Staff> GetPanelists(int id)
+        {
+            try
+            {
+                OpenConnection();
+                List<Staff> list = new List<Staff>();
+                string query = "SELECT * FROM tblpanelists WHERE paper_id = @PaperId";
+                MySqlParameter parameter = new MySqlParameter("@PaperId", id);
+                DataTable dt = ExecuteQueryWithParameters(query, parameter);
+                foreach (DataRow row in dt.Rows)
+                {
+                    Staff staff = new Staff
+                    {
+                        Id = Convert.ToInt32(row["employee_id"]),
+                        Name = row["employee_name"].ToString(),
+                    };
+                    Trace.WriteLine($"GET: [TYPE]PANELIST [ID] {staff.Id}  [NAME] {staff.Name}");
+                    list.Add(staff);
+                }
+                return list;
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine($"Error {e.Message}");
+                return null;
+            }
+        }
+
+        internal List<ResearchFiles> GetFiles(int id)
+        {
+            try
+            {
+                OpenConnection();
+                List<ResearchFiles> list = new List<ResearchFiles>();
+                string query = "SELECT * FROM tblfiles WHERE paper_id = @PaperId";
+                MySqlParameter parameter = new MySqlParameter("@PaperId", id);
+                DataTable dt = ExecuteQueryWithParameters(query, parameter);
+                foreach (DataRow row in dt.Rows)
+                {
+                    ResearchFiles researchFiles = new ResearchFiles
+                    {
+                        FileName = row["files_name"].ToString(),
+                        FileData = (byte[])row["files_content"],
+                    };
+                    Trace.WriteLine($"GET: [TYPE]FILES [FILENAME]{researchFiles.FileName} [BLOB]{researchFiles.FileData.ToString()}");
+                    list.Add(researchFiles);
+                }
+                return list;
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine($"GetFiles Error: {e.Message}");
+                Trace.WriteLine($"Error Code: {e.ErrorCode}");
+                Trace.WriteLine($"SQL State: {e.SqlState}");
                 return null;
             }
         }

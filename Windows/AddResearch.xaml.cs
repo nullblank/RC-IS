@@ -29,16 +29,28 @@ namespace RC_IS.Windows
         private User _user;
         private Staff _staff;
         private Dashboard _form;
+        private bool isEdit;
 
-        public AddResearch(User user, Dashboard dashboard) // Constructor for AddResearch window (called from MainWindow) 
+        public AddResearch(User user, Dashboard form) // Constructor for AddResearch window (called from MainWindow) 
         {
             InitializeComponent();
             originalWindowState = this.WindowState;
             _user = user;
             LoadSchoolData();
             LoadAgendaData();
-            _form = dashboard;
+            isEdit = false;
+            _form = form;
         }
+        public AddResearch(User user, Papers papers, Dashboard form)
+        {
+            InitializeComponent();
+            originalWindowState = this.WindowState;
+            _user = user;
+            LoadSchoolData();
+            LoadAgendaData();
+            isEdit = false;
+            _form = form;
+        }   
 
         // ------------- Methods -------------
         private void ToggleMaximize() // Maximize window to fullscreen and vice versa
@@ -445,6 +457,7 @@ namespace RC_IS.Windows
             Programs selectedProgram = (Programs)txtCourse.SelectedItem;
             Agenda selectedAgenda = (Agenda)txtAgenda.SelectedItem;
 
+
             List<object> authors = dgResearchersSelected.Items.Cast<object>().ToList();
             List<Staff> panelists = dgPanelistSelected.Items.Cast<Staff>().ToList();
             List<ResearchFiles> files = dgFilesSelected.Items.Cast<ResearchFiles>().ToList();
@@ -453,6 +466,7 @@ namespace RC_IS.Windows
             {
                 Title = txtTitle.Text,
                 Year = year,
+                AdviserName = _staff.Name,
                 SchoolID = selectedSchool?.Id ?? 0, // Use null-conditional operator to handle possible null
                 ProgramID = selectedProgram?.Id ?? 0,
                 AgendaID = selectedAgenda?.Id ?? 0,

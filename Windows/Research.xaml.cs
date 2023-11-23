@@ -100,17 +100,14 @@ namespace RC_IS.Windows
 
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-            //Add check user controls here for checking later.
             dgPapers.ItemsSource = null;
             string title = txtSearch.Text;
             DatabaseHandler dbHandler = new DatabaseHandler();
             string query = ConstructQuery();
-
             int year = GetNumericValueWithoutHyphen(txtYear.Text) == "" ? 0 : int.Parse(GetNumericValueWithoutHyphen(txtYear.Text));
             int schoolId = txtSchool.SelectedItem == null ? 0 : ((Schools)txtSchool.SelectedItem).Id;
             int programId = txtProgram.SelectedItem == null ? 0 : ((Programs)txtProgram.SelectedItem).Id;
             int agendaId = txtAgenda.SelectedItem == null ? 0 : ((Agenda)txtAgenda.SelectedItem).Id;
-
             List<Papers> papers = dbHandler.GetPapers(query, title, year, schoolId, programId, agendaId);
             dgPapers.ItemsSource = papers;
         }
@@ -242,6 +239,26 @@ namespace RC_IS.Windows
             {
                 Trace.WriteLine("No item selected or selected item is not of type Agenda.");
             }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e) // View button
+        {
+            Button button = (Button)sender;
+            Papers selectedPaper = (Papers)button.DataContext;
+            DatabaseHandler dbHandler = new DatabaseHandler();
+            Papers toEdit = new Papers
+            {
+                Id = selectedPaper.Id,
+                Title = selectedPaper.Title,
+                Year = selectedPaper.Year,
+                SchoolID = selectedPaper.SchoolID,
+                ProgramID = selectedPaper.ProgramID,
+                AgendaID = selectedPaper.AgendaID,
+                Authors = dbHandler.GetAuthors(selectedPaper.Id),
+                Panelist = dbHandler.GetPanelists(selectedPaper.Id),
+                Files = dbHandler.GetFiles(selectedPaper.Id),
+            };
+            // Put toEdit to the new Add Research window
         }
     }
 }
