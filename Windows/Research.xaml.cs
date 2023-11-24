@@ -40,16 +40,16 @@ namespace RC_IS.Windows
         private void LoadPapers()
         {
             dgPapers.ItemsSource = null;
-            DatabaseHandler dbHandler = new DatabaseHandler();
-            List<Papers> papers = dbHandler.GetPapers();
+            Papers paper = new Papers();
+            List<Papers> papers = paper.GetPapers();
             dgPapers.ItemsSource = papers;
         }
 
         private void LoadSchool() // Load school data from database to combobox (txtSchool)
         {
             txtSchool.ItemsSource = null;
-            DatabaseHandler dbHandler = new DatabaseHandler();
-            List<Schools> schools = dbHandler.GetSchoolData();
+            Schools school = new Schools();
+            List<Schools> schools = school.GetSchoolData();
             txtSchool.ItemsSource = schools;
             txtSchool.SelectedIndex = 0;
         }
@@ -57,8 +57,8 @@ namespace RC_IS.Windows
         private void LoadAgenda() // Load agenda data from database to combobox (txtAgenda)
         {
             txtAgenda.ItemsSource = null;
-            DatabaseHandler dbHandler = new DatabaseHandler();
-            List<Agenda> agendas = dbHandler.GetAgendaData();
+            Agenda agenda = new Agenda();
+            List<Agenda> agendas = agenda.GetAgendaData();
             if (agendas != null && agendas.Any())
             {
                 txtAgenda.ItemsSource = agendas;
@@ -73,8 +73,8 @@ namespace RC_IS.Windows
         private void LoadProgram(int schoolId) // Load program data from database to combobox (txtCourse)
         {
             txtProgram.ItemsSource = null;
-            DatabaseHandler dbHandler = new DatabaseHandler();
-            List<Programs> programs = dbHandler.GetProgramData(schoolId);
+            Programs program = new Programs();
+            List<Programs> programs = program.GetProgramData(schoolId);
             txtProgram.ItemsSource = programs;
             txtProgram.SelectedIndex = 0;
         }
@@ -102,13 +102,13 @@ namespace RC_IS.Windows
         {
             dgPapers.ItemsSource = null;
             string title = txtSearch.Text;
-            DatabaseHandler dbHandler = new DatabaseHandler();
             string query = ConstructQuery();
             int year = GetNumericValueWithoutHyphen(txtYear.Text) == "" ? 0 : int.Parse(GetNumericValueWithoutHyphen(txtYear.Text));
             int schoolId = txtSchool.SelectedItem == null ? 0 : ((Schools)txtSchool.SelectedItem).Id;
             int programId = txtProgram.SelectedItem == null ? 0 : ((Programs)txtProgram.SelectedItem).Id;
             int agendaId = txtAgenda.SelectedItem == null ? 0 : ((Agenda)txtAgenda.SelectedItem).Id;
-            List<Papers> papers = dbHandler.GetPapers(query, title, year, schoolId, programId, agendaId);
+            Papers paper = new Papers();
+            List<Papers> papers = paper.GetPapers(query, title, year, schoolId, programId, agendaId);
             dgPapers.ItemsSource = papers;
         }
 
@@ -245,7 +245,10 @@ namespace RC_IS.Windows
         {
             Button button = (Button)sender;
             Papers selectedPaper = (Papers)button.DataContext;
-            DatabaseHandler dbHandler = new DatabaseHandler();
+            Staff staff = new Staff();
+            Authors authors = new Authors();
+            ResearchFiles files = new ResearchFiles();
+
             Papers toEdit = new Papers
             {
                 Id = selectedPaper.Id,
@@ -254,11 +257,11 @@ namespace RC_IS.Windows
                 SchoolID = selectedPaper.SchoolID,
                 ProgramID = selectedPaper.ProgramID,
                 AgendaID = selectedPaper.AgendaID,
-                Authors = dbHandler.GetAuthors(selectedPaper.Id),
-                Panelist = dbHandler.GetPanelists(selectedPaper.Id),
-                Files = dbHandler.GetFiles(selectedPaper.Id),
+                Authors = authors.GetAuthors(selectedPaper.Id),
+                Panelist = staff.GetPanelists(selectedPaper.Id),
+                Files = files.GetFiles(selectedPaper.Id),
             };
-            // Put toEdit to the new Add Research window
+            
         }
     }
 }

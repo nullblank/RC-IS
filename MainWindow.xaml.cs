@@ -52,7 +52,7 @@ namespace RC_IS
             if (user.Authenticate(txtPassword.Password))
             {
                 Audit audit = new Audit(user);
-                audit.Log(user.Description + " has logged in!", null, null, null);
+                // Add login logging here
                 RC_IS.Windows.Panel panel = new RC_IS.Windows.Panel(user);
                 panel.Show();
                 this.Close();

@@ -31,7 +31,7 @@ namespace RC_IS.Windows
         private Dashboard _form;
         private bool isEdit;
 
-        public AddResearch(User user, Dashboard form) // Constructor for AddResearch window (called from MainWindow) 
+        public AddResearch(User user, Dashboard form) // Constructor for AddResearch window (called from MainWindow) Add
         {
             InitializeComponent();
             originalWindowState = this.WindowState;
@@ -41,14 +41,14 @@ namespace RC_IS.Windows
             isEdit = false;
             _form = form;
         }
-        public AddResearch(User user, Papers papers, Dashboard form)
+        public AddResearch(User user, Papers papers, Dashboard form) // Constructor for AddResearch window (called from MainWindow) Edit
         {
             InitializeComponent();
             originalWindowState = this.WindowState;
             _user = user;
             LoadSchoolData();
             LoadAgendaData();
-            isEdit = false;
+            isEdit = true;
             _form = form;
         }   
 
@@ -95,16 +95,15 @@ namespace RC_IS.Windows
         private void LoadSchoolData() // Load school data from database to combobox (txtSchool)
         {
             txtSchool.ItemsSource = null;
-            DatabaseHandler dbHandler = new DatabaseHandler();
-            List<Schools> schools = dbHandler.GetSchoolData();
-            txtSchool.ItemsSource = schools;
+            Schools school = new Schools();
+            txtSchool.ItemsSource = school.GetSchoolData();
         }
 
         private void LoadAgendaData() // Load agenda data from database to combobox (txtAgenda)
         {
             txtAgenda.ItemsSource = null;
-            DatabaseHandler dbHandler = new DatabaseHandler();
-            List<Agenda> agendas = dbHandler.GetAgendaData();
+            Agenda agenda = new Agenda();
+            List<Agenda> agendas = agenda.GetAgendaData();
             if (agendas != null && agendas.Any())
             {
                 txtAgenda.ItemsSource = agendas;
@@ -118,8 +117,8 @@ namespace RC_IS.Windows
         private void LoadProgramData(int schoolId) // Load program data from database to combobox (txtCourse)
         {
             txtCourse.ItemsSource = null;
-            DatabaseHandler dbHandler = new DatabaseHandler();
-            List<Programs> programs = dbHandler.GetProgramData(schoolId);
+            Programs program = new Programs();
+            List<Programs> programs = program.GetProgramData(schoolId);
             txtCourse.ItemsSource = programs;
         }
 
@@ -485,14 +484,18 @@ namespace RC_IS.Windows
 
         private void InsertPaperToDatabase(Papers paper)
         {
-            DatabaseHandler dbHandler = new DatabaseHandler();
-            paper.Id = dbHandler.InsertPaper(paper);
+            Papers papers = new Papers();
+            Staff staff = new Staff();
+            Authors author = new Authors();
+            ResearchFiles files = new ResearchFiles();
+
+            paper.Id = papers.InsertPaper(paper);
             if (paper.Id > 0)
             {
-                dbHandler.InsertAdviser(paper);
-                dbHandler.InsertAuthors(paper);
-                dbHandler.InsertPanelist(paper);
-                dbHandler.InsertDocuments(paper);
+                staff.InsertAdviser(paper);
+                author.InsertAuthors(paper);
+                staff.InsertPanelist(paper);
+                files.InsertDocuments(paper);
                 MessageBox.Show($"Successfully inserted paper with id of [ID]{paper.Id} to database!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 _form.Show();
                 this.Close();
