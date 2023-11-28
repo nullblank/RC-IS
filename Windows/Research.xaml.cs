@@ -251,17 +251,20 @@ namespace RC_IS.Windows
 
             Papers toEdit = new Papers
             {
-                Id = selectedPaper.Id,
-                Title = selectedPaper.Title,
-                Year = selectedPaper.Year,
-                SchoolID = selectedPaper.SchoolID,
-                ProgramID = selectedPaper.ProgramID,
+                Id = selectedPaper.Id,                              //Label
+                Title = selectedPaper.Title,                        //Label
+                Year = selectedPaper.Year,                          //Label
+                AdviserID = selectedPaper.AdviserID,
+                SchoolID = selectedPaper.SchoolID,                  
+                ProgramID = selectedPaper.ProgramID,                
                 AgendaID = selectedPaper.AgendaID,
-                Authors = authors.GetAuthors(selectedPaper.Id),
-                Panelist = staff.GetPanelists(selectedPaper.Id),
-                Files = files.GetFiles(selectedPaper.Id),
+                Authors = authors.GetAuthors(selectedPaper.Id),     //ComboBox
+                Panelist = staff.GetPanelists(selectedPaper.Id),    //ComboBox
+                Files = files.GetFiles(selectedPaper.Id),           //ComboBox
             };
-            
+
+            ViewResearch form = new ViewResearch(toEdit); // Pass the selected paper to the form
+            form.Show();
         }
     }
 }

@@ -176,41 +176,5 @@ namespace RC_IS.Classes
             }
         }
 
-
-        //internal List<Researcher> GetResearchersAsync(string researcherName)
-        //{
-        //    try
-        //    {
-        //        OpenConnection();
-        //        List<Researcher> list = new List<Researcher>();
-        //        string query = "SELECT TOP 10 * FROM dbo.UVW_CURRENT_ENROLLED_STUDENTS WHERE STDN_FNM LIKE @FirstName OR STDN_LNM LIKE @FirstName OR STDN_MID LIKE @FirstName OR STDN_IDN LIKE @FirstName";
-        //        SqlParameter parameter = new SqlParameter("@FirstName", "%" + researcherName + "%");
-        //        DataTable dt = ExecuteQueryWithParameters(query, parameter);
-        //        foreach (DataRow row in dt.Rows)
-        //        {
-        //            if (!string.IsNullOrEmpty(row["STDN_IDN"].ToString()))
-        //            {
-        //                Researcher researcher = new Researcher
-        //                {
-        //                    Id = Convert.ToInt32(row["STDN_IDN"]),
-        //                    Name = row["STDN_FNM"].ToString() + " " + row["STDN_MID"].ToString() + " " + row["STDN_LNM"].ToString(),
-        //                };
-        //                list.Add(researcher);
-        //            }
-        //        }
-        //        return list;
-        //    }
-        //    catch (SqlException e)
-        //    {
-        //        Trace.WriteLine("ERROR GETTING RESEARCHERDATA");
-        //        return null;
-        //    }
-        //    finally
-        //    {
-        //        this.Dispose();
-        //    }
-        //}
-
-
     }
 }

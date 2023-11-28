@@ -169,5 +169,22 @@ namespace RC_IS.Classes
             }
         }
 
+        internal T ExecuteScalar<T>(T query, MySqlParameter parameter)
+        {
+            try
+            {
+                OpenConnection();
+                using (MySqlCommand command = new MySqlCommand(query.ToString(), connection))
+                {
+                    command.Parameters.Add(parameter);
+                    return (T)command.ExecuteScalar();
+                }
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine($"Error executing scalar: {e.Message}");
+                return default(T);
+            }
+        }
     }
 }

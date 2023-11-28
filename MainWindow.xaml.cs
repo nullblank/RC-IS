@@ -64,12 +64,7 @@ namespace RC_IS
         {
             try
             {
-
                 //DEBUGGING PURPOSES ONLY
-
-                MSDatabaseHandler dbHandler = new MSDatabaseHandler();
-
-
             }
             catch (MySqlException a)
             {

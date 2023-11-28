@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RC_IS.Windows"
         mc:Ignorable="d"
-        Title="ViewResearch" Height="450" Width="800"
+        Title="ViewResearch" Height="879" Width="817"
         WindowStyle="None"
         ResizeMode="NoResize"
         BorderThickness="0"
@@ -13,7 +13,7 @@
         MouseDown="Window_MouseDown"
         Background="Transparent"
         AllowsTransparency="True">
-    <Border CornerRadius="12" Margin="0,0,-6,-108">
+    <Border CornerRadius="12" Margin="0,0,0,0">
         <Border.Background>
             <ImageBrush ImageSource="/Resources/Images/smu.jpg"
                 Stretch="UniformToFill" />
@@ -149,10 +149,191 @@
                         </Button.Template>
                     </Button>
                 </Grid>
-                <!--MAIN GRID FOR RESEARCHES-->
-                <Grid Margin="0,35,0,0">
-                    
+                <ScrollViewer Margin="0,35,3,2">
+                <Grid Margin="50,5,50,0">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <!--0Header-->
+                                <RowDefinition Height="auto"/>
+                                <!--1PaperId-->
+                                <RowDefinition Height="auto"/>
+                                <!--2PaperTitle-->
+                                <RowDefinition Height="auto"/>
+                                <!--3PaperYear-->
+                            </Grid.RowDefinitions>
+                            <Grid x:Name="Header" Grid.Row="0">
+                                <Label
+                                    Content="VIEWING PAPER"
+                                    Foreground="White"
+                                    FontSize="20"
+                                    FontFamily="{StaticResource Poppins}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    />
+                            </Grid>
+                            <Grid Grid.Row="1" HorizontalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Label
+                                    Grid.Column="0"
+                                    Content="Paper ID:"
+                                    Foreground="Gray"
+                                    FontSize="12"
+                                    FontFamily="{StaticResource Poppins}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    />
+                                <Label x:Name="lblPaperId"
+                                    Grid.Column="1"
+                                    Content="IdPlaceHolder"
+                                    Foreground="White"
+                                    FontSize="12"
+                                    FontFamily="{StaticResource Poppins}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    />
+                            </Grid>
+                            <Grid Grid.Row="2" HorizontalAlignment="Center" Margin="50,10,50,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock x:Name="lblTitle"
+                                    Grid.Column="0"
+                                    TextWrapping="Wrap"
+                                    TextAlignment="Center"
+                                    Foreground="White"
+                                    FontSize="15"
+                                    FontFamily="{StaticResource Poppins}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    >
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec adipiscing
+                                    nulla quis libero egestas lobortis. Duis blandit imperdiet ornare. Nulla
+                                    ac arcu ut purus placerat congue. Integer pretium fermentum gravida.
+                                </TextBlock>
+                            </Grid>
+                            <Grid Grid.Row="3" HorizontalAlignment="Center" Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Label x:Name="lblYear"
+                                    Grid.Column="0"
+                                    Content="YearPlaceholder"
+                                    Foreground="White"
+                                    FontSize="15"
+                                    FontFamily="{StaticResource Poppins}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    />
+                            </Grid>
+                        </Grid>
+                        <Grid x:Name="Grid_Adviser" Margin="0,20,0,0" HorizontalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label
+                                Grid.Column="0"
+                                Content="Adviser:"
+                                Foreground="Gray"
+                                FontSize="15"
+                                FontFamily="{StaticResource Poppins}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                />
+                            <Label x:Name="lblAdviser"
+                                Grid.Column="1"
+                                Content="John Doe"
+                                Foreground="White"
+                                FontSize="15"
+                                FontFamily="{StaticResource Poppins}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                />
+                        </Grid>
+                        <Grid Margin="0,20,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0" Margin="0,0,5,0">
+                                <StackPanel>
+                                    <Label
+                                        Content="Authors"
+                                        Foreground="White"
+                                        FontSize="15"
+                                        FontFamily="{StaticResource Poppins}"
+                                        />
+                                    <DataGrid x:Name="dgAuthors"
+                                            Margin="0,0,0,0"
+                                            Height="200"
+                                            CanUserAddRows="False"
+                                            AutoGenerateColumns="False"
+                                            BeginningEdit="dgAuthors_BeginningEdit"
+                                            GridLinesVisibility="None">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </StackPanel>
+                            </Grid>
+                            <Grid Grid.Column="1" Margin="5,0,0,0">
+                                <StackPanel>
+                                    <Label
+                                        Content="Panelists"
+                                        Foreground="White"
+                                        FontSize="15"
+                                        FontFamily="{StaticResource Poppins}"
+                                        />
+                                    <DataGrid x:Name="dgPanelists"
+                                            Margin="0,0,0,0"
+                                            Height="200"
+                                            CanUserAddRows="False"
+                                            AutoGenerateColumns="False"
+                                            BeginningEdit="dgPanelists_BeginningEdit"
+                                            GridLinesVisibility="None">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                        <Grid Margin="0,20,0,0">
+                            <StackPanel>
+                                <Label
+                                        Content="Files"
+                                        Foreground="White"
+                                        FontSize="15"
+                                        FontFamily="{StaticResource Poppins}"
+                                        />
+                                <DataGrid x:Name="dgFiles"
+                                            Margin="0,0,0,0"
+                                            Height="150"
+                                            CanUserAddRows="False"
+                                            AutoGenerateColumns="False"
+                                            BeginningEdit="dgPanelists_BeginningEdit"
+                                            GridLinesVisibility="None">
+                                    <DataGrid.Columns>
+                                    <DataGridTextColumn Header="File Name" Binding="{Binding FileName}" Width="*" />
+                                            <DataGridTemplateColumn Header="Download">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <Button x:Name="btnDownload" Content="Download" Click="btnDownload_Click"/>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                        </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
                 </Grid>
+                </ScrollViewer>
             </Grid>
 
         </Border>

@@ -1,14 +1,11 @@
-﻿using MySql.Data.MySqlClient;
-using System;
+﻿using Microsoft.Win32;
+using MySql.Data.MySqlClient;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Win32;
+using System.Windows;
 
 namespace RC_IS.Classes
 {
@@ -71,5 +68,75 @@ namespace RC_IS.Classes
                 Trace.WriteLine($"Error storing document: {ex.Message}");
             }
         }
+
+        public void DownloadDocument(Papers paper, string filename)
+        {
+            try
+            {
+                DatabaseHandler dbHandler = new DatabaseHandler();
+                string query = "SELECT * FROM tblfiles WHERE paper_id = @PaperID AND files_name = @DocumentName";
+                List<MySqlParameter> parameters = new List<MySqlParameter>
+                {
+                    new MySqlParameter("@PaperID", paper.Id),
+                    new MySqlParameter("@DocumentName", filename),
+                };
+                DataTable dt = dbHandler.ExecuteQueryWithParameters(query, parameters.ToArray());
+
+                if (dt.Rows.Count > 0)
+                {
+                    // Use SaveFileDialog to get the destination path and file name
+                    SaveFileDialog saveFileDialog = new SaveFileDialog();
+                    saveFileDialog.FileName = dt.Rows[0]["files_name"].ToString();
+                    while (saveFileDialog.ShowDialog() == true)
+                    {
+                        // Get the selected file name and path
+                        string destinationPath = saveFileDialog.FileName;
+                        if (File.Exists(destinationPath))
+                        {
+                            // File already exists, prompt user for confirmation or choose a different file name
+                            MessageBoxResult result = MessageBox.Show("The file already exists. Do you want to overwrite it?", "File Exists", MessageBoxButton.YesNoCancel);
+
+                            if (result == MessageBoxResult.Yes)
+                            {
+                                // User chose to overwrite the file
+                                MessageBox.Show("Document overwritten successfully!", "Done!", MessageBoxButton.OK, MessageBoxImage.Information);
+                                break;
+                            }
+                            else if (result == MessageBoxResult.No)
+                            {
+                                // User chose not to overwrite, continue the loop to prompt for a different name
+                            }
+                            else
+                            {
+                                // User canceled, exit the method
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                byte[] documentBytes = (byte[])row["files_content"];
+                                File.WriteAllBytes(destinationPath, documentBytes);
+                            }
+
+                            Trace.WriteLine("Document downloaded successfully!");
+                            MessageBox.Show("Document downloaded successfully!", "Done!", MessageBoxButton.OK, MessageBoxImage.Information);
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    Trace.WriteLine("No document found for download.");
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Trace.WriteLine($"Error downloading document: {ex.Message}");
+            }
+        }
+
+
     }
 }

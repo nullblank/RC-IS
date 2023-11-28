@@ -45,6 +45,29 @@ namespace RC_IS.Classes
             }
         }
 
+        internal Staff GetAdviser(int id) // REPLACE WITH GET STAFF <-- Current function is for testing purposes only
+        {
+            try
+            {
+                DatabaseHandler dbHandler = new DatabaseHandler();
+                string query = "SELECT * FROM tbladvisers WHERE paper_id = @Id";
+                MySqlParameter parameter = new MySqlParameter("@Id", id);
+                DataTable dt = dbHandler.ExecuteQueryWithParameters(query, parameter);
+                DataRow row = dt.Rows[0];
+                Staff staff = new Staff
+                {
+                    Id = Convert.ToInt32(row["employee_id"]),
+                    Name = row["employee_name"].ToString(),
+                };
+                return staff;
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine($"MySqlException thrown at RC-IS.Classes.Staff.GetAdviser(): {e.Message}");
+                return null;
+            }
+        }
+
         internal void InsertPanelist(Papers paper) // Insert panelists into database
         {
             try
