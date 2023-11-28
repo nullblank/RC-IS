@@ -142,5 +142,15 @@ namespace RC_IS.Windows
                 MessageBox.Show("Please select a file to download!");
             }
         }
+
+        private void btnCloser_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void btnEdit_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

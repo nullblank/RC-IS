@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RC_IS.Windows"
         mc:Ignorable="d"
-        Title="ViewResearch" Height="879" Width="817"
+        Title="ViewResearch" Height="566" Width="817"
         WindowStyle="None"
         ResizeMode="NoResize"
         BorderThickness="0"
@@ -331,6 +331,77 @@
                                 </DataGrid>
                             </StackPanel>
                         </Grid>
+                        <Grid HorizontalAlignment="Center" Margin="0,20,0,50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <Button x:Name="btnEdit"
+                                Grid.Column="0"
+                                BorderThickness="0"
+                                Content="Edit"
+                                Foreground="White"
+                                FontSize="12"
+                                Cursor="Hand"
+                                Margin="0,0,5,0"
+                                FontFamily="{StaticResource Poppins}"
+                                Click="btnEdit_Click">
+                                <Button.Style>
+                                    <Style TargetType="{x:Type Button}">
+                                        <Setter Property="Background" Value="#473ACB" />
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#FF39327E" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                                <Button.Template>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border Width="150" Height="30"
+                                        CornerRadius="10"
+                                        Background="{TemplateBinding Background}">
+                                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                                <Button x:Name="btnCloser"
+                                Grid.Column="1"
+                                BorderThickness="0"
+                                Content="Close"
+                                Foreground="White"
+                                FontSize="12"
+                                Cursor="Hand"
+                                Margin="5,0,0,0"
+                                FontFamily="{StaticResource Poppins}"
+                                Click="btnCloser_Click">
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Setter Property="Background" Value="#473ACB" />
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#FF39327E" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border Width="150" Height="30"
+                                        CornerRadius="10"
+                                        Background="{TemplateBinding Background}">
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center" />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+
+                            </Grid>
                     </StackPanel>
                 </Grid>
                 </ScrollViewer>
