@@ -56,12 +56,38 @@ namespace RC_IS.Windows
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            lblPanel.Text = "Panel - " + _user.Description;
+            // TODO: This line of code loads data into the 'rCISDataSet1.Research' table. You can move, or remove it, as needed.
         }
 
-        private void btnResearchers_Click(object sender, RoutedEventArgs e)
+
+        private void Oopsie()
         {
-            MessageBox.Show("NOT YET IMPLEMENTED", "WARNING!", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("NOT YET IMPLEMENTED! TODO: Should set filter and open research records that make up of this statistic. Add option to export to excel for further auditing", "NOT SO FAST!", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
+        private void btnFilter_SEAIT_Click(object sender, RoutedEventArgs e)
+        {
+            Oopsie();
+        }
+
+        private void btnFilter_SAB_Click(object sender, RoutedEventArgs e)
+        {
+            Oopsie();
+        }
+
+        private void btnFilter_SHANS_Click(object sender, RoutedEventArgs e)
+        {
+            Oopsie();
+        }
+
+        private void btnFilter_STEH_Click(object sender, RoutedEventArgs e)
+        {
+            Oopsie();
+        }
+
+        private void btnFilter_GS_Click(object sender, RoutedEventArgs e)
+        {
+            Oopsie();
+        }
+
     }
 }

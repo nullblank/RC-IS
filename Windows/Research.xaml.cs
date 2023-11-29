@@ -37,7 +37,7 @@ namespace RC_IS.Windows
             LoadAgenda();
         }
 
-        private void LoadPapers()
+        internal void LoadPapers()
         {
             dgPapers.ItemsSource = null;
             Papers paper = new Papers();
@@ -262,8 +262,8 @@ namespace RC_IS.Windows
                 Panelist = staff.GetPanelists(selectedPaper.Id),    //ComboBox
                 Files = files.GetFiles(selectedPaper.Id),           //ComboBox
             };
-
-            ViewResearch form = new ViewResearch(toEdit); // Pass the selected paper to the form
+            
+            ViewResearch form = new ViewResearch(toEdit, this); // Pass the selected paper to the form
             form.Show();
         }
     }

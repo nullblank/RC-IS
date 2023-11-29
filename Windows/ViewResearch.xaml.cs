@@ -21,6 +21,7 @@ namespace RC_IS.Windows
     public partial class ViewResearch : Window
     {
         private WindowState originalWindowState;
+        private Dashboard _form;
         private Papers _papers;
         public ViewResearch(Papers papers)
         {
@@ -28,6 +29,22 @@ namespace RC_IS.Windows
             {
                 InitializeComponent();
                 _papers = papers;
+                SetData();
+            }
+            else
+            {
+                MessageBox.Show("ILLEGAL ACTION! Paper constructor is either fabricated or not complete!");
+                this.Close();
+            }
+        }
+
+        public ViewResearch(Papers papers, Dashboard form)
+        {
+            if (papers != null)
+            {
+                InitializeComponent();
+                _papers = papers;
+                _form = form;
                 SetData();
             }
             else
@@ -117,6 +134,10 @@ namespace RC_IS.Windows
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
+            if (_form != null)
+            {
+                _form.LoadPapers();
+            }
             this.Close();
         }
 
@@ -153,6 +174,18 @@ namespace RC_IS.Windows
             AddResearch addResearch = new AddResearch(_papers);
             addResearch.Show();
             this.Close();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_form != null)
+                _form.LoadPapers();
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            if (_form != null)
+                _form.LoadPapers();
         }
     }
 }

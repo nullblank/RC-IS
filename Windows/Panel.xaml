@@ -4,7 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Dashboard" Height="689" Width="1111"
+        Title="Dashboard" Height="738" Width="1069"
         WindowStyle="None"
         ResizeMode="NoResize"
         BorderThickness="0"
@@ -38,9 +38,9 @@
                 </LinearGradientBrush>
             </Border.Background>
 
-            <Grid x:Name="Grid_Root">
+            <Grid x:Name="Grid_Root" Margin="0,0,0,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="200" />
                     <ColumnDefinition Width="*" />
                     <!--Main display grid-->
                 </Grid.ColumnDefinitions>
@@ -48,19 +48,264 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-
-                <Grid x:Name="Grid_Main" Grid.Column="1" Grid.Row="1"/>
-
-                <Grid Grid.Row="0" Grid.Column="0">
-                    <TextBlock x:Name="lblPanel" Text="PANEL"
+                <Grid Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Statistics for School Year "
+                        Grid.Column="0"
                         Foreground="White"
                         FontSize="24"
                         FontFamily="{StaticResource Poppins}"
-                        FontWeight="Bold" Margin="20,35,0,0"
+                        FontWeight="Bold" Margin="0,35,0,20"
+                        HorizontalAlignment="Left"/>
+                    <TextBlock x:Name="lblYear" Text="####-####"
+                        Grid.Column="1"
+                        Foreground="White"
+                        FontSize="24"
+                        FontFamily="{StaticResource Poppins}"
+                        FontWeight="Bold" Margin="0,35,0,20"
+                        HorizontalAlignment="Left"/>
+                </Grid>
+                <!--===================================================================================================-->
+                <Grid x:Name="Grid_Main" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center">
+                    <StackPanel>
+                        <Grid x:Name="_1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Border CornerRadius="10" Background="#473ACB" Grid.Column="0" Margin="10,10,10,10">
+                                <Button Background="Transparent" x:Name="btnFilter_SEAIT" Click="btnFilter_SEAIT_Click" BorderThickness="0">
+                                    <Grid Grid.Column="0" Margin="10,10,10,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="auto"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="SEAIT"
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Foreground="White"
+                                                FontSize="30"
+                                                FontFamily="{StaticResource Poppins}"
+                                                FontWeight="Bold" Height="36"/>
+                                        <TextBlock Text="# of research papers:"
+                                                Margin="10,10,0,0"
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                Foreground="White"
+                                                FontSize="15"
+                                                FontFamily="{StaticResource Poppins}"
+                                                FontWeight="Bold" Height="36"/>
+                                        <TextBlock Text="####"
+                                                x:Name="lblSEAIT"
+                                                Margin="10,10,0,0"
+                                                Grid.Row="1"
+                                                Grid.Column="1"
+                                                Foreground="White"
+                                                FontSize="15"
+                                                FontFamily="{StaticResource Poppins}"
+                                                FontWeight="Bold" Height="36"/>
+                                    </Grid>
+                                </Button>
+                            </Border>
+                            <Border CornerRadius="10" Background="#473ACB" Grid.Column="1" Margin="10,10,10,10">
+                                <Button Background="Transparent" x:Name="btnFilter_SAB" Click="btnFilter_SAB_Click" BorderThickness="0">
+                                    <Grid Grid.Column="1" Margin="10,10,10,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="auto"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="SAB"
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Foreground="White"
+                                            FontSize="30"
+                                            FontFamily="{StaticResource Poppins}"
+                                            FontWeight="Bold" Height="36"/>
+                                        <TextBlock Text="# of research papers:"
+                                            Margin="10,10,0,0"
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Foreground="White"
+                                            FontSize="15"
+                                            FontFamily="{StaticResource Poppins}"
+                                            FontWeight="Bold" Height="36"/>
+                                        <TextBlock Text="####"
+                                            x:Name="lblSAB"
+                                            Margin="10,10,0,0"
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            Foreground="White"
+                                            FontSize="15"
+                                            FontFamily="{StaticResource Poppins}"
+                                            FontWeight="Bold" Height="36"/>
+                                    </Grid>
+                                </Button>
+                            </Border>
+
+                            <Border CornerRadius="10" Background="#473ACB" Grid.Column="2" Margin="10,10,10,10">
+                                <Button Background="Transparent" x:Name="btnFilter_SHANS" Click="btnFilter_SHANS_Click" BorderThickness="0">
+                                    <Grid Grid.Column="2" Margin="10,10,10,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="auto"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="SHANS"
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Foreground="White"
+                                            FontSize="30"
+                                            FontFamily="{StaticResource Poppins}"
+                                            FontWeight="Bold" Height="36"/>
+                                        <TextBlock Text="# of research papers:"
+                                            Margin="10,10,0,0"
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Foreground="White"
+                                            FontSize="15"
+                                            FontFamily="{StaticResource Poppins}"
+                                            FontWeight="Bold" Height="36"/>
+                                        <TextBlock Text="####"
+                                            x:Name="lblSHANS"
+                                            Margin="10,10,0,0"
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            Foreground="White"
+                                            FontSize="15"
+                                            FontFamily="{StaticResource Poppins}"
+                                            FontWeight="Bold" Height="36"/>
+                                    </Grid>
+                                </Button>
+                            </Border>
+
+                        </Grid>
+                        <Grid x:Name="_2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Border CornerRadius="10" Background="#473ACB" Grid.Column="0" Margin="10,10,10,10">
+                                <Button Background="Transparent" x:Name="btnFilter_STEH" Click="btnFilter_STEH_Click" BorderThickness="0">
+                                    <Grid Grid.Column="0" Margin="10,10,10,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="auto"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="STEH"
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Foreground="White"
+                                        FontSize="30"
+                                        FontFamily="{StaticResource Poppins}"
+                                        FontWeight="Bold" Height="36"/>
+                                        <TextBlock Text="# of research papers:"
+                                        Margin="10,10,0,0"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Foreground="White"
+                                        FontSize="15"
+                                        FontFamily="{StaticResource Poppins}"
+                                        FontWeight="Bold" Height="36"/>
+                                        <TextBlock Text="####"
+                                        x:Name="lblSEAIT1"
+                                        Margin="10,10,0,0"
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Foreground="White"
+                                        FontSize="15"
+                                        FontFamily="{StaticResource Poppins}"
+                                        FontWeight="Bold" Height="36"/>
+                                    </Grid>
+                                </Button>
+                            </Border>
+                            <Border CornerRadius="10" Background="#473ACB" Grid.Column="1" Margin="10,10,10,10">
+                                <Button Background="Transparent" x:Name="btnFilter_GS" Click="btnFilter_GS_Click" BorderThickness="0">
+                                    <Grid Grid.Column="1" Margin="10,10,10,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="auto"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="GS"
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Foreground="White"
+                                        FontSize="30"
+                                        FontFamily="{StaticResource Poppins}"
+                                        FontWeight="Bold" Height="36"/>
+                                        <TextBlock Text="# of research papers:"
+                                        Margin="10,10,0,0"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Foreground="White"
+                                        FontSize="15"
+                                        FontFamily="{StaticResource Poppins}"
+                                        FontWeight="Bold" Height="36"/>
+                                        <TextBlock Text="####"
+                                        x:Name="lblSAB1"
+                                        Margin="10,10,0,0"
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Foreground="White"
+                                        FontSize="15"
+                                        FontFamily="{StaticResource Poppins}"
+                                        FontWeight="Bold" Height="36"/>
+                                    </Grid>
+                                </Button>
+                            </Border>
+                        </Grid>
+                        <Grid x:Name="_3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+
+                            </Grid>
+                            <Grid Grid.Column="1">
+
+                            </Grid>
+                            <Grid Grid.Column="2">
+
+                            </Grid>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+                <!--===================================================================================================-->
+                <Grid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center">
+                    <TextBlock x:Name="lblPanel" Text="RCIS"
+                        Foreground="White"
+                        FontSize="24"
+                        FontFamily="{StaticResource Poppins}"
+                        FontWeight="Bold" Margin="0,35,0,0"
                         HorizontalAlignment="left"/>
                 </Grid>
 
-                <Grid x:Name="Grid_Panel" Margin="0,0,0,0" HorizontalAlignment="left" Width="auto" Grid.Row="1">
+                <Grid x:Name="Grid_Panel" Margin="0,0,0,0" HorizontalAlignment="Center" Grid.Row="1">
                     <StackPanel Margin="0,0,0,0">
                         <Button x:Name="btnResearchRecords"
                             BorderThickness="0"
@@ -71,37 +316,6 @@
                                 Margin="20,20,20,0"
                             FontFamily="{StaticResource Poppins}"
                             Click="btnResearchRecords_Click" Height="30" Width="150">
-                            <Button.Style>
-                                <Style TargetType="{x:Type Button}">
-                                    <Setter Property="Background" Value="#473ACB" />
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="#FF39327E" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                            <Button.Template>
-                                <ControlTemplate TargetType="{x:Type Button}">
-                                    <Border Width="150" Height="30"
-                                        CornerRadius="10"
-                                        Background="{TemplateBinding Background}">
-                                        <ContentPresenter HorizontalAlignment="Center"
-                                            VerticalAlignment="Center" />
-                                    </Border>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
-
-                        <Button x:Name="btnResearchers"
-                            BorderThickness="0"
-                            Content="Researchers"
-                            Foreground="White"
-                            FontSize="12"
-                            Cursor="Hand"
-                                Margin="20,20,20,0"
-                            FontFamily="{StaticResource Poppins}"
-                            Click="btnResearchers_Click" Height="30" Width="150">
                             <Button.Style>
                                 <Style TargetType="{x:Type Button}">
                                     <Setter Property="Background" Value="#473ACB" />

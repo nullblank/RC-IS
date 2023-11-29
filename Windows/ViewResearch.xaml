@@ -12,7 +12,7 @@
         WindowStartupLocation="CenterScreen"
         MouseDown="Window_MouseDown"
         Background="Transparent"
-        AllowsTransparency="True">
+        AllowsTransparency="True" Closing="Window_Closing" Closed="Window_Closed">
     <Border CornerRadius="12" Margin="0,0,0,0">
         <Border.Background>
             <ImageBrush ImageSource="/Resources/Images/smu.jpg"
