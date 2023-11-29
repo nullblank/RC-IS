@@ -150,7 +150,9 @@ namespace RC_IS.Windows
 
         private void btnEdit_Click(object sender, RoutedEventArgs e)
         {
-
+            AddResearch addResearch = new AddResearch(_papers);
+            addResearch.Show();
+            this.Close();
         }
     }
 }

@@ -254,7 +254,7 @@ namespace RC_IS.Windows
                 Id = selectedPaper.Id,                              //Label
                 Title = selectedPaper.Title,                        //Label
                 Year = selectedPaper.Year,                          //Label
-                AdviserID = selectedPaper.AdviserID,
+                AdviserID = staff.GetAdviserId(selectedPaper.Id),
                 SchoolID = selectedPaper.SchoolID,                  
                 ProgramID = selectedPaper.ProgramID,                
                 AgendaID = selectedPaper.AgendaID,

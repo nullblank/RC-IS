@@ -157,5 +157,27 @@ namespace RC_IS.Classes
             }
         }
 
+        internal void UpdatePaper(Papers paper)
+        {
+            try
+            {
+                DatabaseHandler dbHandler = new DatabaseHandler();
+                string query = "UPDATE tblpapers SET paper_title = @PaperTitle, paper_year = @PaperYear, school_id = @SchoolID, program_id = @ProgramID, agenda_id = @AgendaID WHERE paper_id = @PaperID";
+                List<MySqlParameter> parameters = new List<MySqlParameter>
+                {
+                    new MySqlParameter("@PaperTitle", paper.Title),
+                    new MySqlParameter("@PaperYear", paper.Year),
+                    new MySqlParameter("@SchoolID", paper.SchoolID),
+                    new MySqlParameter("@ProgramID", paper.ProgramID),
+                    new MySqlParameter("@AgendaID", paper.AgendaID),
+                    new MySqlParameter("@PaperID", paper.Id),
+                };
+                dbHandler.ExecuteNonQueryWithParameters(query, parameters.ToArray());
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine($"Error updating paper! {e.Message}");
+            }
+        }
     }
 }

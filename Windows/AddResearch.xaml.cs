@@ -17,6 +17,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.IO; // Added for file handling
 using System.Text.RegularExpressions;
+using System.Linq;
+using System.Reflection;
 
 namespace RC_IS.Windows
 {
@@ -27,9 +29,10 @@ namespace RC_IS.Windows
     {
         private WindowState originalWindowState;
         private User _user;
-        private Staff _staff;
-        private Dashboard _form;
+        private Staff _staff = new Staff();
+        private Window _form;
         private bool isEdit;
+        private Papers _paper;
 
         public AddResearch(User user, Dashboard form) // Constructor for AddResearch window (called from MainWindow) Add
         {
@@ -41,16 +44,100 @@ namespace RC_IS.Windows
             isEdit = false;
             _form = form;
         }
-        public AddResearch(User user, Papers papers, Dashboard form) // Constructor for AddResearch window (called from MainWindow) Edit
+        public AddResearch(Papers papers) // Constructor for AddResearch window (called from MainWindow) Edit
         {
             InitializeComponent();
             originalWindowState = this.WindowState;
-            _user = user;
+            _paper = papers;
+            PrepareForEdit();
+        }
+
+        private void PrepareForEdit()
+        {
             LoadSchoolData();
             LoadAgendaData();
             isEdit = true;
-            _form = form;
-        }   
+            if (isEdit)
+            {
+                SelectItemById<Schools>(_paper.SchoolID, txtSchool);
+                SelectItemById<Agenda>(_paper.AgendaID, txtAgenda);
+                SelectItemById<Programs>(_paper.ProgramID, txtCourse);
+                txtTitle.Text = _paper.Title;
+                txtYear.Text = _paper.Year.ToString();
+                _staff.Id = _paper.AdviserID;
+                _staff.Name = _paper.AdviserName;
+                lblSelectedAdviser.Text = _staff.Name;
+                PaperToDataGrid();
+            }
+        }
+
+        private void PaperToDataGrid()
+        {
+            if (_paper != null)
+            {
+                foreach (object author in _paper.Authors)
+                {
+                    dgResearchersSelected.Items.Add(author);
+                }
+                foreach (object panelist in _paper.Panelist)
+                {
+                    dgPanelistSelected.Items.Add(panelist);
+                }
+                foreach (object file in _paper.Files) 
+                {
+                    dgFilesSelected.Items.Add(file);
+                }
+            }
+
+        }
+
+        private void SelectItemById<T>(int targetId, ComboBox comboBox)
+        {
+            T selectedItem = comboBox.Items.OfType<T>().FirstOrDefault(item => GetId(item) == targetId);
+            if (selectedItem != null)
+            {
+                comboBox.SelectedItem = selectedItem;
+            }
+            else
+            {
+                MessageBox.Show("The item with the matching Id was not found in the ComboBox items source.");
+            }
+        }
+        private int GetId<T>(T item)
+        {
+            var property = item.GetType().GetProperty("Id");
+            return property != null ? (int)property.GetValue(item) : 0; // Assuming Id is of type int
+        }
+
+
+
+
+
+
+
+
+        private void LoadSchoolData() // Load school data from database to combobox (txtSchool)
+        {
+            
+            txtSchool.ItemsSource = null;
+            Schools school = new Schools();
+            txtSchool.ItemsSource = school.GetSchoolData();
+        }
+
+        private void LoadAgendaData() // Load agenda data from database to combobox (txtAgenda)
+        {
+            txtAgenda.ItemsSource = null;
+            Agenda agenda = new Agenda();
+            List<Agenda> agendas = agenda.GetAgendaData();
+            if (agendas != null && agendas.Any())
+            {
+                txtAgenda.ItemsSource = agendas;
+            }
+            else
+            {
+                Trace.WriteLine("No agenda data retrieved from the database.");
+            }
+        }
 
         // ------------- Methods -------------
         private void ToggleMaximize() // Maximize window to fullscreen and vice versa
@@ -92,27 +179,7 @@ namespace RC_IS.Windows
             return false;
         }
 
-        private void LoadSchoolData() // Load school data from database to combobox (txtSchool)
-        {
-            txtSchool.ItemsSource = null;
-            Schools school = new Schools();
-            txtSchool.ItemsSource = school.GetSchoolData();
-        }
-
-        private void LoadAgendaData() // Load agenda data from database to combobox (txtAgenda)
-        {
-            txtAgenda.ItemsSource = null;
-            Agenda agenda = new Agenda();
-            List<Agenda> agendas = agenda.GetAgendaData();
-            if (agendas != null && agendas.Any())
-            {
-                txtAgenda.ItemsSource = agendas;
-            }
-            else
-            {
-                Trace.WriteLine("No agenda data retrieved from the database.");
-            }
-        }
+        
 
         private void LoadProgramData(int schoolId) // Load program data from database to combobox (txtCourse)
         {
@@ -171,13 +238,6 @@ namespace RC_IS.Windows
                 default:
                     break;
             }
-
-
-
-            
-            
-
-            
         }
         private void Button_Click(object sender, RoutedEventArgs e) // Add authors to selected list
         {
@@ -401,53 +461,12 @@ namespace RC_IS.Windows
             dgFilesSelected.ItemsSource = list;
         }
 
-        private void btnDebugUpload_Click(object sender, RoutedEventArgs e) // Debug button for uploading files to database
-        {
-            //if (dgFilesSelected.Items.Count > 0)
-            //{
-            //    List<ResearchFiles> list = (List<ResearchFiles>)dgFilesSelected.ItemsSource;
-            //    DatabaseHandler dbHandler = new DatabaseHandler();
-            //    dbHandler.InsertDocuments(list);
-            //}
-            //else
-            //{
-            //    Trace.WriteLine("NO FILES SELECTED");
-            //}   
-        }
-
         private string GetNumericValueWithoutHyphen(string formattedText)
         {
             return new string(formattedText.Where(char.IsDigit).ToArray());
         }
 
-        private bool ValidateControls()
-        {
-            List<ControlInfo> allControls = new List<ControlInfo> // List of all controls that need to be validated
-            {
-                new ControlInfo { Name = "Title is empty", Control = txtTitle },
-                new ControlInfo { Name = "Year is empty", Control = txtYear },
-                new ControlInfo { Name = "No school selected", Control = txtSchool },
-                new ControlInfo { Name = "No course/program selected", Control = txtCourse },
-                new ControlInfo { Name = "No agenda selected", Control = txtAgenda },
-                new ControlInfo { Name = "No panelists selected", Control = dgPanelistSelected },
-                new ControlInfo { Name = "No authors selected", Control = dgResearchersSelected },
-                new ControlInfo { Name = "No files seleected", Control = dgFilesSelected },
-            };
-
-            ValidationHelper validator = new ValidationHelper();
-            List<ControlInfo> emptyControls = validator.GetEmptyControls(allControls);
-
-            if (emptyControls.Count > 0)
-            {
-                string errorMessage = "The following need attention:\n" +
-                    string.Join("\n", emptyControls.Select(info => info.Name));
-
-                MessageBox.Show(errorMessage, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
-            }
-
-            return true;
-        }
+        
 
         private Papers CreatePaperObject()
         {
@@ -455,7 +474,6 @@ namespace RC_IS.Windows
             Schools selectedSchool = (Schools)txtSchool.SelectedItem;
             Programs selectedProgram = (Programs)txtCourse.SelectedItem;
             Agenda selectedAgenda = (Agenda)txtAgenda.SelectedItem;
-
 
             List<object> authors = dgResearchersSelected.Items.Cast<object>().ToList();
             List<Staff> panelists = dgPanelistSelected.Items.Cast<Staff>().ToList();
@@ -505,23 +523,116 @@ namespace RC_IS.Windows
                 MessageBox.Show("Failed to insert paper to database!", "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         private void btnSubmit_Click(object sender, RoutedEventArgs e) // Submits the entire list as a new research paper document
         {
 
             try
             {
-                if (ValidateControls())
+                if (isEdit)
                 {
-                    Papers paper = CreatePaperObject();
-                    InsertPaperToDatabase(paper);
-                    Trace.WriteLine("Validation returns clear!");
+                    if (ValidateControls())
+                    {
+                        ValdatePapers();
+                        Papers papers = new Papers();
+                        Staff staff = new Staff();
+                        Authors author = new Authors();
+                        ResearchFiles files = new ResearchFiles();
+                        papers.UpdatePaper(_paper);
+                        staff.UpdateAdviser(_paper);
+                        staff.UpdatePanelists(_paper);
+                        author.UpdateAuthors(_paper);
+                        files.UpdateDocuments(_paper);
+                        MessageBox.Show($"Successfully updated paper with id of [ID]{_paper.Id} to database!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                        ViewResearch form = new ViewResearch(_paper);
+                        form.Show();
+                        this.Close();
+                    }
                 }
+                else
+                {
+                    if (ValidateControls())
+                    {
+                        Papers paper = CreatePaperObject();
+                        InsertPaperToDatabase(paper);
+                        Trace.WriteLine("Validation returns clear!");
+                    }
+                }
+                
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void ValdatePapers()
+        {
+            Papers paper = CreatePaperObject();
+            if (_paper.Title != paper.Title)
+            {
+                _paper.Title = paper.Title;
+            }
+            if (_paper.Year != paper.Year)
+            {
+                _paper.Year = paper.Year;
+            }
+            if (_paper.SchoolID != paper.SchoolID)
+            {
+                _paper.SchoolID = paper.SchoolID;
+            }
+            if (_paper.ProgramID != paper.ProgramID)
+            {
+                _paper.ProgramID = paper.ProgramID;
+            }
+            if (_paper.AgendaID != paper.AgendaID)
+            {
+                _paper.AgendaID = paper.AgendaID;
+            }
+            if (_paper.AdviserID != paper.AdviserID)
+            {
+                _paper.AdviserID = paper.AdviserID;
+            }
+            if (_paper.AdviserName != paper.AdviserName)
+            {
+                _paper.AdviserName = paper.AdviserName;
+            }
+            if (_paper.Authors != paper.Authors)
+            {
+                _paper.Authors = paper.Authors;
+            }
+            if (_paper.Panelist != paper.Panelist)
+            {
+                _paper.Panelist = paper.Panelist;
+            }
+        }
+
+        private bool ValidateControls()
+        {
+            List<ControlInfo> allControls = new List<ControlInfo> // List of all controls that need to be validated
+            {
+                new ControlInfo { Name = "Title is empty", Control = txtTitle },
+                new ControlInfo { Name = "Year is empty", Control = txtYear },
+                new ControlInfo { Name = "No school selected", Control = txtSchool },
+                new ControlInfo { Name = "No course/program selected", Control = txtCourse },
+                new ControlInfo { Name = "No agenda selected", Control = txtAgenda },
+                new ControlInfo { Name = "No panelists selected", Control = dgPanelistSelected },
+                new ControlInfo { Name = "No authors selected", Control = dgResearchersSelected },
+                new ControlInfo { Name = "No files seleected", Control = dgFilesSelected },
+            };
+
+            ValidationHelper validator = new ValidationHelper();
+            List<ControlInfo> emptyControls = validator.GetEmptyControls(allControls);
+
+            if (emptyControls.Count > 0)
+            {
+                string errorMessage = "The following need attention:\n" +
+                    string.Join("\n", emptyControls.Select(info => info.Name));
+
+                MessageBox.Show(errorMessage, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            return true;
         }
 
         private void Year_PreviewTextInput(object sender, TextCompositionEventArgs e)

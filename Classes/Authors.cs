@@ -98,5 +98,21 @@ namespace RC_IS.Classes
                 return null;
             }
         }
+
+        internal void UpdateAuthors(Papers paper)
+        {
+            try
+            {
+                DatabaseHandler dbHandler = new DatabaseHandler();
+                string query = "DELETE FROM tblauthors WHERE paper_id = @PaperId";
+                MySqlParameter parameter = new MySqlParameter("@PaperId", paper.Id);
+                dbHandler.ExecuteQueryWithParameters(query, parameter);
+                InsertAuthors(paper);
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine($"Error updating authors: {e.Message}");
+            }
+        }
     }
 }

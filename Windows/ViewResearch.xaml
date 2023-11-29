@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RC_IS.Windows"
         mc:Ignorable="d"
-        Title="ViewResearch" Height="566" Width="817"
+        Title="ViewResearch" Height="896" Width="817"
         WindowStyle="None"
         ResizeMode="NoResize"
         BorderThickness="0"

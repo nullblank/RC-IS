@@ -139,5 +139,58 @@ namespace RC_IS.Classes
             }
         }
 
+        internal void UpdateAdviser(Papers paper)
+        {
+            try
+            {
+                DatabaseHandler dbHandler = new DatabaseHandler();
+                string query = "UPDATE tbladvisers SET employee_id = @Id, employee_name = @EmpName WHERE paper_id = @PaperId";
+                List<MySqlParameter> parameters = new List<MySqlParameter>
+                {
+                    new MySqlParameter("@PaperId", paper.Id),
+                    new MySqlParameter("@Id", paper.AdviserID),
+                    new MySqlParameter("@EmpName", paper.AdviserName)
+                };
+                dbHandler.ExecuteNonQueryWithParameters(query, parameters.ToArray());
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine($"Error updating adviser: {e.Message}");
+            }
+        }
+
+        internal void UpdatePanelists(Papers paper)
+        {
+            try
+            {
+                DatabaseHandler dbHandler = new DatabaseHandler();
+                string query = "DELETE FROM tblpanelists WHERE paper_id = @PaperId";
+                MySqlParameter parameter = new MySqlParameter("@PaperId", paper.Id);
+                dbHandler.ExecuteNonQueryWithParameters(query, parameter);
+                InsertPanelist(paper);
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine($"Error updating panelists: {e.Message}");
+            }
+        }
+
+        internal int GetAdviserId(int id)
+        {
+            try
+            {
+                DatabaseHandler dbHandler = new DatabaseHandler();
+                string query = "SELECT employee_id FROM tbladvisers WHERE paper_id = @PaperId";
+                MySqlParameter parameter = new MySqlParameter("@PaperId", id);
+                DataTable dt = dbHandler.ExecuteQueryWithParameters(query, parameter);
+                DataRow row = dt.Rows[0];
+                return Convert.ToInt32(row["employee_id"]);
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine($"MySqlException thrown at RC-IS.Classes.Staff.GetAdviserId(): {e.Message}");
+                return 0;
+            }
+        }
     }
 }

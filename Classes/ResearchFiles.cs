@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using Microsoft.Win32;
 using System.Windows;
+using System;
 
 namespace RC_IS.Classes
 {
@@ -52,14 +53,17 @@ namespace RC_IS.Classes
                 string query = "INSERT INTO tblfiles (paper_id, files_content, files_name) VALUES (@PaperID, @DocumentData, @DocumentName)";
                 foreach (ResearchFiles file in paper.Files)
                 {
-                    byte[] documentBytes = File.ReadAllBytes(file.FilePath);
-                    List<MySqlParameter> parameters = new List<MySqlParameter>
+                    if (!string.IsNullOrEmpty(file.FilePath))
                     {
-                        new MySqlParameter("@PaperID", paper.Id),
-                        new MySqlParameter("@DocumentName", file.FileName),
-                        new MySqlParameter("@DocumentData", documentBytes),
-                    };
-                    dbHandler.ExecuteQueryWithParameters(query, parameters.ToArray());
+                        byte[] documentBytes = File.ReadAllBytes(file.FilePath);
+                        List<MySqlParameter> parameters = new List<MySqlParameter>
+                        {
+                            new MySqlParameter("@PaperID", paper.Id),
+                            new MySqlParameter("@DocumentName", file.FileName),
+                            new MySqlParameter("@DocumentData", documentBytes),
+                        };
+                        dbHandler.ExecuteQueryWithParameters(query, parameters.ToArray());
+                    }
                 }
                 Trace.WriteLine("Document stored successfully!");
             }
@@ -137,6 +141,31 @@ namespace RC_IS.Classes
             }
         }
 
-
+        internal void UpdateDocuments(Papers paper) // Delete then replace
+        {
+            try
+            {
+                foreach (ResearchFiles file in paper.Files)
+                {
+                    if (!string.IsNullOrEmpty(file.FilePath)) // If the file path is not empty, delete the old file and insert the new one
+                    {
+                        DatabaseHandler dbHandler = new DatabaseHandler();
+                        string query = "DELETE FROM tblfiles WHERE paper_id = @PaperID";
+                        MySqlParameter parameter = new MySqlParameter("@PaperID", paper.Id);
+                        dbHandler.ExecuteQueryWithParameters(query, parameter);
+                        InsertDocuments(paper);
+                        Trace.WriteLine("Document updated successfully!");
+                    }
+                    else // If the file path is empty, skip the file
+                    {
+                        continue;
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Trace.WriteLine($"Error updating document: {ex.Message}");
+            }
+        }
     }
 }
