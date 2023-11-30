@@ -169,6 +169,24 @@ namespace RC_IS.Classes
             }
         }
 
+        private object ExecuteScalar(string query, MySqlParameter[] mySqlParameters)
+        {
+            try
+            {
+                OpenConnection();
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddRange(mySqlParameters);
+                    return command.ExecuteScalar();
+                }
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine($"Error executing scalar: {e.Message}");
+                return null;
+            }
+        }
+
         internal T ExecuteScalar<T>(T query, MySqlParameter parameter)
         {
             try
@@ -186,5 +204,53 @@ namespace RC_IS.Classes
                 return default(T);
             }
         }
+
+        internal List<int> GetYear()
+        {
+            List<int> years = new List<int>();
+            try
+            {
+                OpenConnection();
+                string query = "SELECT DISTINCT paper_year FROM tblpapers ORDER BY paper_year DESC";
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            years.Add(reader.GetInt32(0));
+                        }
+                    }
+                }
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine($"Error executing scalar: {e.Message}");
+            }
+            return years;
+        }
+
+        internal string GetPaperCount(int year, int schoolId)
+        {
+            string count = "";
+            try
+            {
+                OpenConnection();
+                string query = "SELECT COUNT(*) FROM tblpapers WHERE paper_year = @year AND school_id = @schoolId ORDER BY school_id DESC LIMIT 5";
+                List<MySqlParameter> parameters = new List<MySqlParameter>
+                {
+                    new MySqlParameter("@year", year),
+                    new MySqlParameter("@schoolId", schoolId)
+                };
+                count = ExecuteScalar(query, parameters.ToArray()).ToString();
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine($"Error executing scalar: {e.Message}");
+            }
+            return count;
+        }
+
+        
     }
 }

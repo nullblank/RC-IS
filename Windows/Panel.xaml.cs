@@ -1,6 +1,7 @@
 ﻿using RC_IS.Classes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,53 @@ namespace RC_IS.Windows
         {
             _user = user;
             InitializeComponent();
+            LoadStatisctics();
+            cbYear.SelectedIndex = 0;
+            if (cbYear.SelectedValue != null)
+            {
+                
+                LoadPaperCount();
+            }
+        }
+
+        private void LoadPaperCount()
+        {
+            int year = FormatYearD(cbYear.SelectedValue.ToString());
+            DatabaseHandler dbHandler = new DatabaseHandler();
+            lblSEAIT.Text = dbHandler.GetPaperCount(year, 1);
+            lblSAB.Text = dbHandler.GetPaperCount(year, 2);
+            lblSHANS.Text = dbHandler.GetPaperCount(year, 3);
+            lblSTEH.Text = dbHandler.GetPaperCount(year, 4);
+            //lblGS.Text = dbHandler.GetPaperCount(year, 5);
+        }
+
+        private void LoadStatisctics()
+        {
+            DatabaseHandler dbHandler = new DatabaseHandler();
+            List<int> year = dbHandler.GetYear();
+            cbYear.Items.Clear();
+            foreach (int y in year)
+            {
+                cbYear.Items.Add(FormatYear(y.ToString()));
+            }
+        }
+
+        static int FormatYearD(string input)
+        {
+            if (input.Length != 9 || input[4] != '-' || !int.TryParse(input.Replace("-", ""), out _))
+            {
+                throw new ArgumentException("Invalid input. It should be in the format '####-####'.");
+            }
+
+            return int.Parse(input.Replace("-", ""));
+        }
+        static string FormatYear(string input)
+        {
+            if (input.Length != 8 || !int.TryParse(input, out _))
+            {
+                throw new ArgumentException("Invalid input. It should be an eight-digit string.");
+            }
+            return $"{input.Substring(0, 4)}-{input.Substring(4, 4)}";
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -89,5 +137,10 @@ namespace RC_IS.Windows
             Oopsie();
         }
 
+        private void cbYear_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            LoadPaperCount();
+            lblYear.Text = cbYear.SelectedValue.ToString();
+        }
     }
 }

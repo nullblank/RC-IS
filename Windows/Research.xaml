@@ -4,7 +4,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Dashboard" Height="732" Width="997"
+        Title="Dashboard"
+        Height="729"
+        Width="971"
         WindowStyle="None"
         ResizeMode="NoResize"
         BorderThickness="0"
@@ -16,25 +18,33 @@
     <Border CornerRadius="12">
         <Border.Background>
             <ImageBrush ImageSource="/Resources/Images/smu.jpg"
-                    Stretch="UniformToFill" />
+                        Stretch="UniformToFill" />
         </Border.Background>
 
         <Border CornerRadius="10"
                 Opacity="0.92"
-                BorderThickness="5" Margin="0,0,0,0">
+                BorderThickness="5"
+                Margin="0,0,0,0">
 
             <Border.BorderBrush>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1, 1">
-                    <GradientStop Color="#473ACB" Offset="0" />
-                    <GradientStop Color="#473ACB" Offset="0.75" />
-                    <GradientStop Color="#21A2F5" Offset="1" />
+                <LinearGradientBrush StartPoint="0,0"
+                                     EndPoint="1, 1">
+                    <GradientStop Color="#0EA5E9"
+                                  Offset="0" />
+                    <GradientStop Color="#0EA5E9"
+                                  Offset="0.75" />
+                    <GradientStop Color="#21A2F5"
+                                  Offset="1" />
                 </LinearGradientBrush>
             </Border.BorderBrush>
 
             <Border.Background>
-                <LinearGradientBrush StartPoint="0,1" EndPoint="1,0">
-                    <GradientStop Color="#050835" Offset="0" />
-                    <GradientStop Color="#1B194A" Offset="0.75" />
+                <LinearGradientBrush StartPoint="0,1"
+                                     EndPoint="1,0">
+                    <GradientStop Color="#2A3342"
+                                  Offset="0" />
+                    <GradientStop Color="#2A3342"
+                                  Offset="0.75" />
                 </LinearGradientBrush>
             </Border.Background>
 
@@ -57,27 +67,30 @@
                         <ColumnDefinition Width="5" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="Research Center Information System"
-                           Foreground="DarkGray"
-                           FontSize="10"
-                           FontFamily="{StaticResource Poppins}"
-                           Grid.Column="0"
-                           VerticalAlignment="Center"
-                           Margin="10,0,0,0" />
+                               Foreground="DarkGray"
+                               FontSize="10"
+                               FontFamily="{StaticResource Poppins}"
+                               Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Margin="10,0,0,0" />
                     <Button x:Name="btnMinimize"
-                        BorderThickness="0"
-                        Content="-"
-                        Foreground="White"
-                        FontSize="16"
-                        Cursor="Hand"
-                        FontFamily="{StaticResource Poppins}"
-                        Grid.Column="1"
-                        Click="btnMinimize_Click">
+                            BorderThickness="0"
+                            Content="-"
+                            Foreground="White"
+                            FontSize="16"
+                            Cursor="Hand"
+                            FontFamily="{StaticResource Poppins}"
+                            Grid.Column="1"
+                            Click="btnMinimize_Click">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
-                                <Setter Property="Background" Value="#28AEED" />
+                                <Setter Property="Background"
+                                        Value="#28AEED" />
                                 <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#1B194A" />
+                                    <Trigger Property="IsMouseOver"
+                                             Value="True">
+                                        <Setter Property="Background"
+                                                Value="#1B194A" />
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -85,30 +98,34 @@
 
                         <Button.Template>
                             <ControlTemplate TargetType="{x:Type Button}">
-                                <Border Width="18" Height="18"
-                                    CornerRadius="9"
-                                    Background="{TemplateBinding Background}">
+                                <Border Width="18"
+                                        Height="18"
+                                        CornerRadius="9"
+                                        Background="{TemplateBinding Background}">
                                     <ContentPresenter HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center" />
+                                                      VerticalAlignment="Center" />
                                 </Border>
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
                     <Button x:Name="btnMaximize"
-                        BorderThickness="0"
-                        Content="[ ]"
-                        Foreground="White"
-                        FontSize="9"
-                        Cursor="Hand"
-                        FontFamily="{StaticResource Poppins}"
-                        Grid.Column="2"
-                        Click="btnMaximize_Click">
+                            BorderThickness="0"
+                            Content="[ ]"
+                            Foreground="White"
+                            FontSize="9"
+                            Cursor="Hand"
+                            FontFamily="{StaticResource Poppins}"
+                            Grid.Column="2"
+                            Click="btnMaximize_Click">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
-                                <Setter Property="Background" Value="#28AEED" />
+                                <Setter Property="Background"
+                                        Value="#28AEED" />
                                 <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#1B194A" />
+                                    <Trigger Property="IsMouseOver"
+                                             Value="True">
+                                        <Setter Property="Background"
+                                                Value="#1B194A" />
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -116,30 +133,34 @@
 
                         <Button.Template>
                             <ControlTemplate TargetType="{x:Type Button}">
-                                <Border Width="18" Height="18"
-                                    CornerRadius="9"
-                                    Background="{TemplateBinding Background}">
+                                <Border Width="18"
+                                        Height="18"
+                                        CornerRadius="9"
+                                        Background="{TemplateBinding Background}">
                                     <ContentPresenter HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center" />
+                                                      VerticalAlignment="Center" />
                                 </Border>
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
                     <Button x:Name="btnClose"
-                        BorderThickness="0"
-                        Content="X"
-                        Foreground="White"
-                        FontSize="12"
-                        Cursor="Hand"
-                        FontFamily="{StaticResource Poppins}"
-                        Grid.Column="3"
-                        Click="btnClose_Click">
+                            BorderThickness="0"
+                            Content="X"
+                            Foreground="White"
+                            FontSize="12"
+                            Cursor="Hand"
+                            FontFamily="{StaticResource Poppins}"
+                            Grid.Column="3"
+                            Click="btnClose_Click">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
-                                <Setter Property="Background" Value="#E64BB1" />
+                                <Setter Property="Background"
+                                        Value="#E64BB1" />
                                 <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#1B194A" />
+                                    <Trigger Property="IsMouseOver"
+                                             Value="True">
+                                        <Setter Property="Background"
+                                                Value="#1B194A" />
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -147,11 +168,12 @@
 
                         <Button.Template>
                             <ControlTemplate TargetType="{x:Type Button}">
-                                <Border Width="18" Height="18"
-                                    CornerRadius="9"
-                                    Background="{TemplateBinding Background}">
+                                <Border Width="18"
+                                        Height="18"
+                                        CornerRadius="9"
+                                        Background="{TemplateBinding Background}">
                                     <ContentPresenter HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center" />
+                                                      VerticalAlignment="Center" />
                                 </Border>
                             </ControlTemplate>
                         </Button.Template>
@@ -165,92 +187,95 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <!--PANEL-->
-                    <Grid x:Name="Panel_Grid" Grid.Column="0" Margin="0,35,0,0" VerticalAlignment="Top" HorizontalAlignment="Center">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="50" />
-                            <RowDefinition Height="50" />
-                            <RowDefinition Height="50" />
-                            <RowDefinition Height="50" />
-                            <RowDefinition Height="50" />
-                            <RowDefinition Height="50" />
-                            <RowDefinition Height="50" />
-                            <RowDefinition Height="50" />
-                            <RowDefinition Height="50" />
-                            <RowDefinition Height="50" />
-                            <RowDefinition Height="50" />
-                        </Grid.RowDefinitions>
+                    <Grid x:Name="Panel_Grid"
+                          Grid.Column="0"
+                          Margin="0,35,0,0"
+                          Background="#2A3342">
+                        <StackPanel>
+                            <Grid Grid.Row="0"
+                                  Margin="0,0,0,0">
+                                <Button x:Name="btnAddResearches"
+                                        BorderThickness="0"
+                                        Content="Add Research"
+                                        Foreground="White"
+                                        FontSize="15"
+                                        Cursor="Hand"
+                                        Margin="20,20,20,0"
+                                        FontFamily="{StaticResource Poppins}"
+                                        Click="btnAddResearches_Click">
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Setter Property="Background"
+                                                    Value="#0EA5E9" />
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver"
+                                                         Value="True">
+                                                    <Setter Property="Background"
+                                                            Value="#0369A1" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
 
-                        <Grid Grid.Row="0" Margin="0,0,0,0">
-                            <Button x:Name="btnAddResearches"
-                                    BorderThickness="0"
-                                    Content="Add Research"
-                                    Foreground="White"
-                                    FontSize="15"
-                                    Cursor="Hand"
-                                    Margin="20,10,20,0"
-                                    FontFamily="{StaticResource Poppins}"
-                                    Click="btnAddResearches_Click">
-                                <Button.Style>
-                                    <Style TargetType="{x:Type Button}">
-                                        <Setter Property="Background" Value="#473ACB" />
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#FF39327E" />
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border Width="150"
+                                                    Height="30"
+                                                    CornerRadius="10"
+                                                    Background="{TemplateBinding Background}">
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                                                  VerticalAlignment="Center" />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Button x:Name="btnReport"
+                                        BorderThickness="0"
+                                        Content="Reporting"
+                                        Foreground="White"
+                                        FontSize="15"
+                                        Cursor="Hand"
+                                        Margin="20,10,20,0"
+                                        FontFamily="{StaticResource Poppins}"
+                                        Click="btnReport_Click">
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Setter Property="Background"
+                                                    Value="#0EA5E9" />
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver"
+                                                         Value="True">
+                                                    <Setter Property="Background"
+                                                            Value="#0369A1" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
 
-                                <Button.Template>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Width="150" Height="30"
-                                    CornerRadius="10"
-                                    Background="{TemplateBinding Background}">
-                                            <ContentPresenter HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center" />
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </Grid>
-                        <Grid Grid.Row="1">
-                            <Button x:Name="btnReport"
-                                    BorderThickness="0"
-                                    Content="Reporting"
-                                    Foreground="White"
-                                    FontSize="15"
-                                    Cursor="Hand"
-                                    Margin="20,10,20,0"
-                                    FontFamily="{StaticResource Poppins}"
-                                    Click="btnReport_Click">
-                                <Button.Style>
-                                    <Style TargetType="{x:Type Button}">
-                                        <Setter Property="Background" Value="#473ACB" />
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#FF39327E" />
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border Width="150"
+                                                    Height="30"
+                                                    CornerRadius="10"
+                                                    Background="{TemplateBinding Background}">
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                                                  VerticalAlignment="Center" />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </Grid>
+                        </StackPanel>
 
-                                <Button.Template>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Width="150" Height="30"
-                                    CornerRadius="10"
-                                    Background="{TemplateBinding Background}">
-                                            <ContentPresenter HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center" />
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </Grid>
                     </Grid>
                     <!--Main Grid-->
-                    <Grid x:Name="Main_Grid" Grid.Column="1" Margin="35,0,35,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Grid x:Name="Main_Grid"
+                          Grid.Column="1"
+                          Margin="35,0,35,0"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
@@ -258,71 +283,84 @@
                             <RowDefinition Height="auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        <Grid Grid.Column="0" Grid.Row="0" Margin="0,35,0,0">
-                            <StackPanel Width="auto" Orientation="Vertical">
+                        <Grid Grid.Column="0"
+                              Grid.Row="0"
+                              Margin="0,35,0,0">
+                            <StackPanel Width="auto"
+                                        Orientation="Vertical">
                                 <TextBlock Text="RESEARCH PAPERS"
-                                    Foreground="White"
-                                    FontSize="24"
-                                    FontFamily="{StaticResource Poppins}"
-                                    FontWeight="Bold"
-                                    HorizontalAlignment="Center"
-                                    Margin="0,0,0,0" />
-                                <TextBlock x:Name="lblWelcome" Text="Welcome &lt;PLACEHOLDER_NAME&gt;"
-                                    Foreground="DarkGray"
-                                    FontSize="15"
-                                    FontFamily="{StaticResource Poppins}"
-                                    HorizontalAlignment="Center"
-                                    TextWrapping="Wrap"
-                                    Margin="0,5,0,0" />
+                                           Foreground="White"
+                                           FontSize="24"
+                                           FontFamily="{StaticResource Poppins}"
+                                           FontWeight="Bold"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,0,0,0" />
+                                <TextBlock x:Name="lblWelcome"
+                                           Text="Welcome &lt;PLACEHOLDER_NAME&gt;"
+                                           Foreground="DarkGray"
+                                           FontSize="15"
+                                           FontFamily="{StaticResource Poppins}"
+                                           HorizontalAlignment="Center"
+                                           TextWrapping="Wrap"
+                                           Margin="0,5,0,0" />
                                 <!--Search Grid-->
-                                <Grid x:Name="Search_Grid" Margin="0,20,0,0">
+                                <Grid x:Name="Search_Grid"
+                                      Margin="0,20,0,0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="auto" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                    <StackPanel Grid.Column="0"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Left">
                                         <TextBlock Text="Search"
-                                            Foreground="DarkGray"
-                                            FontSize="15"
-                                            FontFamily="{StaticResource Poppins}"
-                                            HorizontalAlignment="left"
-                                            TextWrapping="Wrap" />
+                                                   Foreground="DarkGray"
+                                                   FontSize="15"
+                                                   FontFamily="{StaticResource Poppins}"
+                                                   HorizontalAlignment="left"
+                                                   TextWrapping="Wrap" />
                                         <TextBox x:Name="txtSearch"
-                                            FontSize="15"
-                                            FontWeight="Medium"
-                                            FontFamily="{StaticResource Poppins}"
-                                            Foreground="White"
-                                            CaretBrush="LightGray"
-                                            BorderBrush="DarkGray"
-                                            BorderThickness="0,0,0,2"
-                                            Height="28"
-                                            Width="300"
-                                            VerticalAlignment="Center"
-                                            HorizontalAlignment="Left"
-                                            Margin="0,5,0,0"
-                                            Padding="20,0,0,0">
+                                                 FontSize="15"
+                                                 FontWeight="Medium"
+                                                 FontFamily="{StaticResource Poppins}"
+                                                 Foreground="White"
+                                                 CaretBrush="LightGray"
+                                                 BorderBrush="DarkGray"
+                                                 BorderThickness="0,0,0,2"
+                                                 Height="28"
+                                                 Width="300"
+                                                 VerticalAlignment="Center"
+                                                 HorizontalAlignment="Left"
+                                                 Margin="0,5,0,0"
+                                                 Padding="20,0,0,0">
                                             <TextBox.Background>
                                                 <ImageBrush ImageSource="/Resources/Images/user-icon.png"
-                                                    Stretch="none"
-                                                    AlignmentX="Left" />
+                                                            Stretch="none"
+                                                            AlignmentX="Left" />
                                             </TextBox.Background>
                                         </TextBox>
                                     </StackPanel>
-                                    <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                    <StackPanel Grid.Column="1"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Right">
                                         <Button x:Name="btnSearch"
-                                            BorderThickness="0"
-                                            Content="Search"
-                                            Foreground="White"
-                                            FontSize="15"
-                                            Cursor="Hand"
-                                            FontFamily="{StaticResource Poppins}"
-                                            Click="btnSearch_Click" Grid.Column="1">
+                                                BorderThickness="0"
+                                                Content="Search"
+                                                Foreground="White"
+                                                FontSize="15"
+                                                Cursor="Hand"
+                                                FontFamily="{StaticResource Poppins}"
+                                                Click="btnSearch_Click"
+                                                Grid.Column="1">
                                             <Button.Style>
                                                 <Style TargetType="{x:Type Button}">
-                                                    <Setter Property="Background" Value="#473ACB" />
+                                                    <Setter Property="Background"
+                                                            Value="#0EA5E9" />
                                                     <Style.Triggers>
-                                                        <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter Property="Background" Value="#FF39327E" />
+                                                        <Trigger Property="IsMouseOver"
+                                                                 Value="True">
+                                                            <Setter Property="Background"
+                                                                    Value="#0369A1" />
                                                         </Trigger>
                                                     </Style.Triggers>
                                                 </Style>
@@ -330,11 +368,12 @@
 
                                             <Button.Template>
                                                 <ControlTemplate TargetType="{x:Type Button}">
-                                                    <Border Width="150" Height="30"
-                                                        CornerRadius="10"
-                                                        Background="{TemplateBinding Background}">
+                                                    <Border Width="150"
+                                                            Height="30"
+                                                            CornerRadius="10"
+                                                            Background="{TemplateBinding Background}">
                                                         <ContentPresenter HorizontalAlignment="Center"
-                                                            VerticalAlignment="Center" />
+                                                                          VerticalAlignment="Center" />
                                                     </Border>
                                                 </ControlTemplate>
                                             </Button.Template>
@@ -342,7 +381,9 @@
                                     </StackPanel>
                                 </Grid>
                                 <!--Filter Controls-->
-                                <Grid x:Name="Filter_Grid" Margin="0,5,0,0" Height="50">
+                                <Grid x:Name="Filter_Grid"
+                                      Margin="0,5,0,0"
+                                      Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="auto" />
                                         <ColumnDefinition Width="auto" />
@@ -358,114 +399,119 @@
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
                                     <StackPanel Grid.Column="0"
-                                        Margin="0,0,10,0">
+                                                Margin="0,0,10,0">
                                         <TextBlock Text="Year"
-                                            Foreground="DarkGray"
-                                            FontSize="15"
-                                            FontFamily="{StaticResource Poppins}"
-                                            HorizontalAlignment="left"
-                                            TextWrapping="Wrap"
-                                            Margin="0,0,0,0" />
+                                                   Foreground="DarkGray"
+                                                   FontSize="15"
+                                                   FontFamily="{StaticResource Poppins}"
+                                                   HorizontalAlignment="left"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,0,0,0" />
                                         <TextBox x:Name="txtYear"
-                                            Text=""
-                                            FontSize="15"
-                                            FontWeight="Medium"
-                                            FontFamily="{StaticResource Poppins}"
-                                            Foreground="White"
-                                            CaretBrush="LightGray"
-                                            BorderBrush="DarkGray"
-                                            Background="Transparent"
-                                            BorderThickness="0,0,0,7"
-                                            Height="28"
-                                            Width="100"
-                                            VerticalAlignment="Center"
-                                            HorizontalAlignment="Left"
-                                            Margin="0,5,0,0" PreviewTextInput="txtYear_PreviewTextInput" TextChanged="txtYear_TextChanged" />
+                                                 Text=""
+                                                 FontSize="15"
+                                                 FontWeight="Medium"
+                                                 FontFamily="{StaticResource Poppins}"
+                                                 Foreground="White"
+                                                 CaretBrush="LightGray"
+                                                 BorderBrush="DarkGray"
+                                                 Background="Transparent"
+                                                 BorderThickness="0,0,0,7"
+                                                 Height="28"
+                                                 Width="100"
+                                                 VerticalAlignment="Center"
+                                                 HorizontalAlignment="Left"
+                                                 Margin="0,5,0,0"
+                                                 PreviewTextInput="txtYear_PreviewTextInput"
+                                                 TextChanged="txtYear_TextChanged" />
                                     </StackPanel>
                                     <StackPanel Grid.Column="1"
-                                        Margin="0,0,10,0">
+                                                Margin="0,0,10,0">
                                         <TextBlock Text="School"
-                                            Foreground="DarkGray"
-                                            FontSize="15"
-                                            FontFamily="{StaticResource Poppins}"
-                                            HorizontalAlignment="left"
-                                            TextWrapping="Wrap"
-                                            Margin="0,0,0,0" />
+                                                   Foreground="DarkGray"
+                                                   FontSize="15"
+                                                   FontFamily="{StaticResource Poppins}"
+                                                   HorizontalAlignment="left"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,0,0,0" />
                                         <ComboBox x:Name="txtSchool"
-                                            DisplayMemberPath="Desc"
-                                            SelectedValuePath="Id"
-                                            IsEditable="True"
-                                            IsReadOnly="True"
-                                            Text="--"
-                                            FontSize="15"
-                                            FontWeight="Medium"
-                                            FontFamily="{StaticResource Poppins}"
-                                            Foreground="Black"
-                                            BorderBrush="DarkGray"
-                                            Background="Transparent"
-                                            BorderThickness="0,0,0,2"
-                                            Height="28"
-                                            Width="110"
-                                            VerticalAlignment="Center"
-                                            HorizontalAlignment="Stretch"
-                                            Margin="0,5,0,0"
-                                            Padding="0,0,0,0" SelectionChanged="txtSchool_SelectionChanged" />
+                                                  DisplayMemberPath="Desc"
+                                                  SelectedValuePath="Id"
+                                                  IsEditable="True"
+                                                  IsReadOnly="True"
+                                                  Text="--"
+                                                  FontSize="15"
+                                                  FontWeight="Medium"
+                                                  FontFamily="{StaticResource Poppins}"
+                                                  Foreground="Black"
+                                                  BorderBrush="DarkGray"
+                                                  Background="Transparent"
+                                                  BorderThickness="0,0,0,2"
+                                                  Height="28"
+                                                  Width="110"
+                                                  VerticalAlignment="Center"
+                                                  HorizontalAlignment="Stretch"
+                                                  Margin="0,5,0,0"
+                                                  Padding="0,0,0,0"
+                                                  SelectionChanged="txtSchool_SelectionChanged" />
                                     </StackPanel>
                                     <StackPanel Grid.Column="2"
-                                        Margin="0,0,10,0">
+                                                Margin="0,0,10,0">
                                         <TextBlock Text="Program"
-                                            Foreground="DarkGray"
-                                            FontSize="15"
-                                            FontFamily="{StaticResource Poppins}"
-                                            HorizontalAlignment="left"
-                                            TextWrapping="Wrap"
-                                            Margin="0,0,0,0" />
+                                                   Foreground="DarkGray"
+                                                   FontSize="15"
+                                                   FontFamily="{StaticResource Poppins}"
+                                                   HorizontalAlignment="left"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,0,0,0" />
                                         <ComboBox x:Name="txtProgram"
-                                            DisplayMemberPath="Desc"
-                                            SelectedValuePath="Id"
-                                            IsEditable="True"
-                                            IsReadOnly="True"
-                                            Text="--"
-                                            FontSize="15"
-                                            FontWeight="Medium"
-                                            FontFamily="{StaticResource Poppins}"
-                                            Foreground="Black"
-                                            BorderBrush="DarkGray"
-                                            Background="Transparent"
-                                            BorderThickness="0,0,0,2"
-                                            Height="28"
-                                            VerticalAlignment="Center"
-                                            HorizontalAlignment="Stretch"
-                                            Margin="0,5,0,0"
-                                            Padding="0,0,0,0" SelectionChanged="txtProgram_SelectionChanged" />
+                                                  DisplayMemberPath="Desc"
+                                                  SelectedValuePath="Id"
+                                                  IsEditable="True"
+                                                  IsReadOnly="True"
+                                                  Text="--"
+                                                  FontSize="15"
+                                                  FontWeight="Medium"
+                                                  FontFamily="{StaticResource Poppins}"
+                                                  Foreground="Black"
+                                                  BorderBrush="DarkGray"
+                                                  Background="Transparent"
+                                                  BorderThickness="0,0,0,2"
+                                                  Height="28"
+                                                  VerticalAlignment="Center"
+                                                  HorizontalAlignment="Stretch"
+                                                  Margin="0,5,0,0"
+                                                  Padding="0,0,0,0"
+                                                  SelectionChanged="txtProgram_SelectionChanged" />
                                     </StackPanel>
                                     <StackPanel Grid.Column="3"
-                                        Margin="0,0,0,0">
+                                                Margin="0,0,0,0">
                                         <TextBlock Text="Agenda"
-                                            Foreground="DarkGray"
-                                            FontSize="15"
-                                            FontFamily="{StaticResource Poppins}"
-                                            HorizontalAlignment="left"
-                                            TextWrapping="Wrap"
-                                            Margin="0,0,0,0" />
+                                                   Foreground="DarkGray"
+                                                   FontSize="15"
+                                                   FontFamily="{StaticResource Poppins}"
+                                                   HorizontalAlignment="left"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,0,0,0" />
                                         <ComboBox x:Name="txtAgenda"
-                                            DisplayMemberPath="Desc"
-                                            SelectedValuePath="Id"
-                                            IsEditable="True"
-                                            IsReadOnly="True"
-                                            Text="--"
-                                            FontSize="15"
-                                            FontWeight="Medium"
-                                            FontFamily="{StaticResource Poppins}"
-                                            Foreground="Black"
-                                            BorderBrush="DarkGray"
-                                            Background="Transparent"
-                                            BorderThickness="0,0,0,2"
-                                            Height="28"
-                                            VerticalAlignment="Center"
-                                            HorizontalAlignment="Stretch"
-                                            Margin="0,5,0,0"
-                                            Padding="0,0,0,0" SelectionChanged="txtAgenda_SelectionChanged" />
+                                                  DisplayMemberPath="Desc"
+                                                  SelectedValuePath="Id"
+                                                  IsEditable="True"
+                                                  IsReadOnly="True"
+                                                  Text="--"
+                                                  FontSize="15"
+                                                  FontWeight="Medium"
+                                                  FontFamily="{StaticResource Poppins}"
+                                                  Foreground="Black"
+                                                  BorderBrush="DarkGray"
+                                                  Background="Transparent"
+                                                  BorderThickness="0,0,0,2"
+                                                  Height="28"
+                                                  VerticalAlignment="Center"
+                                                  HorizontalAlignment="Stretch"
+                                                  Margin="0,5,0,0"
+                                                  Padding="0,0,0,0"
+                                                  SelectionChanged="txtAgenda_SelectionChanged" />
                                     </StackPanel>
 
                                     <Grid Grid.Row="5">
@@ -473,22 +519,46 @@
                                 </Grid>
                             </StackPanel>
                         </Grid>
-                        <Grid Grid.Row="1" Margin="0,20,0,35">
-                            <DataGrid x:Name="dgPapers" Margin="0,10,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                        <Grid Grid.Row="1"
+                              Margin="0,20,0,35">
+                            <DataGrid x:Name="dgPapers"
+                                      Margin="0,10,0,0"
+                                      VerticalAlignment="Stretch"
+                                      HorizontalAlignment="Stretch"
                                       CanUserAddRows="False"
                                       AutoGenerateColumns="False"
                                       BeginningEdit="dgPapers_BeginningEdit"
                                       GridLinesVisibility="None">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn FontSize="15" Header="Title" Binding="{Binding Title}" Width="*" />
-                                    <DataGridTextColumn FontSize="15" Header="S.Y" Binding="{Binding ParsedYear}" Width="100" />
-                                    <DataGridTextColumn FontSize="15" Header="School" Binding="{Binding SchoolName}" Width="90" />
-                                    <DataGridTextColumn FontSize="15" Header="Program" Binding="{Binding ProgramName}" Width="*" />
-                                    <DataGridTextColumn FontSize="15" Header="Agenda" Binding="{Binding AgendaName}" Width="*" />
-                                    <DataGridTemplateColumn Header="Action" x:Name="dgPapersActionColumn" Width="100">
+                                    <DataGridTextColumn FontSize="15"
+                                                        Header="Title"
+                                                        Binding="{Binding Title}"
+                                                        Width="*" />
+                                    <DataGridTextColumn FontSize="15"
+                                                        Header="S.Y"
+                                                        Binding="{Binding ParsedYear}"
+                                                        Width="100" />
+                                    <DataGridTextColumn FontSize="15"
+                                                        Header="School"
+                                                        Binding="{Binding SchoolName}"
+                                                        Width="90" />
+                                    <DataGridTextColumn FontSize="15"
+                                                        Header="Program"
+                                                        Binding="{Binding ProgramName}"
+                                                        Width="*" />
+                                    <DataGridTextColumn FontSize="15"
+                                                        Header="Agenda"
+                                                        Binding="{Binding AgendaName}"
+                                                        Width="*" />
+                                    <DataGridTemplateColumn Header="Action"
+                                                            x:Name="dgPapersActionColumn"
+                                                            Width="100">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Button Margin="5,2,5,2" Content="View" Click="Button_Click_1" HorizontalAlignment="Stretch"/>
+                                                <Button Margin="5,2,5,2"
+                                                        Content="View"
+                                                        Click="Button_Click_1"
+                                                        HorizontalAlignment="Stretch" />
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>

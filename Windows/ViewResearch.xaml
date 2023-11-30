@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RC_IS.Windows"
         mc:Ignorable="d"
-        Title="ViewResearch" Height="896" Width="817"
+        Title="ViewResearch" Height="626" Width="817"
         WindowStyle="None"
         ResizeMode="NoResize"
         BorderThickness="0"
@@ -23,15 +23,15 @@
             BorderThickness="5" Margin="0,0,0,0">
             <Border.BorderBrush>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1, 1">
-                    <GradientStop Color="#473ACB" Offset="0" />
-                    <GradientStop Color="#473ACB" Offset="0.75" />
-                    <GradientStop Color="#21A2F5" Offset="1" />
+                    <GradientStop Color="#0EA5E9" Offset="0" />
+                    <GradientStop Color="#0EA5E9" Offset="0.75" />
+                    <GradientStop Color="#0EA5E9" Offset="1" />
                 </LinearGradientBrush>
             </Border.BorderBrush>
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,1" EndPoint="1,0">
-                    <GradientStop Color="#050835" Offset="0" />
-                    <GradientStop Color="#1B194A" Offset="0.75" />
+                    <GradientStop Color="#2A3342" Offset="0" />
+                    <GradientStop Color="#2A3342" Offset="0.75" />
                 </LinearGradientBrush>
             </Border.Background>
             <Grid Margin="0,0,0,0">
@@ -66,10 +66,10 @@
                         Click="btnMinimize_Click">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
-                                <Setter Property="Background" Value="#28AEED" />
+                                <Setter Property="Background" Value="#0EA5E9" />
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#1B194A" />
+                                        <Setter Property="Background" Value="#0284C7" />
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -97,10 +97,10 @@
                         Click="btnMaximize_Click">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
-                                <Setter Property="Background" Value="#28AEED" />
+                                <Setter Property="Background" Value="#0EA5E9" />
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#1B194A" />
+                                        <Setter Property="Background" Value="#0284C7" />
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -131,7 +131,7 @@
                                 <Setter Property="Background" Value="#E64BB1" />
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#1B194A" />
+                                        <Setter Property="Background" Value="#0284C7" />
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -276,7 +276,7 @@
                                             BeginningEdit="dgAuthors_BeginningEdit"
                                             GridLinesVisibility="None">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
+                                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </StackPanel>
@@ -349,10 +349,10 @@
                                 Click="btnEdit_Click">
                                 <Button.Style>
                                     <Style TargetType="{x:Type Button}">
-                                        <Setter Property="Background" Value="#473ACB" />
+                                        <Setter Property="Background" Value="#0EA5E9" />
                                         <Style.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#FF39327E" />
+                                                <Setter Property="Background" Value="#0284C7" />
                                             </Trigger>
                                         </Style.Triggers>
                                     </Style>
@@ -381,10 +381,10 @@
                                 Click="btnCloser_Click">
                                     <Button.Style>
                                         <Style TargetType="{x:Type Button}">
-                                            <Setter Property="Background" Value="#473ACB" />
+                                            <Setter Property="Background" Value="#0EA5E9" />
                                             <Style.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter Property="Background" Value="#FF39327E" />
+                                                    <Setter Property="Background" Value="#0284C7" />
                                                 </Trigger>
                                             </Style.Triggers>
                                         </Style>

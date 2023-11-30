@@ -43,6 +43,7 @@ namespace RC_IS.Windows
             LoadAgendaData();
             isEdit = false;
             _form = form;
+            lblHeader.Text = "ADD NEW RESEARCH PAPER";
         }
         public AddResearch(Papers papers) // Constructor for AddResearch window (called from MainWindow) Edit
         {
@@ -50,6 +51,7 @@ namespace RC_IS.Windows
             originalWindowState = this.WindowState;
             _paper = papers;
             PrepareForEdit();
+            lblHeader.Text = $"EDITING RESEARCH PAPER: {_paper.Id}";
         }
 
         private void PrepareForEdit()

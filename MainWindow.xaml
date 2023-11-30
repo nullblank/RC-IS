@@ -27,16 +27,16 @@
 
             <Border.BorderBrush>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1, 1">
-                    <GradientStop Color="#473ACB" Offset="0" />
-                    <GradientStop Color="#473ACB" Offset="0.75" />
-                    <GradientStop Color="#21A2F5" Offset="1" />
+                    <GradientStop Color="#0EA5E9" Offset="0" />
+                    <GradientStop Color="#0EA5E9" Offset="0.75" />
+                    <GradientStop Color="#0EA5E9" Offset="1" />
                 </LinearGradientBrush>
             </Border.BorderBrush>
 
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,1" EndPoint="1,0">
-                    <GradientStop Color="#050835" Offset="0" />
-                    <GradientStop Color="#1B194A" Offset="0.75" />
+                    <GradientStop Color="#2A3342" Offset="0" />
+                    <GradientStop Color="#2A3342" Offset="0.75" />
                 </LinearGradientBrush>
             </Border.Background>
 
@@ -205,10 +205,12 @@
                         Margin="0,50,0,0">
                         <Button.Style>
                             <Style TargetType="Button">
-                                <Setter Property="Background" Value="#473ACB"/>
+                                <Setter Property="Background"
+                                        Value="#0EA5E9"/>
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#FF39327E"/>
+                                        <Setter Property="Background"
+                                                Value="#0284C7"/>
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -229,14 +231,14 @@
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Center"
                                 Margin="0,10,0,0">
-                        <TextBlock Text="Made by the "
+                        <TextBlock Text="Made by "
                                Foreground="DarkGray"
                                FontSize="12"
                                FontFamily="{StaticResource Poppins}"
                                HorizontalAlignment="Center"
                                TextWrapping="Wrap"
                                Margin="0,5,0,0"/>
-                        <TextBlock Text="CICT"
+                        <TextBlock Text="Diego Gerard A. Diego (CICT)"
                                Foreground="White"
                                FontSize="12"
                                FontFamily="{StaticResource Poppins}"
