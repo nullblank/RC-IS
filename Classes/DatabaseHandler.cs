@@ -251,6 +251,23 @@ namespace RC_IS.Classes
             return count;
         }
 
-        
+        internal bool ValidateLocalDatabases()
+        {
+            try
+            {
+                OpenConnection();
+                string query = "SELECT COUNT(*) FROM tblacc";
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    command.ExecuteScalar();
+                }
+                return true;
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine($"Error executing scalar: {e.Message}");
+                return false;
+            }
+        }
     }
 }

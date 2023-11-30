@@ -43,7 +43,7 @@ namespace RC_IS.Windows
             lblSAB.Text = dbHandler.GetPaperCount(year, 2);
             lblSHANS.Text = dbHandler.GetPaperCount(year, 3);
             lblSTEH.Text = dbHandler.GetPaperCount(year, 4);
-            //lblGS.Text = dbHandler.GetPaperCount(year, 5);
+            lblGS.Text = dbHandler.GetPaperCount(year, 5);
         }
 
         private void LoadStatisctics()

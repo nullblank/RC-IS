@@ -34,7 +34,7 @@ namespace RC_IS.Windows
         private bool isEdit;
         private Papers _paper;
 
-        public AddResearch(User user, Dashboard form) // Constructor for AddResearch window (called from MainWindow) Add
+        public AddResearch(User user, Window form) // Constructor for AddResearch window (called from MainWindow) Add
         {
             InitializeComponent();
             originalWindowState = this.WindowState;
@@ -45,11 +45,12 @@ namespace RC_IS.Windows
             _form = form;
             lblHeader.Text = "ADD NEW RESEARCH PAPER";
         }
-        public AddResearch(Papers papers) // Constructor for AddResearch window (called from MainWindow) Edit
+        public AddResearch(Papers papers, ViewResearch form) // Constructor for AddResearch window (called from MainWindow) Edit
         {
             InitializeComponent();
             originalWindowState = this.WindowState;
             _paper = papers;
+            _form = form;
             PrepareForEdit();
             lblHeader.Text = $"EDITING RESEARCH PAPER: {_paper.Id}";
         }
@@ -195,6 +196,10 @@ namespace RC_IS.Windows
         // --------------- Event Handlers ---------------
         private void btnClose_Click(object sender, RoutedEventArgs e) // Close window button event handler (btnClose)
         {
+            if (isEdit)
+            {
+                _form = new ViewResearch(_paper);
+            }
             _form.Show();
             this.Close();
         }

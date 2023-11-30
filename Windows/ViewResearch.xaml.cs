@@ -171,7 +171,7 @@ namespace RC_IS.Windows
 
         private void btnEdit_Click(object sender, RoutedEventArgs e)
         {
-            AddResearch addResearch = new AddResearch(_papers);
+            AddResearch addResearch = new AddResearch(_papers, this);
             addResearch.Show();
             this.Close();
         }

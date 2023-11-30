@@ -23,9 +23,41 @@ namespace RC_IS
     /// </summary>
     public partial class MainWindow : Window
     {
+        //private LoadingForm loadingForm;
         public MainWindow()
         {
             InitializeComponent();
+            MessageBox.Show("Please wait...");
+            try
+            {
+                //loadingForm = new LoadingForm();
+                //loadingForm.Show();
+                ValidateLocalDatabases();
+            }
+            finally
+            {
+                //loadingForm.Close();
+            }
+        }
+
+        protected void ValidateLocalDatabases()
+        {
+
+            DatabaseHandler dbHandler = new DatabaseHandler();
+            if (!dbHandler.ValidateLocalDatabases())
+            {
+                MessageBox.Show("Cannot connect to local database. Please contact your system administrator.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown();
+            }
+
+            MSDatabaseHandler msDatabaseHandler = new MSDatabaseHandler();
+            if (!msDatabaseHandler.ValidateLocalDatabases())
+            {
+                MessageBox.Show("Cannot connect to reference database. Please contact your system administrator.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown();
+            }
+
+
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -48,7 +80,7 @@ namespace RC_IS
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            User user  = new User(txtUsername.Text);
+            User user = new User(txtUsername.Text);
             if (user.Authenticate(txtPassword.Password))
             {
                 Audit audit = new Audit(user);
@@ -58,18 +90,6 @@ namespace RC_IS
                 this.Close();
             }
 
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                //DEBUGGING PURPOSES ONLY
-            }
-            catch (MySqlException a)
-            {
-                MessageBox.Show("MySQL Error: " + a.Message);
-            }
         }
     }
 }

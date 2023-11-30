@@ -176,5 +176,30 @@ namespace RC_IS.Classes
             }
         }
 
+        internal bool ValidateLocalDatabases()
+        {
+            try
+            {
+                string query = "SELECT * FROM dbo.UVW_EMPLOYEES";
+                DataTable dt = ExecuteQuery(query);
+                if (dt != null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (SqlException e)
+            {
+                Trace.WriteLine("ERROR VALIDATING LOCAL DATABASES");
+                return false;
+            }
+            finally
+            {
+                this.Dispose();
+            }
+        }
     }
 }
