@@ -100,6 +100,11 @@ namespace RC_IS.Windows
 
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
+            loadPapers();
+        }
+
+        public void loadPapers()
+        {
             dgPapers.ItemsSource = null;
             string title = txtSearch.Text;
             string query = ConstructQuery();

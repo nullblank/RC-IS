@@ -175,7 +175,7 @@
                     </Button>
                 </Grid>
                 <ScrollViewer Margin="0,35,3,2">
-                    <Grid Margin="50,5,50,0">
+                    <Grid Margin="50,5,50,0" Width="800" HorizontalAlignment="Center">
                         <StackPanel>
                             <Grid>
                                 <Grid.RowDefinitions>

@@ -137,6 +137,7 @@ namespace RC_IS.Windows
             if (_form != null)
             {
                 _form.LoadPapers();
+                _form.loadPapers();
             }
             this.Close();
         }
@@ -166,6 +167,7 @@ namespace RC_IS.Windows
 
         private void btnCloser_Click(object sender, RoutedEventArgs e)
         {
+            _form.loadPapers();
             this.Close();
         }
 
@@ -179,13 +181,13 @@ namespace RC_IS.Windows
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (_form != null)
-                _form.LoadPapers();
+                _form.loadPapers();
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
             if (_form != null)
-                _form.LoadPapers();
+                _form.loadPapers();
         }
     }
 }
