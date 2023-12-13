@@ -464,8 +464,8 @@ namespace RC_IS.Windows
             list.Remove(files);
 
             // Update the DataGrid by resetting the ItemsSource
-            dgFilesSelected.ItemsSource = null;
-            dgFilesSelected.ItemsSource = list;
+            //dgFilesSelected.ItemsSource = null;
+            //dgFilesSelected.ItemsSource = list;
         }
 
         private string GetNumericValueWithoutHyphen(string formattedText)

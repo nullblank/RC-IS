@@ -16,10 +16,6 @@
         AllowsTransparency="True">
 
     <Border CornerRadius="12">
-        <Border.Background>
-            <ImageBrush ImageSource="/Resources/Images/smu.jpg"
-                        Stretch="UniformToFill" />
-        </Border.Background>
 
         <Border CornerRadius="10"
                 Opacity="0.92"

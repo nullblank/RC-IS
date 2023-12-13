@@ -22,6 +22,41 @@ namespace RC_IS.Classes
         {
             Username = username;
         }
+
+        public bool InsertUser(string username, string password, string description, int role) // Refactored
+        {
+            try
+            {
+                DatabaseHandler handler = new DatabaseHandler();
+                string salt = GenerateSalt();
+                string hashedPassword = HashPassword(password, salt);
+                string query = "INSERT INTO tblacc (acc_name, acc_pass, acc_salt, acc_desc, acc_role) VALUES (@Username, @Password, @Salt, @Desc, @Role)";
+                List<MySqlParameter> parameters = new List<MySqlParameter>
+                {
+                    new MySqlParameter("@Username", username),
+                    new MySqlParameter("@Password", hashedPassword),
+                    new MySqlParameter("@Salt", salt),
+                    new MySqlParameter("@Desc", description),
+                    new MySqlParameter("@Role", role)
+                };
+                //string query = "INSERT INTO tblacc (acc_name, acc_pass, acc_salt, acc_desc) VALUES (@Username, @Password, @Salt, @Desc)";
+                //List<MySqlParameter> parameters = new List<MySqlParameter>
+                //{
+                //    new MySqlParameter("@Username", username),
+                //    new MySqlParameter("@Password", hashedPassword),
+                //    new MySqlParameter("@Salt", salt),
+                //    new MySqlParameter("@Desc", description)
+                //};
+                handler.ExecuteNonQueryWithParameters(query, parameters.ToArray());
+                return true;
+            }
+            catch (MySqlException e)
+            {
+                MessageBox.Show("ERROR INSERTING USER: " + e.Message);
+                return false;
+            }
+        }
+
         public bool Authenticate(string password) // Refactored
         {
             try
@@ -35,32 +70,6 @@ namespace RC_IS.Classes
                 return false;
             }
         }
-
-        public bool InsertUser(string username, string password, string description) // Refactored
-        {
-            try
-            {
-                DatabaseHandler handler = new DatabaseHandler();
-                string salt = GenerateSalt();
-                string hashedPassword = HashPassword(password, salt);
-                string query = "INSERT INTO tblacc (acc_name, acc_pass, acc_salt, acc_desc) VALUES (@Username, @Password, @Salt, @Desc)";
-                List<MySqlParameter> parameters = new List<MySqlParameter>
-                {
-                    new MySqlParameter("@Username", username),
-                    new MySqlParameter("@Password", hashedPassword),
-                    new MySqlParameter("@Salt", salt),
-                    new MySqlParameter("@Desc", description)
-                };
-                handler.ExecuteNonQueryWithParameters(query, parameters.ToArray());
-                return true;
-            }
-            catch (MySqlException e)
-            {
-                MessageBox.Show("ERROR INSERTING USER: " + e.Message);
-                return false;
-            }
-        }
-
 
         public bool AuthenticateUser(string enteredUsername, string enteredPassword, User user)
         {
@@ -169,14 +178,23 @@ namespace RC_IS.Classes
                 };
                 using (MySqlDataReader reader = handler.ExecuteReaderWithParameters(query, parameter.ToArray()))
                 {
-                    if (reader.Read())
+                    if (reader != null)
                     {
-                        byte[] accountHashedPassBytes = (byte[])reader["acc_pass"];
-                        string accountHashedPass = Encoding.UTF8.GetString(accountHashedPassBytes);
-                        byte[] accountSaltBytes = (byte[])reader["acc_salt"];
-                        string salt = Encoding.UTF8.GetString(accountSaltBytes);
-                        return (accountHashedPass, salt);
+                        if (reader.Read())
+                        {
+                            byte[] accountHashedPassBytes = (byte[])reader["acc_pass"];
+                            string accountHashedPass = Encoding.UTF8.GetString(accountHashedPassBytes);
+                            byte[] accountSaltBytes = (byte[])reader["acc_salt"];
+                            string salt = Encoding.UTF8.GetString(accountSaltBytes);
+                            return (accountHashedPass, salt);
+                        }
                     }
+                    else
+                    {
+                        MessageBox.Show("Could not authenticate user: connection returns NULL!");
+                        return (null, null);
+                    }
+                    
                 }
                 return (null, null);
             }

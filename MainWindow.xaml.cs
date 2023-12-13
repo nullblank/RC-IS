@@ -32,7 +32,7 @@ namespace RC_IS
             {
                 //loadingForm = new LoadingForm();
                 //loadingForm.Show();
-                ValidateLocalDatabases();
+                //ValidateLocalDatabases();
             }
             finally
             {

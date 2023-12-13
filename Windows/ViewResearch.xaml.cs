@@ -167,7 +167,6 @@ namespace RC_IS.Windows
 
         private void btnCloser_Click(object sender, RoutedEventArgs e)
         {
-            _form.loadPapers();
             this.Close();
         }
 
