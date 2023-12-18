@@ -23,8 +23,15 @@ namespace RC_IS.Classes
         private MySqlConnection connection;
         public DatabaseHandler()
         {
-            this.connectionString = ConfigurationManager.ConnectionStrings["DbURC"].ConnectionString;
-            Trace.WriteLine("DatabaseHandler Initiated");
+            try
+            {
+                this.connectionString = ConfigurationManager.ConnectionStrings["DbURC"].ConnectionString;
+                Trace.WriteLine("DatabaseHandler Initiated");
+            }
+            catch (MySqlException e)
+            {
+                MessageBox.Show($"Cannot connect to local database: {e.Message}");
+            }
         }
         private void OpenConnection()
         {
@@ -255,12 +262,8 @@ namespace RC_IS.Classes
         {
             try
             {
+                Trace.WriteLine("Validating Local Database...");
                 OpenConnection();
-                string query = "SELECT COUNT(*) FROM tblacc";
-                using (MySqlCommand command = new MySqlCommand(query, connection))
-                {
-                    command.ExecuteScalar();
-                }
                 return true;
             }
             catch (MySqlException e)

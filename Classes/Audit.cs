@@ -36,6 +36,7 @@ namespace RC_IS.Classes
             {
                 Trace.WriteLine("Error logging user action!: " + ex.Message);
             }
+
         }
 
     }

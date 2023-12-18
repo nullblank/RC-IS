@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data;
 using MySql.Data.MySqlClient;
+using System.Windows;
 
 namespace RC_IS.Classes
 {
@@ -17,8 +18,15 @@ namespace RC_IS.Classes
         private SqlConnection connection;
         public MSDatabaseHandler()
         {
-            this.connectionString = ConfigurationManager.ConnectionStrings["DbCICT"].ConnectionString;
-            Trace.WriteLine("MsDatabaseHandler Initiated");
+            try
+            {
+                this.connectionString = ConfigurationManager.ConnectionStrings["DbCICT"].ConnectionString;
+                Trace.WriteLine("MsDatabaseHandler Initiated");
+            }
+            catch (TimeoutException e)
+            {
+                MessageBox.Show($"Cannot connect to reference database: {e.Message}");
+            }
         }
 
         private void OpenConnection()
@@ -180,16 +188,8 @@ namespace RC_IS.Classes
         {
             try
             {
-                string query = "SELECT * FROM dbo.UVW_EMPLOYEES";
-                DataTable dt = ExecuteQuery(query);
-                if (dt != null)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                OpenConnection();
+                return true;
             }
             catch (SqlException e)
             {

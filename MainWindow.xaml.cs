@@ -32,7 +32,7 @@ namespace RC_IS
             {
                 //loadingForm = new LoadingForm();
                 //loadingForm.Show();
-                //ValidateLocalDatabases();
+                ValidateDatabases();
             }
             finally
             {
@@ -40,14 +40,13 @@ namespace RC_IS
             }
         }
 
-        protected void ValidateLocalDatabases()
+        protected void ValidateDatabases()
         {
-
             DatabaseHandler dbHandler = new DatabaseHandler();
             if (!dbHandler.ValidateLocalDatabases())
             {
                 MessageBox.Show("Cannot connect to local database. Please contact your system administrator.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                Application.Current.Shutdown();
+                Application.Close
             }
 
             MSDatabaseHandler msDatabaseHandler = new MSDatabaseHandler();
@@ -56,8 +55,6 @@ namespace RC_IS
                 MessageBox.Show("Cannot connect to reference database. Please contact your system administrator.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 Application.Current.Shutdown();
             }
-
-
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
