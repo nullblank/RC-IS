@@ -46,14 +46,14 @@ namespace RC_IS
             if (!dbHandler.ValidateLocalDatabases())
             {
                 MessageBox.Show("Cannot connect to local database. Please contact your system administrator.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                Application.Close
+                this.Close();
             }
 
             MSDatabaseHandler msDatabaseHandler = new MSDatabaseHandler();
             if (!msDatabaseHandler.ValidateLocalDatabases())
             {
                 MessageBox.Show("Cannot connect to reference database. Please contact your system administrator.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                Application.Current.Shutdown();
+                this.Close();
             }
         }
 
