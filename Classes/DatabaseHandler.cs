@@ -212,7 +212,7 @@ namespace RC_IS.Classes
             }
         }
 
-        internal List<int> GetYear()
+        internal List<int> GetExistingSchoolYears() // This function grabs the distinct school years that exist in the database for listing.
         {
             List<int> years = new List<int>();
             try

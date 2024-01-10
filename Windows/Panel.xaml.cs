@@ -26,38 +26,38 @@ namespace RC_IS.Windows
         {
             _user = user;
             InitializeComponent();
-            LoadStatisctics();
-            cbYear.SelectedIndex = 0;
-            if (cbYear.SelectedValue != null)
+            LoadStatisctics(); // Populates cbYear only with school years that exist in the currently registered research papers.
+            cbYear.SelectedIndex = 0; // Selects the most recent school year in the records.
+            if (cbYear.SelectedValue != null) // Loads all school's research paper count in a given school year.
             {
-                
                 LoadPaperCount();
             }
         }
 
-        private void LoadPaperCount()
+        private void LoadPaperCount() // Loads all school's research paper count in a given school year.
         {
-            int year = FormatYearD(cbYear.SelectedValue.ToString());
-            DatabaseHandler dbHandler = new DatabaseHandler();
-            lblSEAIT.Text = dbHandler.GetPaperCount(year, 1);
+            int year = FormatYearD(cbYear.SelectedValue.ToString()); // Extracting the selected year from the combo box and formatting the string.
+            DatabaseHandler dbHandler = new DatabaseHandler(); // Creating an instance of the DatabaseHandler class
+            lblSEAIT.Text = dbHandler.GetPaperCount(year, 1); // Retrieving and displaying the paper count for the schools based on the current school year.
             lblSAB.Text = dbHandler.GetPaperCount(year, 2);
             lblSHANS.Text = dbHandler.GetPaperCount(year, 3);
             lblSTEH.Text = dbHandler.GetPaperCount(year, 4);
             lblGS.Text = dbHandler.GetPaperCount(year, 5);
         }
 
-        private void LoadStatisctics()
+        private void LoadStatisctics() // Populates cbYear only with school years that exist in the currently registered research papers.
         {
             DatabaseHandler dbHandler = new DatabaseHandler();
-            List<int> year = dbHandler.GetYear();
-            cbYear.Items.Clear();
-            foreach (int y in year)
-            {
-                cbYear.Items.Add(FormatYear(y.ToString()));
-            }
+            List<int> year = dbHandler.GetExistingSchoolYears(); // This function grabs the distinct school years that exist in the database for listing.
+            cbYear.Items.Clear(); // Clears the combobox
+            foreach (int y in year){ cbYear.Items.Add(FormatYear(y.ToString())); } // Iterates over each of the years in the list, formats then adds them to the combobox
         }
-
-        static int FormatYearD(string input)
+        private void cbYear_SelectionChanged(object sender, SelectionChangedEventArgs e) // Event handler for whenever a new school year is selected.
+        {
+            LoadPaperCount();
+            lblYear.Text = cbYear.SelectedValue.ToString();
+        }
+        static int FormatYearD(string input) // Helper function.
         {
             if (input.Length != 9 || input[4] != '-' || !int.TryParse(input.Replace("-", ""), out _))
             {
@@ -66,7 +66,7 @@ namespace RC_IS.Windows
 
             return int.Parse(input.Replace("-", ""));
         }
-        static string FormatYear(string input)
+        static string FormatYear(string input) // Helper function.
         {
             if (input.Length != 8 || !int.TryParse(input, out _))
             {
@@ -75,7 +75,7 @@ namespace RC_IS.Windows
             return $"{input.Substring(0, 4)}-{input.Substring(4, 4)}";
         }
 
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e) // Function used to allow draging of the window
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
@@ -83,19 +83,19 @@ namespace RC_IS.Windows
             }
         }
 
-        private void btnMinimize_Click(object sender, RoutedEventArgs e)
+        private void btnMinimize_Click(object sender, RoutedEventArgs e) // Minimize Window
         {
             WindowState = WindowState.Minimized;
         }
 
-        private void btnClose_Click(object sender, RoutedEventArgs e)
+        private void btnClose_Click(object sender, RoutedEventArgs e) // Close this window and initialize and open Login Window
         {
             this.Hide();
             MainWindow form  = new MainWindow();
             form.Show();
         }
 
-        private void btnResearchRecords_Click(object sender, RoutedEventArgs e)
+        private void btnResearchRecords_Click(object sender, RoutedEventArgs e) // Closes this window and opens the Dashboard
         {
             Dashboard form = new Dashboard(_user, this);
             form.Show();
@@ -104,7 +104,7 @@ namespace RC_IS.Windows
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            // TODO: This line of code loads data into the 'rCISDataSet1.Research' table. You can move, or remove it, as needed.
+            // TODO: This line of code loads data into the 'rCISDataSet1.Research' table. You can move, or remove it, as needed or whatever lol.
         }
 
 
@@ -137,10 +137,5 @@ namespace RC_IS.Windows
             Oopsie();
         }
 
-        private void cbYear_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            LoadPaperCount();
-            lblYear.Text = cbYear.SelectedValue.ToString();
-        }
     }
 }
