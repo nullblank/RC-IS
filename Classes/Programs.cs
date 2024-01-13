@@ -11,6 +11,7 @@ namespace RC_IS.Classes
 {
     public class Programs
     {
+        // Responsible for element item population.
         public int Id { get; set; }
         public string Desc { get; set; }
 

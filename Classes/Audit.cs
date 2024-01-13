@@ -39,5 +39,24 @@ namespace RC_IS.Classes
 
         }
 
+        internal void LogSesssionAction (User user, string action, string table, string row_id, string column)
+        {
+            try
+            {
+                DatabaseHandler dbHandler = new DatabaseHandler();
+                string query = "INSERT INTO tblaudit (acc_id, action, `table`, row_id, `column`) " +
+                               "VALUES (@accountId, @action, @table, @rowId, @column)";
+                // TODO: Revamp entire codebase for Audit class. Check with encryption.
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine("ERROR WITH DATABASE HANDLER: " + e.Message);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("LogSessionAction::Caught an exception!: " + e.Message);
+            }
+        }
+
     }
 }
